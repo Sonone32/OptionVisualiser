@@ -1,0 +1,54 @@
+html {
+  background: white;
+  min-height: 100%;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+body {
+  background: cornflowerblue;
+  background: -webkit-linear-gradient(cornflowerblue, white); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(cornflowerblue, white); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(cornflowerblue, white); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(cornflowerblue, white); /* Standard syntax */
+  min-height: 100vh;
+  max-height: 120vh;
+  border: 0;
+}
+
+#mainPanel {
+  width: 100vw;
+}
+
+.outter {
+  padding: 5vh 5vw;
+}
+
+#title {
+  text-align: center;
+}
+
+#searchField {
+  margin: 10px;
+}
+
+#graphBox {
+  background: white;
+  border-radius: 30px;
+  padding: 5px 3vw;
+  padding-top: 20px;
+}
+
+.graph {
+  border: 5px solid #5a86d5;
+  border-radius: 40px;
+  background: gray;
+  padding: 20px;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.plot {
+  width: 100%;
+}
