@@ -7,22 +7,17 @@ html {
 }
 
 body {
-  background: cornflowerblue;
-  background: -webkit-linear-gradient(cornflowerblue, white); /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(cornflowerblue, white); /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(cornflowerblue, white); /* For Firefox 3.6 to 15 */
-  background: linear-gradient(cornflowerblue, white); /* Standard syntax */
+  background: #57B0E3;
+  background: -webkit-linear-gradient(#57B0E3, white); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#57B0E3, white); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#57B0E3, white); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#57B0E3, white); /* Standard syntax */
   min-height: 100vh;
-  max-height: 120vh;
+  max-height: 100vh;
   border: 0;
 }
 
 #mainPanel {
-  width: 100vw;
-}
-
-.outter {
-  padding: 5vh 5vw;
 }
 
 #title {
@@ -36,19 +31,20 @@ body {
 #graphBox {
   background: white;
   border-radius: 30px;
-  padding: 5px 3vw;
-  padding-top: 20px;
+  padding: 3vh 3vw;
 }
 
 .graph {
-  border: 5px solid #5a86d5;
   border-radius: 40px;
-  background: gray;
-  padding: 20px;
+  background: white;
   width: 100%;
   margin: 10px 0;
 }
 
 .plot {
   width: 100%;
+}
+
+.plotControl {
+  
 }

@@ -1,7 +1,8 @@
-import React from 'react';
-import * as RBS from 'react-bootstrap' //RBS for React-BootStrap
-import SearchBar from 'material-ui-search-bar'
-import Chart from 'chartjs';
+import React from "react";
+import * as RBS from "react-bootstrap" //RBS for React-BootStrap
+import SearchBar from "material-ui-search-bar"
+import Graph from "./graph.jsx";
+
 
 class Title extends React.Component {
   render() {
@@ -17,19 +18,9 @@ class GraphBox extends React.Component {
   render() {
     return (
       <div id="graphBox">
-        <Graph name="1"/>
-        <Graph name="2"/>
-        <Graph name="3"/>
-      </div>
-    )
-  }
-}
-
-class Graph extends React.Component {
-  render() {
-    return (
-      <div className="graph">
-        <canvas id="this.props.name" className="plot"></canvas>
+        {this.props.items.map(
+          x => <Graph key={x[0]} item={x} kill={this.props.kill} />
+        )}
       </div>
     )
   }
@@ -38,6 +29,24 @@ class Graph extends React.Component {
 class MainPanel extends React.Component {
   constructor() {
     super();
+    this.state = {
+      items: [[1, 'AMD'],
+              [2, 'NVDA'],
+              [3, 'INTC'],
+             ]
+    }
+    this.handleKill = this.handleKill.bind(this);
+  }
+  
+  handleKill(key) {
+    let newData = this.state.items.slice();
+    let index = newData.map(x => x[0]).indexOf(key);
+    if (index > -1) {
+      newData.splice(index, 1);
+    }
+    this.setState({
+      items: newData,
+    });
   }
   
   render() {
@@ -54,7 +63,7 @@ class MainPanel extends React.Component {
             <div id="searchField">
               <SearchBar
               onChange={(value) => console.log(value)}
-              onRequestSearch={() => console.log('searching ')}
+              onRequestSearch={() => console.log("searching ")}
               hintText="Add a graph"
               />
             </div>
@@ -63,7 +72,7 @@ class MainPanel extends React.Component {
         
         <RBS.Row className="show-grid">
           <RBS.Col lg={12}>
-            <GraphBox />
+            <GraphBox items={this.state.items} kill={this.handleKill}/>
           </RBS.Col>
         </RBS.Row>
       </RBS.Grid>
@@ -71,4 +80,4 @@ class MainPanel extends React.Component {
   }
 }
 
-export {MainPanel};
+export default MainPanel;

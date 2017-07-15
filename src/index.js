@@ -1,8 +1,11 @@
-import ReactDOM from 'react-dom';
-import React from 'react';
-import {MainPanel} from './index.jsx';
-import './index.css';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import ReactDOM from "react-dom";
+import React from "react";
+import MainPanel from "./index.jsx";
+import "./index.css";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
 
 const App = () => (
   <MuiThemeProvider>
@@ -12,5 +15,5 @@ const App = () => (
 
 ReactDOM.render(
   <App />,
-  document.getElementById('mainPanel')
+  document.getElementById("mainPanel")
 );

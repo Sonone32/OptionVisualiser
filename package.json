@@ -12,6 +12,7 @@
     "material-ui-search-bar": "^0.2.4",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.1",
+    "react-chartjs": "^0.8.0",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
     "react-scripts": "1.0.10",
