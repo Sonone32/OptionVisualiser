@@ -16,14 +16,14 @@ class Graph extends React.Component {
     this.state = {
       data: source,
       date: source.expDates[0], // this will be the the earliest date in source.expDates
-    }
+    };
     this.handleDateChange = this.handleDateChange.bind(this);
   }
   
   handleDateChange(event, index, value) {
     this.setState({
       date: value,
-    })
+    });
     // TODO: Wipe all graphed lines here.
   }
   
@@ -34,7 +34,7 @@ class Graph extends React.Component {
         <Card className="graph">
           <GraphTitle
             item={this.props.item}
-            kill={this.props.kill}
+            handleKill={this.props.handleKill}
             expDates={this.state.data.expDates}
             handleDateChange={this.handleDateChange}
             date={this.state.date}
@@ -48,7 +48,7 @@ class Graph extends React.Component {
 
         </Card>
       </Paper>
-    )
+    );
   }
 }
 
@@ -78,7 +78,7 @@ function GraphTitle(props) {
       style={styles.appbar}
       title={<div style={styles.title}>{symbol}</div>}
       iconElementLeft={
-        <IconButton onClick={() => props.kill(key)}>
+        <IconButton onClick={() => props.handleKill(key)}>
           <NavigationClose />
         </IconButton>
       }
@@ -105,7 +105,7 @@ function ExpDateSelector(props) {
           date => <MenuItem key={date} value={date} primaryText={date} />
       )}
     </SelectField>
-  )
+  );
 }
 
 export default Graph

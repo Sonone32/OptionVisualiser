@@ -4,26 +4,22 @@ import SearchBar from "material-ui-search-bar"
 import Graph from "./graph.jsx";
 
 
-class Title extends React.Component {
-  render() {
-    return (
-      <div id="title">
-        <h1>flowersYnc</h1>
-      </div>
-    )
-  }
+function Title(props) {
+  return (
+    <div id="title">
+      <h1>flowersYnc</h1>
+    </div>
+  );
 }
 
-class GraphBox extends React.Component {
-  render() {
-    return (
-      <div id="graphBox">
-        {this.props.items.map(
-          x => <Graph key={x[0]} item={x} kill={this.props.kill} />
-        )}
-      </div>
-    )
-  }
+function GraphBox(props) {
+  return (
+    <div id="graphBox">
+      {props.items.map(
+        x => <Graph key={x[0]} item={x} handleKill={props.handleKill} />
+      )}
+    </div>
+  );
 }
 
 class MainPanel extends React.Component {
@@ -72,11 +68,11 @@ class MainPanel extends React.Component {
         
         <RBS.Row className="show-grid">
           <RBS.Col lg={12}>
-            <GraphBox items={this.state.items} kill={this.handleKill}/>
+            <GraphBox items={this.state.items} handleKill={this.handleKill}/>
           </RBS.Col>
         </RBS.Row>
       </RBS.Grid>
-    )
+    );
   }
 }
 
