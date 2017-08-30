@@ -7,7 +7,6 @@
     "chart.js": "^2.6.0",
     "chartjs": "^0.3.24",
     "fetch": "^1.1.0",
-    "jquery": "^3.2.1",
     "material-ui": "^0.18.6",
     "material-ui-search-bar": "^0.2.4",
     "react": "^15.6.1",
@@ -27,7 +26,7 @@
   },
   "devDependencies": {
     "babel-preset-stage-1": "^6.24.1",
-    "eslint": "^4.3.0",
+    "eslint": "^4.5.0",
     "redux-devtools": "^3.4.0"
   }
 }
