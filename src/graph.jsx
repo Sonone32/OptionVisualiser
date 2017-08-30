@@ -1,43 +1,92 @@
-import React from "react";
-import NavigationClose from "material-ui/svg-icons/navigation/close";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
-import Paper from "material-ui/Paper";
-import Line from "react-chartjs";
-import {Option} from "./interface.js"
+import React from 'react';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
+import Line from 'react-chartjs';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import polyfill from 'es6-promise';
+import 'isomorphic-fetch';
+
+const source = 'http://www.flowersync.com:8080/api';
 
 class Graph extends React.Component {
   constructor(props) {
     super(props);
-    let source = new Option(this.props.item[0], this.props.item[1]);
+    // props.item := [<key>, <symbol>]
     this.state = {
-      data: source,
-      date: source.expDates[0], // this will be the the earliest date in source.expDates
+      expDates: [],
+      expDate: null,
     };
-    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleExpDateChange = this.handleExpDateChange.bind(this);
   }
   
-  handleDateChange(event, index, value) {
+  componentDidMount() {
+    // Fetch expDates here.
+    let symbol = this.props.item[1];
+    
+    fetch(source + '/api/exp/?symbol=' + symbol)
+      .then((response) => {
+        if (response.status >= 400) {
+          console.log("error in fetching exp dates");
+          // Handle error here
+          return null;
+        } else {
+          return response.json();
+        }
+      }).then((json) => {
+        let expDates = json.expirations.date;
+        this.setState({
+          expDates: expDates,
+          expDate: expDates[0],
+        });
+      
+        // Fetch initial data here with expDates[0] after getting the list of exp dates.
+        fetch(source + '/api/chain/?symbol='
+              + symbol
+              + '&expiration='
+              + expDates[0])
+          .then(response => response.json())
+          .then((chain) => {
+            // Initial chain data is obtained here, needs to push it into a state or somehow store it.
+            // Also needs to save as cache.
+            console.log(chain);
+          })
+      })
+  }
+  
+  handleExpDateChange(event, index, value) {
+    fetch(
+          source + '/api/chain/?symbol='
+          + this.props.item[1]
+          + '&expiration='
+          + value
+          )
+      .then(response => response.json())
+      .then((chain) => {
+        // Initial chain data is obtained here, needs to push it into a state or somehow store it.
+        // Also needs to save as cache.
+        console.log(chain);
+      })
+    
     this.setState({
-      date: value,
+      expDate: value,
     });
     // TODO: Wipe all graphed lines here.
   }
   
   render() {
-    // expDates will need to be initialized
     return (
       <Paper zDepth={2}>
         <Card className="graph">
           <GraphTitle
             item={this.props.item}
             handleKill={this.props.handleKill}
-            expDates={this.state.data.expDates}
-            handleDateChange={this.handleDateChange}
-            date={this.state.date}
+            expDates={this.state.expDates}
+            handleExpDateChange={this.handleExpDateChange}
+            expDate={this.state.expDate}
           />
           
           <canvas id="this.props.name" className="plot"></canvas>
@@ -54,18 +103,18 @@ class Graph extends React.Component {
 
 const styles = {
   inline: {
-    textAlign: "left",
+    textAlign: 'left',
   },
   title: {
-    cursor: "pointer",
-    height: "100%"
+    cursor: 'pointer',
+    height: '100%'
   },
   appbar: {
-    backgroundColor: "#00A2E1",
+    backgroundColor: '#00A2E1',
   },
   dateSelector: {
-    maxWidth: "140px",
-    margin: "0",
+    maxWidth: '140px',
+    margin: '0',
   }
 };
 
@@ -84,9 +133,9 @@ function GraphTitle(props) {
       }
       iconElementRight={
         <ExpDateSelector
-          date={props.date}
+          expDate={props.expDate}
           expDates={props.expDates}
-          handleDateChange={props.handleDateChange}
+          handleExpDateChange={props.handleExpDateChange}
         />
       }
     />
@@ -97,8 +146,8 @@ function ExpDateSelector(props) {
   return (
     <SelectField
       floatingLabelText="Expiration Date"
-      value={props.date}
-      onChange={props.handleDateChange}
+      value={props.expDate}
+      onChange={props.handleExpDateChange}
       style={styles.dateSelector}
     >
       {props.expDates.map(

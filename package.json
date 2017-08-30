@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "babel-preset-stage-1": "^6.24.1",
+    "eslint": "^4.3.0",
     "redux-devtools": "^3.4.0"
   }
 }

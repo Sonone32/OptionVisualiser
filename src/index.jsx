@@ -1,7 +1,7 @@
-import React from "react";
-import * as RBS from "react-bootstrap" //RBS for React-BootStrap
-import SearchBar from "material-ui-search-bar"
-import Graph from "./graph.jsx";
+import React from 'react';
+import * as RBS from 'react-bootstrap' //RBS for React-BootStrap
+import SearchBar from 'material-ui-search-bar'
+import Graph from './graph.jsx';
 
 
 function Title(props) {
@@ -26,12 +26,13 @@ class MainPanel extends React.Component {
   constructor() {
     super();
     this.state = {
-      items: [[1, 'AMD'],
-              [2, 'NVDA'],
-              [3, 'INTC'],
-             ]
+      items: [],
+      key: 0,
+      searchTerm: "",
     }
     this.handleKill = this.handleKill.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
   
   handleKill(key) {
@@ -42,6 +43,27 @@ class MainPanel extends React.Component {
     }
     this.setState({
       items: newData,
+    });
+  }
+  
+  handleSearchChange(value) {
+    this.setState({
+      searchTerm: value,
+    })
+    console.log("term changed to: "+value);
+  }
+  
+  handleSearch() {
+    console.log("searching for: "+this.state.searchTerm);
+    // Clear this.state.searchTerm after searching.
+    // Maybe add verification here or on handleSearchChange.
+    let newItems = [[this.state.key, this.state.searchTerm.toUpperCase()]];
+    newItems = newItems.concat(this.state.items);
+    
+    this.setState({
+      items: newItems,
+      key: this.state.key + 1,
+      searchTerm: "",
     });
   }
   
@@ -58,9 +80,10 @@ class MainPanel extends React.Component {
           <RBS.Col lg={10} lgOffset={1}>
             <div id="searchField">
               <SearchBar
-              onChange={(value) => console.log(value)}
-              onRequestSearch={() => console.log("searching ")}
-              hintText="Add a graph"
+                onChange={this.handleSearchChange}
+                onRequestSearch={this.handleSearch}
+                hintText="Add a graph"
+                value={this.state.searchTerm}
               />
             </div>
           </RBS.Col>
