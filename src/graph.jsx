@@ -12,22 +12,47 @@ import 'isomorphic-fetch';
 
 import {Phi, phi} from './modeling.js';
 
-const source = 'http://www.flowersync.com:8080/api';
+const source = 'http://flowersync.com:8080/api';
+
+// TODO: Make some sort of pop up window that shows quote/chain data when elements are clicked on.
+// TODO: Generate x-axis labels from this.state.chain. What should the domain be?
+
+
 
 class Graph extends React.Component {
   constructor(props) {
     super(props);
     // props.item := [<key>, <symbol>]
     this.state = {
-      valid: true,
-      loading: true, // Might need to split this into multiple loading indicators.
-      quote: 0,
-      chain: null,
+      cache: {},
+      chain: null,  // Stores fetched data for current expDate.
       expDates: [],
       expDate: null,
-      cache: {},
+      fetchError: false,
+      loadingChain: true,
+      loadingQuote: true,
+      plotDate: [], // List of data to plot.
+      quote: {},  // Stores fetched data for underlying stock.
     };
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
+    this.makeChartDate = this.makeChartData.bind(this);
+  }
+  
+  makeChartData() {
+    // This is where most of the math will happen.
+    let chartData = {labels: [], datasets: []};
+    let priceSet = new Set();
+    
+    for (let i = 0; i < this.state.chain.length; i++) {
+      if (!priceSet.has(this.state.chain[i].strike)) {
+        priceSet.add(this.state.chain[i].strike);
+        chartData.labels.push(this.state.chain[i].strike);
+      }
+    }
+    
+    chartData.labels = chartData.labels.sort((a, b) => a - b);
+    
+    console.log(chartData);
   }
   
   componentDidMount() {
@@ -40,12 +65,13 @@ class Graph extends React.Component {
       .then(json => {
         console.log("quote is: " + json.quotes.quote);
         this.setState({
+          loadingQuote: false,
           quote: json.quotes.quote,
         });
       })
       .catch(error => {
         this.setState({
-          valid: false
+          fetchError: true
         })
       });
     
@@ -73,19 +99,13 @@ class Graph extends React.Component {
             
             this.setState({
               chain: option,
-            })
-          
-            let prices = [];
-            for (let i = 0; i < option.length; i++) {
-              prices.push([option[i].strike, option[i].option_type]);
-            }
-            console.log(prices.sort((a,b) => a[0]-b[0]));
-
+              loadingChain: false,
+            });
           });
       })
       .catch(error => {
         this.setState({
-          valid: false
+          fetchError: true
         })
       });
   }
@@ -110,6 +130,7 @@ class Graph extends React.Component {
     Object.assign(cacheCopy, updater);
     this.setState({
       cache: cacheCopy,
+      loadingChain: true, // True
     });
     
     fetch(
@@ -123,21 +144,25 @@ class Graph extends React.Component {
         // Initial chain data is obtained here, needs to push it into a state or somehow store it.
         this.setState({
           chain: chain.options.option,
+          loadingChain: false,
         });
       })
     
     this.setState({
       expDate: value,
+      plotData: [], // Temp. plotData wipe
     })
     
     // TODO: Wipe all graphed lines here or above
   }
   
   render() {
-    let core = <div>beep boop error!</div>;
+    // Call makeChartData() in here somewhere if loading is finished.
     
-    if (this.state.valid) {
-      core = <div>content is here</div>
+    let core = <div>content is here</div>;
+    
+    if (this.state.fetchError) {
+      core = <div>beep boop error!</div>;
     }
     
     return (
