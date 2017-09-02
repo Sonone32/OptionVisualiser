@@ -26,6 +26,8 @@ class Graph extends React.Component {
     this.state = {
       cache: {},
       chain: null,  // Stores fetched data for current expDate.
+      chartDatasets: [],
+      chartLabels: [],
       expDates: [],
       expDate: null,
       fetchError: false,
@@ -35,24 +37,33 @@ class Graph extends React.Component {
       quote: {},  // Stores fetched data for underlying stock.
     };
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
-    this.makeChartDate = this.makeChartData.bind(this);
+    this.makeChartDatasets = this.makeChartDatasets.bind(this);
+    this.makeChartLabels = this.makeChartLabels.bind(this);
   }
   
-  makeChartData() {
-    // This is where most of the math will happen.
-    let chartData = {labels: [], datasets: []};
+  makeChartLabels() {
+    // Generate x-axis for the chart.
+    let labels = [];
     let priceSet = new Set();
     
     for (let i = 0; i < this.state.chain.length; i++) {
       if (!priceSet.has(this.state.chain[i].strike)) {
         priceSet.add(this.state.chain[i].strike);
-        chartData.labels.push(this.state.chain[i].strike);
+        labels.push(this.state.chain[i].strike);
       }
     }
     
-    chartData.labels = chartData.labels.sort((a, b) => a - b);
+    labels = labels.sort((a, b) => a - b);
     
-    console.log(chartData);
+    this.setState({
+      chartLabels: labels,
+    });
+  }
+  
+  makeChartDatasets() {
+    // Available dataset options are the ones present in this.state.chain.
+    // This is where most of the math will happen.
+    // Calculate data on the fly and push to state.
   }
   
   componentDidMount() {
@@ -75,6 +86,7 @@ class Graph extends React.Component {
         })
       });
     
+    // Fetch expDates then chain data here.
     fetch(source + '/exp/?symbol=' + symbol)
       .then(response => response.json())
       .then(json => {
@@ -157,7 +169,7 @@ class Graph extends React.Component {
   }
   
   render() {
-    // Call makeChartData() in here somewhere if loading is finished.
+    // Call makeChart{Datasets, Labels}() in here somewhere if loading is finished.
     
     let core = <div>content is here</div>;
     
