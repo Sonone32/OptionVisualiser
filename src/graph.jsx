@@ -10,6 +10,9 @@ import MenuItem from 'material-ui/MenuItem';
 import polyfill from 'es6-promise';
 import 'isomorphic-fetch';
 
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import Chip from 'material-ui/Chip';
+
 import {Phi, phi} from './modeling.js';
 
 const source = 'http://flowersync.com:8080/api';
@@ -23,47 +26,58 @@ class Graph extends React.Component {
   constructor(props) {
     super(props);
     // props.item := [<key>, <symbol>]
-    this.state = {
+    this.state = {  // Needs to calculate and store implied volatility.
       cache: {},
-      chain: null,  // Stores fetched data for current expDate.
+      chain: {},  // Stores fetched & transformed data for current expDate.
       chartDatasets: [],
       chartLabels: [],
       expDates: [],
       expDate: null,
+      currentDate: null,
       fetchError: false,
       loadingChain: true,
       loadingQuote: true,
-      plotDate: [], // List of data to plot.
       quote: {},  // Stores fetched data for underlying stock.
     };
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
     this.makeChartDatasets = this.makeChartDatasets.bind(this);
-    this.makeChartLabels = this.makeChartLabels.bind(this);
+    this.makeDataTransform = this.makeDataTransform.bind(this);
+    this.addToBasket = this.addToBasket.bind(this);
   }
   
-  makeChartLabels() {
-    // Generate x-axis for the chart.
-    let labels = [];
-    let priceSet = new Set();
-    
-    for (let i = 0; i < this.state.chain.length; i++) {
-      if (!priceSet.has(this.state.chain[i].strike)) {
-        priceSet.add(this.state.chain[i].strike);
-        labels.push(this.state.chain[i].strike);
-      }
-    }
-    
-    labels = labels.sort((a, b) => a - b);
-    
+  addToBasket(type, price, volume) {
+    let newChain = this.state.chain;
+    newChain[type][price].volume += volume;
     this.setState({
-      chartLabels: labels,
+      chain: newChain,
     });
   }
   
-  makeChartDatasets() {
+  // Transforms fetched chain data into something usable by this application.
+  // May be imported from another file a la factory pattern, and return
+  // whatever version works for the data source.
+  makeDataTransform(chain) {
+    let cleanedChain = {puts: {}, calls: {}};
+    let bound = chain.length;
+    
+    for (let i = 0; i < bound; i++) {
+      cleanedChain[chain[i].option_type == 'put' ? 'puts' : 'calls'][chain[i].strike] = {ask: chain[i].ask,
+                                                                                         bid: chain[i].bid,
+                                                                                         data: chain[i],
+                                                                                         IV: 0,
+                                                                                         strike: chain[i].strike,
+                                                                                         value: 0, // per contract
+                                                                                         volume: 0,
+                                                                                        };
+    }
+    
+    return cleanedChain;
+  }
+  
+  makeChartDatasets(options) {
     // Available dataset options are the ones present in this.state.chain.
     // This is where most of the math will happen.
-    // Calculate data on the fly and push to state.
+    // Calculate data on added/removed elements and push to state.
   }
   
   componentDidMount() {
@@ -104,13 +118,9 @@ class Graph extends React.Component {
           .then(response => response.json())
           .then(chain => {
             // Initial chain data is obtained here, needs to push it into a state or somehow store it.
-            // Also needs to save as cache.
-            
-            let option = chain.options.option;
-            console.log(option);
-            
+            console.log(chain.options.option);
             this.setState({
-              chain: option,
+              chain: this.makeDataTransform(chain.options.option),
               loadingChain: false,
             });
           });
@@ -122,6 +132,7 @@ class Graph extends React.Component {
       });
   }
   
+  // TODO: Should probably fetch new quote data here.
   handleExpDateChange(event, index, value) {
     // Do nothing for meaningless event.
     if (value === this.state.expDate) return;
@@ -135,13 +146,8 @@ class Graph extends React.Component {
       return;
     }
     
-    // Cache current chain data and load the next if content is not cached.
-    let cacheCopy = this.state.cache;
-    let updater = {};
-    updater[this.state.expDate] = this.state.chain;
-    Object.assign(cacheCopy, updater);
+    // Enter loading and after data has been feteched cache old and replace with new.
     this.setState({
-      cache: cacheCopy,
       loadingChain: true, // True
     });
     
@@ -154,22 +160,27 @@ class Graph extends React.Component {
       .then(response => response.json())
       .then(chain => {
         // Initial chain data is obtained here, needs to push it into a state or somehow store it.
+        let cacheCopy = this.state.cache;
+        let updater = {};
+        updater[this.state.expDate] = this.state.chain;
+        Object.assign(cacheCopy, updater);
         this.setState({
-          chain: chain.options.option,
+          cache: cacheCopy,
+          chain: this.makeDataTransform(chain.options.option),
           loadingChain: false,
+          plotData: [], // Temp. plotData wipe
         });
       })
     
     this.setState({
       expDate: value,
-      plotData: [], // Temp. plotData wipe
     })
     
     // TODO: Wipe all graphed lines here or above
   }
   
   render() {
-    // Call makeChart{Datasets, Labels}() in here somewhere if loading is finished.
+    // Call makeChartDatasets() in here somewhere if loading is finished.
     
     let core = <div>content is here</div>;
     
@@ -189,12 +200,24 @@ class Graph extends React.Component {
           />
           
           {core}
-
+          
+          <PlotBasket
+            chain={this.state.chain}
+            basket={this.state.plotData}
+            updatePlot={this.addToBasket}
+          />
+          
         </Card>
       </Paper>
     );
   }
 }
+
+
+
+
+
+
 
 const styles = {
   inline: {
@@ -210,8 +233,108 @@ const styles = {
   dateSelector: {
     maxWidth: '140px',
     margin: '0',
-  }
+  },
+  chip: {
+    margin: 4,
+  },
+  chipWrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
 };
+
+
+// Has a (+) button and on clicking displays in a dialog the message below:
+// I want to {buy, sell} {n} {call, put} contract(s) with strike price at {list of price not in use}.
+// Disable (+) if all prices are in use.
+// Also renders a list of chips which on click opens up a dialog for configuration.
+class PlotBasket extends React.Component {
+  constructor(props) {
+    super(props);
+    this.drawChips = this.drawChips.bind(this);
+    this.addChip = this.addChip.bind(this);
+    this.handleRequestDelete = this.handleRequestDelete.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      
+    };
+  }
+  
+  handleRequestDelete(event) {
+    console.log(event)
+    alert('x the chip');
+  }
+  
+  handleClick(event) {
+    console.log(event)
+    alert('click the chip');
+  }
+  
+  drawChips() {
+    // Return an array of chips to be rendered from this.props.chain.
+    let chips = [];
+    let chain = this.props.chain;
+    
+    for (let key in chain['calls']) {
+      if (chain['calls'][key].volume === 0) {
+        chips.push(<Chip
+                     onRequestDelete={this.handleRequestDelete}
+                     onClick={this.handleClick}
+                     style={styles.chip}
+                     key={key}
+                   >
+                     call@{key}
+                   </Chip>
+                  );
+      }
+    }
+    
+    for (let key in chain['puts']) {
+      if (chain['puts'][key].volume === 0) {
+        chips.push(<Chip
+                     onRequestDelete={this.handleRequestDelete}
+                     onClick={this.handleClick}
+                     style={styles.chip}
+                     key={'-' + key}
+                   >
+                     put@{key}
+                   </Chip>
+                  );
+      }
+    }
+    
+    return (
+      <div style={styles.chipWrapper}>
+        {chips}
+      </div>
+    )
+  }
+  
+  addChip() {
+    alert('adding chip rn');
+  }
+  
+  render() {
+    if (!this.props.chain.hasOwnProperty('puts')) return null;
+    
+    return (
+      <div>
+        <Chip
+          onRequestDelete={this.handleRequestDelete}    // Funky interaction when clicking delete, as onClick gets triggered as well.
+          onClick={this.handleClick}
+          style={styles.chip}
+        >
+          Deletable Text Chip.
+        </Chip>
+        <IconButton onClick={() => this.addChip()}>
+          <ContentAdd />
+        </IconButton>
+      </div>
+      
+    );
+  }
+}
+
 
 function GraphTitle(props) {
   let key = props.item[0];

@@ -12,23 +12,13 @@ function Title(props) {
   );
 }
 
-function GraphBox(props) {
-  return (
-    <div id="graphBox">
-      {props.items.map(
-        x => <Graph key={x[0]} item={x} handleKill={props.handleKill} />
-      )}
-    </div>
-  );
-}
-
 class MainPanel extends React.Component {
   constructor() {
     super();
     this.state = {
-      items: [],
+      items: [[-1, 'AMD']],
       key: 0,
-      searchTerm: "",
+      searchTerm: '',
     }
     this.handleKill = this.handleKill.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -91,7 +81,11 @@ class MainPanel extends React.Component {
         
         <RBS.Row className="show-grid">
           <RBS.Col lg={12}>
-            <GraphBox items={this.state.items} handleKill={this.handleKill}/>
+            <div id="graphBox">
+              {this.state.items.map(
+                x => <Graph key={x[0]} item={x} handleKill={this.handleKill} />
+              )}
+            </div>
           </RBS.Col>
         </RBS.Row>
       </RBS.Grid>
