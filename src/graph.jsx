@@ -2,7 +2,7 @@ import React from 'react';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
-import Line from 'react-chartjs';
+//import Line from 'react-chartjs';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import SelectField from 'material-ui/SelectField';
@@ -12,6 +12,11 @@ import 'isomorphic-fetch';
 
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Chip from 'material-ui/Chip';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import TextField from 'material-ui/TextField';
+
 
 import {Phi, phi} from './modeling.js';
 
@@ -42,10 +47,10 @@ class Graph extends React.Component {
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
     this.makeChartDatasets = this.makeChartDatasets.bind(this);
     this.makeDataTransform = this.makeDataTransform.bind(this);
-    this.addToBasket = this.addToBasket.bind(this);
+    this.handleChipChange = this.handleChipChange.bind(this);
   }
   
-  addToBasket(type, price, volume) {
+  handleChipChange(type, price, volume) {
     let newChain = this.state.chain;
     newChain[type][price].volume += volume;
     this.setState({
@@ -204,7 +209,7 @@ class Graph extends React.Component {
           <PlotBasket
             chain={this.state.chain}
             basket={this.state.plotData}
-            updatePlot={this.addToBasket}
+            handleChipChange={this.handleChipChange}
           />
           
         </Card>
@@ -248,92 +253,234 @@ const styles = {
 // I want to {buy, sell} {n} {call, put} contract(s) with strike price at {list of price not in use}.
 // Disable (+) if all prices are in use.
 // Also renders a list of chips which on click opens up a dialog for configuration.
+//
+// LEARN FLEXBOX
+//
 class PlotBasket extends React.Component {
   constructor(props) {
     super(props);
-    this.drawChips = this.drawChips.bind(this);
-    this.addChip = this.addChip.bind(this);
-    this.handleRequestDelete = this.handleRequestDelete.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.state = {
-      
-    };
+    
+    this.processChips = this.processChips.bind(this);
+    this.handleChipClick = this.handleChipClick.bind(this);
   }
   
-  handleRequestDelete(event) {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.chain === nextProps.chain ? false : true;
+  }
+  
+  handleChipClick(event) {
+    console.log('click')
     console.log(event)
-    alert('x the chip');
   }
   
-  handleClick(event) {
-    console.log(event)
-    alert('click the chip');
-  }
-  
-  drawChips() {
+  processChips() {
+    console.log('drawing chips')
     // Return an array of chips to be rendered from this.props.chain.
     let chips = [];
+    let unusedCalls = [];
+    let unusedPuts = [];
     let chain = this.props.chain;
     
     for (let key in chain['calls']) {
-      if (chain['calls'][key].volume === 0) {
-        chips.push(<Chip
-                     onRequestDelete={this.handleRequestDelete}
-                     onClick={this.handleClick}
-                     style={styles.chip}
-                     key={key}
-                   >
-                     call@{key}
-                   </Chip>
-                  );
+      if (chain['calls'][key].volume !== 0) {
+        chips.push([chain['calls'][key].strike,
+                    <Chip
+                      onClick={this.handleChipClick}
+                      style={styles.chip}
+                      key={key}
+                    >
+                      call@{key}
+                    </Chip>
+                  ]);
+      } else {
+        unusedCalls.push(chain['calls'][key].strike);
       }
     }
     
     for (let key in chain['puts']) {
-      if (chain['puts'][key].volume === 0) {
-        chips.push(<Chip
-                     onRequestDelete={this.handleRequestDelete}
-                     onClick={this.handleClick}
-                     style={styles.chip}
-                     key={'-' + key}
-                   >
-                     put@{key}
-                   </Chip>
-                  );
+      if (chain['puts'][key].volume !== 0) {
+        chips.push([chain['puts'][key].strike,
+                    <Chip
+                      onClick={this.handleChipClick}
+                      style={styles.chip}
+                      key={'-' + key}
+                    >
+                      put@{key}
+                    </Chip>
+                  ]);
+      } else {
+        unusedPuts.push(chain['puts'][key].strike);
       }
     }
     
-    return (
-      <div style={styles.chipWrapper}>
-        {chips}
-      </div>
-    )
-  }
-  
-  addChip() {
-    alert('adding chip rn');
+    chips = chips.sort((a, b) => a[0] - b[0]);
+    
+    return [chips.map(x => x[1]),
+            unusedPuts.sort((a, b) => a[0] - b[0]),
+            unusedCalls.sort((a, b) => a[0] - b[0]),
+           ];
   }
   
   render() {
     if (!this.props.chain.hasOwnProperty('puts')) return null;
     
+    let [chips, unusedCalls, unusedPuts] = this.processChips();
+    
     return (
       <div>
-        <Chip
-          onRequestDelete={this.handleRequestDelete}    // Funky interaction when clicking delete, as onClick gets triggered as well.
-          onClick={this.handleClick}
-          style={styles.chip}
-        >
-          Deletable Text Chip.
-        </Chip>
-        <IconButton onClick={() => this.addChip()}>
-          <ContentAdd />
-        </IconButton>
+        <div style={styles.chipWrapper}>
+          {chips}
+        </div>
+        
+        <AddMenu
+          handleAdd={this.props.handleChipChange}
+          unusedCalls={unusedCalls}
+          unusedPuts={unusedPuts}
+        />
       </div>
       
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+class AddMenu extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      menuOpen: false,
+      verb: 1,  // 1 for buy and -1 for sell
+      quantity: '',
+      quantityError: false,
+      strike: null,
+      call: true, // false for put
+    };
+    
+    this.handleMenuOpen = this.handleMenuOpen.bind(this);
+    this.handleMenuClose = this.handleMenuClose.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
+    this.handleVerbChange = this.handleVerbChange.bind(this);
+    this.handleQuantityChange = this.handleQuantityChange.bind(this);
+    this.handleStrikeChange = this.handleStrikeChange.bind(this);
+    this.handleCallChange = this.handleCallChange.bind(this);
+  }
+  
+  handleMenuOpen() {
+    console.log('opening menu')
+    this.setState({
+      menuOpen: true,
+    });
+  }
+  
+  handleMenuClose() {
+    console.log('closing menu')
+    this.setState({
+      menuOpen: false,
+    });
+  }
+  
+  handleAdd(){
+    console.log('adding chip rn');
+    this.setState({
+      menuOpen: false,
+    });
+  }
+  
+  handleVerbChange(event, index, value) {
+    if (this.state.verb === value) return;
+    this.setState({
+      verb: value,
+    });
+  }
+  
+  // Should consider regex tbh
+  handleQuantityChange(event, value) {
+    let val = parseInt(value);
+    this.setState({
+      quantity: val,
+      quantityErrorText: (val <= 0) ? true : false,
+    });
+  }
+  
+  handleCallChange(event, index, value) {
+    if (this.state.call === value) return;
+    this.setState({
+      call: value,
+    });
+  }
+  
+  handleStrikeChange(event, index, value) {
+    
+  }
+  
+  
+  
+  render() {
+    const menuActions = [
+      <FlatButton
+        label="Never mind"
+        primary={true}
+        onClick={this.handleMenuClose}
+      />,
+      <FlatButton
+        label="Okay"
+        primary={true}
+        onClick={this.handleAdd}
+      />,
+    ]
+    
+    // text field needs fixing. error not displaying properly.
+    
+    return (
+      <div>
+        <IconButton onClick={this.handleMenuOpen}>
+          <ContentAdd />
+        </IconButton>
+        <Dialog
+          title="I want to..."
+          actions={menuActions}
+          modal={false}
+          open={this.state.menuOpen}
+          onRequestClose={this.handleMenuClose}
+        >
+          <DropDownMenu value={this.state.verb} onChange={this.handleVerbChange}>
+            <MenuItem value={1} primaryText="buy" />
+            <MenuItem value={-1} primaryText="sell" />
+          </DropDownMenu>
+          
+          <TextField
+            errorText={this.state.quantityError ? 'Please enter a positive integer.' : ''}
+            floatingLabelText="this amount of"
+            onChange={this.handleQuantityChange}
+            value={this.state.quantityValue}
+          />
+          
+          <DropDownMenu value={this.state.call} onChange={this.handleCallChange}>
+            <MenuItem value={true} primaryText="call contract" />
+            <MenuItem value={false} primaryText="put contract" />
+          </DropDownMenu>
+          
+          contracts with a strike price of
+          
+          <DropDownMenu value={this.state.strike} onChange={this.handleStrikeChange}>
+            <MenuItem value={null} primaryText="" />
+          </DropDownMenu>
+          
+        </Dialog>
+      </div>
+    );
+  }
+}
+
+
 
 
 function GraphTitle(props) {
