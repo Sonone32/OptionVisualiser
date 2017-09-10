@@ -1,16 +1,9 @@
 import React from 'react';
 import * as RBS from 'react-bootstrap' //RBS for React-BootStrap
 import SearchBar from 'material-ui-search-bar'
-import Graph from './graph.jsx';
+import Graph from './graph/graph.jsx';
 
-
-function Title(props) {
-  return (
-    <div id="title">
-      <h1>flowersYnc</h1>
-    </div>
-  );
-}
+const hintText = 'Add a graph'
 
 class MainPanel extends React.Component {
   constructor() {
@@ -23,6 +16,22 @@ class MainPanel extends React.Component {
     this.handleKill = this.handleKill.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
+  }
+  
+  componentDidMount() {
+    // The id of the actual html input field contains the hint text of SearchBar.
+    let searchField = document.querySelector('[id*=' + hintText.replace(/\s/g, '') + ']');
+    if (searchField) {
+      searchField.focus();
+      window.addEventListener('keypress', event => {
+        if (((event.charCode >= 97 && event.charCode <= 122)  // /[a-zA-Z]/, code looks ugly but will do for now...
+            || (event.charCode >= 65 && event.charCode <= 90))
+            && searchField !== document.activeElement 
+            && document.activeElement.nodeName !== 'INPUT') {
+          searchField.focus();
+        }
+      });
+    }
   }
   
   handleKill(key) {
@@ -72,7 +81,8 @@ class MainPanel extends React.Component {
               <SearchBar
                 onChange={this.handleSearchChange}
                 onRequestSearch={this.handleSearch}
-                hintText="Add a graph"
+                hintText={hintText}
+                id="search"
                 value={this.state.searchTerm}
               />
             </div>
@@ -91,6 +101,14 @@ class MainPanel extends React.Component {
       </RBS.Grid>
     );
   }
+}
+
+function Title(props) {
+  return (
+    <div id="title">
+      <h1>flowersYnc</h1>
+    </div>
+  );
 }
 
 export default MainPanel;
