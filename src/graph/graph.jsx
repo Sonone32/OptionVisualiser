@@ -56,10 +56,10 @@ class Graph extends React.Component {
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
     this.makeChartDatasets = this.makeChartDatasets.bind(this);
     this.makeDataTransform = this.makeDataTransform.bind(this);
-    this.handleChipChange = this.handleChipChange.bind(this);
+    this.handleChipAdd = this.handleChipAdd.bind(this);
   }
   
-  handleChipChange(type, price, volume) {
+  handleChipAdd(type, price, volume) {
     let newChain = Object.assign({}, this.state.chain);
     newChain[type][price].volume += volume;
     this.setState({
@@ -73,10 +73,13 @@ class Graph extends React.Component {
   makeDataTransform(chain) {
     let cleanedChain = {puts: {}, calls: {}};
     let bound = chain.length;
+    let color;
     
     for (let i = 0; i < bound; i++) {
+      color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
       cleanedChain[chain[i].option_type === 'put' ? 'puts' : 'calls'][chain[i].strike] = {ask: chain[i].ask,
                                                                                           bid: chain[i].bid,
+                                                                                          color: color,
                                                                                           data: chain[i],
                                                                                           IV: 0,
                                                                                           strike: chain[i].strike,
@@ -217,7 +220,7 @@ class Graph extends React.Component {
           <PlotBasket
             chain={this.state.chain}
             basket={this.state.plotData}
-            handleChipChange={this.handleChipChange}
+            handleChipAdd={this.handleChipAdd}
           />
           
         </Card>

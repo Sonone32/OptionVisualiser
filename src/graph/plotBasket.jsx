@@ -7,6 +7,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
+import Avatar from 'material-ui/Avatar';
 
 const styles = {
   chip: {
@@ -33,17 +34,32 @@ class PlotBasket extends React.Component {
   constructor(props) {
     super(props);
     
+    this.state = {
+      chipOpen: false,
+      
+    };
+    
     this.processChips = this.processChips.bind(this);
-    this.handleChipClick = this.handleChipClick.bind(this);
+    this.handleChipOpen = this.handleChipOpen.bind(this);
+    this.handleChipClose = this.handleChipClose.bind(this);
   }
   
+  
+  // Needs to somehow change this so that processChip() doesnt get run when opening a dialog.
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.chain === nextProps.chain ? false : true;
   }
   
-  handleChipClick(event) {
-    console.log('click')
-    console.log(event)
+  handleChipOpen(type, strike, volume, color, data) {
+    this.setState({
+      chipOpen: true,
+    });
+  }
+  
+  handleChipClose() {
+    this.setState({
+      chipOpen: false,
+    });
   }
   
   processChips() {
@@ -57,13 +73,13 @@ class PlotBasket extends React.Component {
     for (let key in chain['calls']) {
       if (chain['calls'][key].volume === 0) {
         chips.push([chain['calls'][key].strike,
-                    <Chip
-                      onClick={this.handleChipClick}
-                      style={styles.chip}
+                    <OptionChip
+                      onChipOpen={this.handleChipOpen}
                       key={key}
+                      data={ {option: chain['calls'][key], type: 'calls'} }
                     >
                       {chain['calls'][key].volume} call@{key}
-                    </Chip>
+                    </OptionChip>
                   ]);
       } else {
         unusedCalls.push(chain['calls'][key].strike);
@@ -73,13 +89,13 @@ class PlotBasket extends React.Component {
     for (let key in chain['puts']) {
       if (chain['puts'][key].volume !== 0) {
         chips.push([chain['puts'][key].strike,
-                    <Chip
-                      onClick={this.handleChipClick}
-                      style={styles.chip}
+                    <OptionChip
+                      onChipOpen={this.handleChipOpen}
                       key={'-' + key}
+                      data={ {option: chain['puts'][key], type: 'puts'} }
                     >
                       {chain['puts'][key].volume} put@{key}
-                    </Chip>
+                    </OptionChip>
                   ]);
       } else {
         unusedPuts.push(chain['puts'][key].strike);
@@ -99,20 +115,63 @@ class PlotBasket extends React.Component {
     
     let [chips, unusedCalls, unusedPuts] = this.processChips();
     
-    console.log('unused calls is ', unusedCalls)
+    const chipActions = [
+      
+    ];
     
     return (
-      
       <div>
         <div style={styles.flexWrapper}>{chips}</div>
+        <Dialog
+          title="Opened a chip"
+          actions={chipActions}
+          modal={false}
+          open={this.state.chipOpen}
+          onRequestClose={this.handleChipClose}
+        >
+        </Dialog>
         <AddMenu
-          handleAdd={this.props.handleChipChange}
+          handleAdd={this.props.handleChipAdd}
           unusedCalls={unusedCalls}
           unusedPuts={unusedPuts}
         />
       </div>
       
     );
+  }
+}
+
+// Wrapper for material-ui chip that can handle sending info to dialog.
+class OptionChip extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.openDialog = this.openDialog.bind(this);
+  }
+  
+  openDialog() {
+    console.log('open dialog')
+    let data = this.props.data;
+    this.props.onChipOpen(data.type,
+                          data.option.strike,
+                          data.option.volume,
+                          data.option.color,
+                          data.option,
+                         );
+  }
+  
+  render() {
+    return (
+      <Chip
+        onClick={this.openDialog}
+        style={styles.chip}
+      >
+        <Avatar size={32} color={'#fff'} backgroundColor={this.props.data.option.color}>
+          {this.props.data.type.slice(0, -1)}
+        </Avatar>
+        {this.props.children}
+      </Chip>
+    )
   }
 }
 
