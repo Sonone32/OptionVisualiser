@@ -35,23 +35,46 @@ class PlotBasket extends React.Component {
     super(props);
     
     this.state = {
+      chips: [],
+      chipData: null,
       chipOpen: false,
-      
+      chipType: null,
+      unusedCalls: [],
+      unusedPuts: [],
     };
     
     this.processChips = this.processChips.bind(this);
     this.handleChipOpen = this.handleChipOpen.bind(this);
     this.handleChipClose = this.handleChipClose.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   
-  
-  // Needs to somehow change this so that processChip() doesnt get run when opening a dialog.
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.chain === nextProps.chain ? false : true;
-  }
-  
-  handleChipOpen(type, strike, volume, color, data) {
+  // Initialization after data has been fetched => basket is mounted.
+  componentDidMount() {
+    let [chips, unusedCalls, unusedPuts] = this.processChips();
     this.setState({
+      chips: chips,
+      unusedCalls: unusedCalls,
+      unusedPuts: unusedPuts,
+    });
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    // Recalculate the three arrays if chain changed.
+    if (this.props.chain !== nextProps.chain) {
+      let [chips, unusedCalls, unusedPuts] = this.processChips(nextProps.chain);
+      this.setState({
+        chips: chips,
+        unusedCalls: unusedCalls,
+        unusedPuts: unusedPuts,
+      });
+    }
+  }
+  
+  handleChipOpen(type, data) {
+    this.setState({
+      chipType: type,
+      chipData: data,
       chipOpen: true,
     });
   }
@@ -62,13 +85,17 @@ class PlotBasket extends React.Component {
     });
   }
   
-  processChips() {
+  handleSubmit() {
+    
+  }
+  
+  processChips(newChain) {
     console.log('drawing chips')
     // Return an array of chips to be rendered from this.props.chain.
+    let chain = newChain ? newChain : this.props.chain;
     let chips = [];
     let unusedCalls = [];
     let unusedPuts = [];
-    let chain = this.props.chain;
     
     for (let key in chain['calls']) {
       if (chain['calls'][key].volume === 0) {
@@ -105,15 +132,13 @@ class PlotBasket extends React.Component {
     chips = chips.sort((a, b) => a[0] - b[0]);
     
     return [chips.map(x => x[1]),
-            unusedPuts.sort((a, b) => a - b),
             unusedCalls.sort((a, b) => a - b),
+            unusedPuts.sort((a, b) => a - b),
            ];
   }
   
   render() {
     if (!this.props.chain.hasOwnProperty('puts')) return null;
-    
-    let [chips, unusedCalls, unusedPuts] = this.processChips();
     
     const chipActions = [
       
@@ -121,19 +146,18 @@ class PlotBasket extends React.Component {
     
     return (
       <div>
-        <div style={styles.flexWrapper}>{chips}</div>
-        <Dialog
-          title="Opened a chip"
-          actions={chipActions}
-          modal={false}
-          open={this.state.chipOpen}
-          onRequestClose={this.handleChipClose}
-        >
-        </Dialog>
+        <div style={styles.flexWrapper}>{this.state.chips}</div>
+        <ChipDialog
+          chipData={this.state.chipData}
+          chipOpen={this.state.chipOpen}
+          chipType={this.state.chipType}
+          handleChipClose={this.handleChipClose}
+          handleSubmit={this.handleSubmit}
+        />
         <AddMenu
           handleAdd={this.props.handleChipAdd}
-          unusedCalls={unusedCalls}
-          unusedPuts={unusedPuts}
+          unusedCalls={this.state.unusedCalls}
+          unusedPuts={this.state.unusedPuts}
         />
       </div>
       
@@ -152,12 +176,7 @@ class OptionChip extends React.Component {
   openDialog() {
     console.log('open dialog')
     let data = this.props.data;
-    this.props.onChipOpen(data.type,
-                          data.option.strike,
-                          data.option.volume,
-                          data.option.color,
-                          data.option,
-                         );
+    this.props.onChipOpen(data.type, data.option);
   }
   
   render() {
@@ -175,8 +194,36 @@ class OptionChip extends React.Component {
   }
 }
 
+// Functional... now it's just a matter of design.
+class ChipDialog extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render() {
+    if (this.props.chipData === null) return null;
+    
+    const chipActions = [
+
+    ];
+    console.log('render dialog')
+    return (
+      <Dialog
+        title="Opened a chip"
+        actions={chipActions}
+        modal={false}
+        open={this.props.chipOpen}
+        onRequestClose={this.props.handleChipClose}
+      >
+        hi im a chip dialog, i have the color {this.props.chipData.color}.
+        i am a {this.props.chipType} option with a strike of {this.props.chipData.strike} and volume of {this.props.chipData.volume}
+      </Dialog>
+    );
+  }
+}
+
 class AddMenu extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       call: true, // false for put

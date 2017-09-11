@@ -59,9 +59,10 @@ class Graph extends React.Component {
     this.handleChipAdd = this.handleChipAdd.bind(this);
   }
   
-  handleChipAdd(type, price, volume) {
+  handleChipAdd(type, price, volume, color) {
     let newChain = Object.assign({}, this.state.chain);
     newChain[type][price].volume += volume;
+    if (color) newChain[type][price].color = color;
     this.setState({
       chain: newChain,
     });
@@ -80,8 +81,8 @@ class Graph extends React.Component {
       cleanedChain[chain[i].option_type === 'put' ? 'puts' : 'calls'][chain[i].strike] = {ask: chain[i].ask,
                                                                                           bid: chain[i].bid,
                                                                                           color: color,
-                                                                                          data: chain[i],
                                                                                           IV: 0,
+                                                                                          raw: chain[i],
                                                                                           strike: chain[i].strike,
                                                                                           value: 0, // per contract
                                                                                           volume: 0,
@@ -217,11 +218,13 @@ class Graph extends React.Component {
           
           {core}
           
-          <PlotBasket
-            chain={this.state.chain}
-            basket={this.state.plotData}
-            handleChipAdd={this.handleChipAdd}
-          />
+          {this.state.loadingChain
+             ? null
+             : <PlotBasket
+                chain={this.state.chain}
+                basket={this.state.plotData}
+                handleChipAdd={this.handleChipAdd}
+               />}
           
         </Card>
       </Paper>
