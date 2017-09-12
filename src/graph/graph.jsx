@@ -2,7 +2,6 @@ import React from 'react';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
-//import Line from 'react-chartjs';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import SelectField from 'material-ui/SelectField';
@@ -11,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 import polyfill from 'es6-promise';
 import 'isomorphic-fetch';
 
-import PlotBasket from './plotBasket';
+import PlotBasket from './plot-basket';
 import {Phi, phi} from './modeling.js';
 
 const styles = {
@@ -56,13 +55,17 @@ class Graph extends React.Component {
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
     this.makeChartDatasets = this.makeChartDatasets.bind(this);
     this.makeDataTransform = this.makeDataTransform.bind(this);
-    this.handleChipAdd = this.handleChipAdd.bind(this);
+    this.handleChipChange = this.handleChipChange.bind(this);
   }
   
-  handleChipAdd(type, price, volume, color) {
+  // Use the presence of color to determine whether to add changes to or to reset volume.
+  handleChipChange(type, strike, volume, color) {
+    if (!volume && !color) return;
+    if ((volume === this.state.chain[type][strike].volume)
+        && (color === this.state.chain[type][strike].color)) return;
     let newChain = Object.assign({}, this.state.chain);
-    newChain[type][price].volume += volume;
-    if (color) newChain[type][price].color = color;
+    newChain[type][strike].volume = color ? volume : newChain[type][strike].volume + volume;
+    if (color) newChain[type][strike].color = color;
     this.setState({
       chain: newChain,
     });
@@ -106,7 +109,7 @@ class Graph extends React.Component {
     fetch(source + '/quote?symbol=' + symbol)
       .then(response => response.json())
       .then(json => {
-        console.log("quote is: " + json.quotes.quote);
+        console.log("quote is: ", json.quotes.quote);
         this.setState({
           loadingQuote: false,
           quote: json.quotes.quote,
@@ -221,9 +224,11 @@ class Graph extends React.Component {
           {this.state.loadingChain
              ? null
              : <PlotBasket
-                chain={this.state.chain}
-                basket={this.state.plotData}
-                handleChipAdd={this.handleChipAdd}
+                 basket={this.state.plotData}
+                 chain={this.state.chain}
+                 expDate={this.state.expDate}
+                 handleChipChange={this.handleChipChange}
+                 symbol={this.props.item[1]}
                />}
           
         </Card>

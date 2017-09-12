@@ -8,6 +8,7 @@ import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
+import { SliderPicker } from 'react-color';
 
 const styles = {
   chip: {
@@ -46,7 +47,6 @@ class PlotBasket extends React.Component {
     this.processChips = this.processChips.bind(this);
     this.handleChipOpen = this.handleChipOpen.bind(this);
     this.handleChipClose = this.handleChipClose.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
   
   // Initialization after data has been fetched => basket is mounted.
@@ -85,77 +85,61 @@ class PlotBasket extends React.Component {
     });
   }
   
-  handleSubmit() {
-    
-  }
-  
   processChips(newChain) {
     console.log('drawing chips')
     // Return an array of chips to be rendered from this.props.chain.
     let chain = newChain ? newChain : this.props.chain;
     let chips = [];
-    let unusedCalls = [];
-    let unusedPuts = [];
+    let unused = {calls: [], puts: []};
     
-    for (let key in chain['calls']) {
-      if (chain['calls'][key].volume === 0) {
-        chips.push([chain['calls'][key].strike,
-                    <OptionChip
-                      onChipOpen={this.handleChipOpen}
-                      key={key}
-                      data={ {option: chain['calls'][key], type: 'calls'} }
-                    >
-                      {chain['calls'][key].volume} call@{key}
-                    </OptionChip>
-                  ]);
-      } else {
-        unusedCalls.push(chain['calls'][key].strike);
-      }
-    }
-    
-    for (let key in chain['puts']) {
-      if (chain['puts'][key].volume !== 0) {
-        chips.push([chain['puts'][key].strike,
-                    <OptionChip
-                      onChipOpen={this.handleChipOpen}
-                      key={'-' + key}
-                      data={ {option: chain['puts'][key], type: 'puts'} }
-                    >
-                      {chain['puts'][key].volume} put@{key}
-                    </OptionChip>
-                  ]);
-      } else {
-        unusedPuts.push(chain['puts'][key].strike);
+    for (let type in chain) {
+      for (let strike in chain[type]) {
+        if (chain[type][strike].volume !== 0) {
+          chips.push([chain[type][strike].strike,
+                      <OptionChip
+                        onChipOpen={this.handleChipOpen}
+                        key={type + strike}
+                        data={ {option: chain[type][strike], type: type} }
+                      >
+                        {chain[type][strike].volume} call@{strike}
+                      </OptionChip>
+                    ]);
+        } else {
+          unused[type].push(chain[type][strike].strike);
+        }
       }
     }
     
     chips = chips.sort((a, b) => a[0] - b[0]);
     
     return [chips.map(x => x[1]),
-            unusedCalls.sort((a, b) => a - b),
-            unusedPuts.sort((a, b) => a - b),
+            unused['calls'].sort((a, b) => a - b),
+            unused['puts'].sort((a, b) => a - b),
            ];
   }
   
   render() {
     if (!this.props.chain.hasOwnProperty('puts')) return null;
     
-    const chipActions = [
-      
-    ];
-    
     return (
       <div>
-        <div style={styles.flexWrapper}>{this.state.chips}</div>
+        <div style={styles.flexWrapper}>
+          {'chip for stock position here'}
+          {this.state.chips}
+        </div>
         <ChipDialog
           chipData={this.state.chipData}
           chipOpen={this.state.chipOpen}
           chipType={this.state.chipType}
+          expDate={this.props.expDate}
           handleChipClose={this.handleChipClose}
-          handleSubmit={this.handleSubmit}
+          handleSubmit={this.props.handleChipChange}
+          symbol={this.props.symbol}
         />
         <AddMenu
-          handleAdd={this.props.handleChipAdd}
+          expDate={this.props.expDate}
+          handleAdd={this.props.handleChipChange}
+          symbol={this.props.symbol}
           unusedCalls={this.state.unusedCalls}
           unusedPuts={this.state.unusedPuts}
         />
@@ -195,28 +179,114 @@ class OptionChip extends React.Component {
 }
 
 // Functional... now it's just a matter of design.
+// Should present any data pertinent to the raw data source(this.props.chipData.raw).
 class ChipDialog extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      color: '',
+      strike: null,
+      type: '',
+      volume: null,
+    };
+    
+    this.handleColorChangeComplete = this.handleColorChangeComplete.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleVolumeChange = this.handleVolumeChange.bind(this);
+    this.handleChipRemove = this.handleChipRemove.bind(this);
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.chipOpen) return;
+    if (this.props !== nextProps) {
+      this.setState({
+        color: nextProps.chipData.color,
+        strike: nextProps.chipData.strike,
+        type: nextProps.chipType,
+        volume: nextProps.chipData.volume,
+      });
+    }
+  }
+  
+  handleColorChangeComplete(color, event) {
+    if (this.state.color === color.hex) return;
+    console.log('setting color to ', color.hex)
+    this.setState({
+      color: color.hex,
+    });
+  }
+  
+  handleVolumeChange(event, value) {
+    this.setState({
+      volume: value,
+    });
+  }
+  
+  // Make a call to this.props.handleSubmit(type, strike, volume, color)
+  handleSubmit() {
+    this.props.handleSubmit(this.state.type,
+                            this.state.strike,
+                            this.state.volume,
+                            this.state.color);
+    this.props.handleChipClose();
+  }
+  
+  handleChipRemove() {
+    this.props.handleSubmit(this.state.type,
+                            this.state.strike,
+                            0,
+                            this.state.color);
+    this.props.handleChipClose();
   }
   
   render() {
     if (this.props.chipData === null) return null;
     
+    let validVolume = !/[^0-9]+/.test(this.state.volume);
+    let displayedStrike = '$' + this.state.strike + ((this.state.strike % 1 === 0) ? '.00' : '0')
+    
     const chipActions = [
-
+      <FlatButton
+        label="Remove"
+        secondary={true}
+        onClick={this.handleChipRemove}
+      />,
+      <FlatButton
+        label="Never mind"
+        primary={true}
+        onClick={this.props.handleChipClose}
+      />,
+      <FlatButton
+        label="Okay"
+        primary={true}
+        onClick={this.handleSubmit}
+      />,
     ];
-    console.log('render dialog')
+    
     return (
       <Dialog
-        title="Opened a chip"
+        title={`${this.props.expDate} ${this.props.symbol} ${this.state.type.slice(0,-1)} ${displayedStrike}`}
         actions={chipActions}
         modal={false}
         open={this.props.chipOpen}
         onRequestClose={this.props.handleChipClose}
       >
-        hi im a chip dialog, i have the color {this.props.chipData.color}.
-        i am a {this.props.chipType} option with a strike of {this.props.chipData.strike} and volume of {this.props.chipData.volume}
+        
+        I am holding 
+        
+        <TextField
+            errorText={validVolume ? '' : 'Please enter a positive integer.'}
+            hintText="Enter an amount"
+            onChange={this.handleVolumeChange}
+            defaultValue={this.state.volume}
+        />
+        
+        {parseInt(this.state.volume, 10) > 1 ? 'contracts' : 'contract'} of this option.
+        
+        <SliderPicker
+          color={this.state.color}
+          onChangeComplete={this.handleColorChangeComplete}
+        />
       </Dialog>
     );
   }
@@ -271,7 +341,6 @@ class AddMenu extends React.Component {
     });
   }
   
-  // Should consider regex tbh
   handleQuantityChange(event, value) {
     this.setState({
       quantity: value,
@@ -320,7 +389,7 @@ class AddMenu extends React.Component {
         label="Okay"
         primary={true}
         onClick={this.handleSubmit}
-        disabled={!(validQuantity && this.state.strike)}
+        disabled={!(this.state.quantity && validQuantity && this.state.strike)}
       />,
     ];
     
@@ -330,12 +399,14 @@ class AddMenu extends React.Component {
           <ContentAdd />
         </IconButton>
         <Dialog
-          title="I want to..."
+          title={`${this.props.expDate} ${this.props.symbol}`}
           actions={menuActions}
           modal={false}
           open={this.state.menuOpen}
           onRequestClose={this.handleMenuClose}
         >
+          I want to 
+          
           <DropDownMenu value={this.state.verb} onChange={this.handleVerbChange}>
             <MenuItem value={1} primaryText="buy" />
             <MenuItem value={-1} primaryText="sell" />
@@ -358,7 +429,10 @@ class AddMenu extends React.Component {
           <DropDownMenu value={this.state.strike} onChange={this.handleStrikeChange}>
             <MenuItem value={null} primaryText="" />
             {(this.state.call ? this.props.unusedCalls : this.props.unusedPuts).map(
-                choice => <MenuItem key={choice} value={choice} primaryText={choice} />
+                choice => <MenuItem key={choice}
+                                    value={choice}
+                                    primaryText={'$' + choice + ((choice % 1 === 0) ? '.00' : '0')}
+                          />
               )}
           </DropDownMenu>
           
