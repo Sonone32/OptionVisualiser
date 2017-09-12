@@ -22,6 +22,7 @@ class TradierAPI {
                                                                                           bid: chain[i].bid,
                                                                                           color: color,
                                                                                           IV: 0,
+                                                                                          last: chain[i].last,
                                                                                           raw: chain[i],
                                                                                           strike: chain[i].strike,
                                                                                           value: 0, // per contract
@@ -44,39 +45,39 @@ class TradierAPI {
                       // process quote data in here 
                       return Promise.resolve(json);
                     })
-                    .catch(error => Promise.reject(error));
+                    .catch(error => reject(error));
       
-      let expDates = Promise.resolve([date]);
       let chain;
       
       if (!date) {
         chain = fetch(this.endpoint + '/exp/?symbol=' + symbol)
                   .then(response => response.json())
                   .then(json => {
-                    expDates = Promise.resolve(json.expirations.date);
-                    return Promise.resolve(json.expirations.date[0]);
+                    return Promise.resolve(json.expirations.date);
                   })
-                  .then(expDate => {
-                    date = Promise.resolve(expDate);
-                    return fetch(this.endpoint + '/chain/?symbol='
-                             + symbol
-                             + '&expiration='
-                             + expDate)
+                  .then(expDates => {
+                    return Promise.all([
+                      fetch(this.endpoint + '/chain/?symbol='
+                          + symbol
+                          + '&expiration='
+                          + expDates[0]),
+                      Promise.resolve(expDates)
+                    ])
                   })
-                  .then(response => response.json())
-                  .then(chain => Promise.resolve(this.makeDataTransform(chain.options.option)))
-                  .catch(error => Promise.reject(error));
+                  .then(vals => Promise.all([vals[0].json(), Promise.resolve(vals[1])]))
+                  .then(vals => Promise.all([this.makeDataTransform(vals[0].options.option), Promise.resolve(vals[1])]))
+                  .catch(error => reject(error));
       } else {
         chain = fetch(this.endpoint + '/chain/?symbol='
                       + symbol
                       + '&expiration='
                       + date)
                   .then(response => response.json())
-                  .then(chain => Promise.resolve(this.makeDataTransform(chain.options.option)))
-                  .catch(error => Promise.reject(error));
+                  .then(chain => Promise.resolve([this.makeDataTransform(chain.options.option)]))
+                  .catch(error => reject(error));
       }
       
-      resolve(Promise.all([quote, chain, expDates, date]));
+      resolve(Promise.all([quote, chain]));
     })
   }
 }

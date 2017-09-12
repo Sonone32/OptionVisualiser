@@ -17,6 +17,8 @@ class APIClient {
   }
   
   fetchData(symbol, date) {
+    // Resolves to [stock data, [chain data, exp dates]]
+    // because Tradier requires a separate call to get expDates and chain.
     return this.source.fetchData(symbol, date);
   }
 }

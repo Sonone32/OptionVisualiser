@@ -2,6 +2,7 @@ import React from 'react';
 import * as RBS from 'react-bootstrap' //RBS for React-BootStrap
 import SearchBar from 'material-ui-search-bar'
 import Graph from './graph/graph.jsx';
+import APIClient from './api/api-client'
 
 const hintText = 'Add a graph'
 
@@ -9,6 +10,7 @@ class MainPanel extends React.Component {
   constructor() {
     super();
     this.state = {
+      APIClient: new APIClient('TRADIER'),
       items: [[-1, 'AMD']],
       key: 0,
       searchTerm: '',
@@ -93,7 +95,11 @@ class MainPanel extends React.Component {
           <RBS.Col lg={12}>
             <div id="graphBox">
               {this.state.items.map(
-                x => <Graph key={x[0]} item={x} handleKill={this.handleKill} />
+                x => <Graph key={x[0]}
+                            item={x}
+                            handleKill={this.handleKill}
+                            APIClient={this.state.APIClient}
+                     />
               )}
             </div>
           </RBS.Col>

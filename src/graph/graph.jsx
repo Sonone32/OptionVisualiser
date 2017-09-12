@@ -40,7 +40,6 @@ class Graph extends React.Component {
     super(props);
     // props.item := [<key>, <symbol>]
     this.state = {  // Needs to calculate and store implied volatility.
-      cache: {},
       chain: {},  // Stores fetched & transformed data for current expDate.
       chartDatasets: [],
       chartLabels: [],
@@ -48,13 +47,11 @@ class Graph extends React.Component {
       expDate: null,
       currentDate: null,
       fetchError: false,
-      loadingChain: true,
-      loadingQuote: true,
+      loading: true,
       quote: {},  // Stores fetched data for underlying stock.
     };
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
     this.makeChartDatasets = this.makeChartDatasets.bind(this);
-    this.makeDataTransform = this.makeDataTransform.bind(this);
     this.handleChipChange = this.handleChipChange.bind(this);
   }
   
@@ -71,132 +68,47 @@ class Graph extends React.Component {
     });
   }
   
-  // Transforms fetched chain data into something usable by this application.
-  // May be imported from another file a la factory pattern, and return
-  // whatever version works for the data source.
-  makeDataTransform(chain) {
-    let cleanedChain = {puts: {}, calls: {}};
-    let bound = chain.length;
-    let color;
-    
-    for (let i = 0; i < bound; i++) {
-      color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-      cleanedChain[chain[i].option_type === 'put' ? 'puts' : 'calls'][chain[i].strike] = {ask: chain[i].ask,
-                                                                                          bid: chain[i].bid,
-                                                                                          color: color,
-                                                                                          IV: 0,
-                                                                                          raw: chain[i],
-                                                                                          strike: chain[i].strike,
-                                                                                          value: 0, // per contract
-                                                                                          volume: 0,
-                                                                                         };
-    }
-    
-    return cleanedChain;
-  }
-  
   makeChartDatasets(options) {
     // Available dataset options are the ones present in this.state.chain.
     // This is where most of the math will happen.
     // Calculate data on added/removed elements and push to state.
   }
   
+  // Fetching all data using this.props.APIClient.
+  // Promise resolves to [quote, [chain, expDates]] to accommodate API sources.
+  // A bit of a hack...
   componentDidMount() {
-    // Fetch expDates here.
-    let symbol = this.props.item[1];
-    
-    // Fetch quoted price here
-    fetch(source + '/quote?symbol=' + symbol)
-      .then(response => response.json())
-      .then(json => {
-        console.log("quote is: ", json.quotes.quote);
+    this.props.APIClient.fetchData(this.props.item[1], false)
+      .then(vals => {
         this.setState({
-          loadingQuote: false,
-          quote: json.quotes.quote,
+          chain: vals[1][0],
+          expDate: vals[1][1][0],
+          expDates: vals[1][1],
+          loading: false,
+          quote: vals[0],
         });
-      })
-      .catch(error => {
-        this.setState({
-          fetchError: true
-        })
-      });
-    
-    // Fetch expDates then chain data here.
-    fetch(source + '/exp/?symbol=' + symbol)
-      .then(response => response.json())
-      .then(json => {
-        let expDates = json.expirations.date;
-        this.setState({
-          expDates: expDates,
-          expDate: expDates[0],
-        });
-
-        // Fetch initial data here with expDates[0] after getting the list of exp dates.
-        fetch(source + '/chain/?symbol='
-              + symbol
-              + '&expiration='
-              + expDates[0])
-          .then(response => response.json())
-          .then(chain => {
-            // Initial chain data is obtained here, needs to push it into a state or somehow store it.
-            console.log(chain.options.option);
-            this.setState({
-              chain: this.makeDataTransform(chain.options.option),
-              loadingChain: false,
-            });
-          });
-      })
-      .catch(error => {
-        this.setState({
-          fetchError: true
-        })
       });
   }
   
-  // TODO: Should probably fetch new quote data here.
   handleExpDateChange(event, index, value) {
-    // Do nothing for meaningless event.
-    if (value === this.state.expDate) return;
-    
-    // Access cache here.
-    if (value in this.state.cache) {
-      this.setState({
-        chain: this.state.cache[value],
-        expDate: value,
-      });
-      return;
-    }
-    
-    // Enter loading and after data has been feteched cache old and replace with new.
     this.setState({
-      loadingChain: true, // True
+      loading: true,
     });
     
-    fetch(
-          source + '/chain/?symbol='
-          + this.props.item[1]
-          + '&expiration='
-          + value
-          )
-      .then(response => response.json())
-      .then(chain => {
-        // Initial chain data is obtained here, needs to push it into a state or somehow store it.
-        // Shallow copying parts of the cache is fine because cache doesn't need to trigger any re-render.
-        let updater = {};
-        updater[this.state.expDate] = this.state.chain;
+    this.props.APIClient.fetchData(this.props.item[1], value)
+      .then(vals => {
         this.setState({
-          cache: Object.assign({}, this.state.cache, updater),
-          chain: this.makeDataTransform(chain.options.option),
-          loadingChain: false,
-          plotData: [], // Temp. plotData wipe
+          chain: vals[1][0],
+          loading: false,
+          quote: vals[0],
         });
-      })
+      });
     
+    // Makes for a better perceived performance visually.
+    // Changes the displayed date instantly instead of lagging a bit.
     this.setState({
       expDate: value,
-    })
-    
-    // TODO: Wipe all graphed lines here or above
+    });
   }
   
   render() {
@@ -221,7 +133,7 @@ class Graph extends React.Component {
           
           {core}
           
-          {this.state.loadingChain
+          {this.state.loading
              ? null
              : <PlotBasket
                  basket={this.state.plotData}
