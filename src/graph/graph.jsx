@@ -80,6 +80,7 @@ class Graph extends React.Component {
   componentDidMount() {
     this.props.APIClient.fetchData(this.props.item[1], false)
       .then(vals => {
+        console.log('vals ', vals)
         this.setState({
           chain: vals[1][0],
           expDate: vals[1][1][0],

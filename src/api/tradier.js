@@ -1,8 +1,8 @@
 import 'isomorphic-fetch';
 
 class TradierAPI {
-  constructor() {
-    this.endpoint = 'http://flowersync.com:8080/api';
+  constructor(address) {
+    this.endpoint = address;
     
     this.fetchData = this.fetchData.bind(this);
     this.makeDataTransform = this.makeDataTransform.bind(this);
@@ -39,7 +39,7 @@ class TradierAPI {
     return new Promise((resolve, reject) => {
       // fetch expDates if init
       
-      let quote = fetch(this.endpoint + '/quote?symbol=' + symbol)
+      let quote = fetch(`${this.endpoint}/quote?symbol=${symbol}`)
                     .then(response => response.json())
                     .then(json => {
                       // process quote data in here 
@@ -50,17 +50,14 @@ class TradierAPI {
       let chain;
       
       if (!date) {
-        chain = fetch(this.endpoint + '/exp/?symbol=' + symbol)
+        chain = fetch(`${this.endpoint}/exp/?symbol=${symbol}`)
                   .then(response => response.json())
                   .then(json => {
                     return Promise.resolve(json.expirations.date);
                   })
                   .then(expDates => {
                     return Promise.all([
-                      fetch(this.endpoint + '/chain/?symbol='
-                          + symbol
-                          + '&expiration='
-                          + expDates[0]),
+                      fetch(`${this.endpoint}/chain/?symbol=${symbol}&expiration=${expDates[0]}`),
                       Promise.resolve(expDates)
                     ])
                   })
@@ -68,10 +65,7 @@ class TradierAPI {
                   .then(vals => Promise.all([this.makeDataTransform(vals[0].options.option), Promise.resolve(vals[1])]))
                   .catch(error => reject(error));
       } else {
-        chain = fetch(this.endpoint + '/chain/?symbol='
-                      + symbol
-                      + '&expiration='
-                      + date)
+        chain = fetch(`${this.endpoint}/chain/?symbol=${symbol}&expiration=${date}`)
                   .then(response => response.json())
                   .then(chain => Promise.resolve([this.makeDataTransform(chain.options.option)]))
                   .catch(error => reject(error));

@@ -10,6 +10,7 @@
     "material-ui": "^0.18.7",
     "material-ui-search-bar": "^0.2.4",
     "math-erf": "^1.0.0",
+    "npm": "^5.4.1",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.1",
     "react-chartjs": "^0.8.0",

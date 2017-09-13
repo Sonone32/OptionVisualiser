@@ -282,7 +282,7 @@ class ChipDialog extends React.Component {
         />
         
         {parseInt(this.state.volume, 10) > 1 ? 'contracts' : 'contract'} of this option.
-        {`\nASK: ${this.props.chipData.ask} BID: ${this.props.chipData.ask} LAST: ${this.props.chipData.last}`}
+        {`\nASK: ${this.props.chipData.ask} BID: ${this.props.chipData.bid} LAST: ${this.props.chipData.last}`}
         <SliderPicker
           color={this.state.color}
           onChangeComplete={this.handleColorChangeComplete}

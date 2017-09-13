@@ -10,7 +10,7 @@ class MainPanel extends React.Component {
   constructor() {
     super();
     this.state = {
-      APIClient: new APIClient('TRADIER'),
+      APIClient: APIClient.connectTo('YAHOO'),
       items: [[-1, 'AMD']],
       key: 0,
       searchTerm: '',
