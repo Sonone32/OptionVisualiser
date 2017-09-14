@@ -81,10 +81,10 @@ class MainPanel extends React.Component {
           <RBS.Col lg={10} lgOffset={1}>
             <div id="searchField">
               <SearchBar
-                onChange={this.handleSearchChange}
-                onRequestSearch={this.handleSearch}
                 hintText={hintText}
                 id="search"
+                onChange={this.handleSearchChange}
+                onRequestSearch={this.handleSearch}
                 value={this.state.searchTerm}
               />
             </div>
@@ -95,10 +95,11 @@ class MainPanel extends React.Component {
           <RBS.Col lg={12}>
             <div id="graphBox">
               {this.state.items.map(
-                x => <Graph key={x[0]}
-                            item={x}
-                            handleKill={this.handleKill}
-                            APIClient={this.state.APIClient}
+                x => <Graph 
+                       APIClient={this.state.APIClient}
+                       handleKill={this.handleKill}
+                       item={x}
+                       key={x[0]}
                      />
               )}
             </div>

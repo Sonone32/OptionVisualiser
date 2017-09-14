@@ -43,9 +43,9 @@ class Graph extends React.Component {
       chain: {},  // Stores fetched & transformed data for current expDate.
       chartDatasets: [],
       chartLabels: [],
-      expDates: [],
-      expDate: null,
       currentDate: null,
+      expDate: null,
+      expDates: [],
       fetchError: false,
       loading: true,
       quote: {},  // Stores fetched data for underlying stock.
@@ -115,7 +115,7 @@ class Graph extends React.Component {
   render() {
     // Call makeChartDatasets() in here somewhere if loading is finished.
     
-    let core = <div>content is here</div>;
+    let core = <div>all networks functional</div>;
     
     if (this.state.fetchError) {
       core = <div>beep boop error!</div>;
@@ -125,11 +125,11 @@ class Graph extends React.Component {
       <Paper zDepth={2}>
         <Card className="graph">
           <GraphTitle
-            item={this.props.item}
-            handleKill={this.props.handleKill}
+            expDate={this.state.expDate}
             expDates={this.state.expDates}
             handleExpDateChange={this.handleExpDateChange}
-            expDate={this.state.expDate}
+            handleKill={this.props.handleKill}
+            item={this.props.item}
           />
           
           {core}
@@ -155,10 +155,6 @@ function GraphTitle(props) {
   let symbol = props.item[1];
   return (
     <AppBar
-      titleStyle={styles.inline}
-      style={styles.appbar}
-      // Put this.state.quote data in title here.
-      title={<div style={styles.title}>{symbol}</div>}
       iconElementLeft={
         <IconButton onClick={() => props.handleKill(key)}>
           <NavigationClose />
@@ -171,6 +167,9 @@ function GraphTitle(props) {
           handleExpDateChange={props.handleExpDateChange}
         />
       }
+      style={styles.appbar}
+      title={<div style={styles.title}>{symbol}</div>}
+      titleStyle={styles.inline}
     />
   );
 }
@@ -179,12 +178,12 @@ function ExpDateSelector(props) {
   return (
     <SelectField
       floatingLabelText="Expiration Date"
-      value={props.expDate}
       onChange={props.handleExpDateChange}
       style={styles.dateSelector}
+      value={props.expDate}
     >
       {props.expDates.map(
-          date => <MenuItem key={date} value={date} primaryText={date} />
+          date => <MenuItem key={date} primaryText={date} value={date} />
       )}
     </SelectField>
   );

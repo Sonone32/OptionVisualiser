@@ -25,7 +25,7 @@ class TradierAPI {
                                                                                           last: chain[i].last,
                                                                                           raw: chain[i],
                                                                                           strike: chain[i].strike,
-                                                                                          value: 0, // per contract
+                                                                                          value: null, // per contract
                                                                                           volume: 0,
                                                                                          };
     }

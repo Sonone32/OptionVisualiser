@@ -5,7 +5,6 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "chart.js": "^2.7.0",
-    "chartjs": "^0.3.24",
     "fetch": "^1.1.0",
     "material-ui": "^0.18.7",
     "material-ui-search-bar": "^0.2.4",
@@ -13,7 +12,6 @@
     "npm": "^5.4.1",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.1",
-    "react-chartjs": "^0.8.0",
     "react-chartjs-2": "^2.6.2",
     "react-color": "^2.13.8",
     "react-dom": "^15.6.1",

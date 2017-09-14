@@ -23,7 +23,7 @@ class YahooAPI {
                                        last: item.lastPrice,
                                        raw: item,
                                        strike: item.strike,
-                                       value: 0, // per contract
+                                       value: null, // per contract
                                        volume: 0,
                                       };
       })
@@ -51,8 +51,6 @@ class YahooAPI {
             let chain = Promise.resolve([this.makeDataTransform(res.options[0]), expDates]);
 
             let quote = Promise.resolve(res.quote);
-            
-            console.log(chain, quote)
             
             return Promise.all([quote, chain]);
           })
