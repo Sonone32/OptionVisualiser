@@ -11,6 +11,7 @@ const styles = {
   },
 };
 
+// Everything that doesn't have API requests gets done here.
 // Has a (+) button and on clicking displays in a dialog the message below:
 // I want to {buy, sell} {n} {call, put} contract(s) with strike price at {list of price not in use}.
 // Disable (+) if all prices are in use.
@@ -106,6 +107,8 @@ class PlotBasket extends React.PureComponent {
       <div>
         <PlotChart
           chips={this.state.chips}
+          rate={this.props.rate}
+          date={new Date()}
         />
         
         <div style={styles.flexWrapper}>

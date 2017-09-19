@@ -25,7 +25,6 @@ class TradierAPI {
                                                                                           last: chain[i].last,
                                                                                           raw: chain[i],
                                                                                           strike: chain[i].strike,
-                                                                                          value: null, // per contract
                                                                                           volume: 0,
                                                                                          };
     }
@@ -71,7 +70,12 @@ class TradierAPI {
                   .catch(error => reject(error));
       }
       
-      resolve(Promise.all([quote, chain]));
+      let rate = fetch(`${this.endpoint}/interest-rate`)
+                   .then(response => response.json())
+                   .then(json => json['rate'])
+                   .catch(error => reject(error))
+      
+      resolve(Promise.all([quote, chain, rate]));
     })
   }
 }

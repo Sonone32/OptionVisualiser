@@ -7,6 +7,10 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import {Bar} from 'react-chartjs-2';
 
+import BSM from './graph/bsm.js';
+
+console.log('price ', BSM.getValue('calls', 13.08, 13, 1.03/100, 32/360, .5059))
+
 injectTapEventPlugin();
 
 const App = () => (

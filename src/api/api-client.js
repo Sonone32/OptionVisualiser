@@ -7,7 +7,7 @@ class APIClient {
   }
   
   fetchData(symbol, date) {
-    // Resolves to [stock data, [chain data, exp dates]]
+    // Resolves to [stock data, [chain data, exp dates], 1-year-risk-free-interest-rate]
     // because Tradier requires a separate call to get expDates and chain.
   }
   

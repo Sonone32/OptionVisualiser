@@ -23,7 +23,6 @@ class YahooAPI {
                                        last: item.lastPrice,
                                        raw: item,
                                        strike: item.strike,
-                                       value: null, // per contract
                                        volume: 0,
                                       };
       })
@@ -36,6 +35,11 @@ class YahooAPI {
     date = new Date(date).getTime() / 1000;
     
     return new Promise((resolve, reject) => {
+      let rate = fetch(`${this.endpoint}/interest-rate`)
+                         .then(response => response.json())
+                         .then(json => json['rate'])
+                         .catch(error => reject(error))
+      
       resolve(
         fetch(`${this.endpoint}/ychain/?symbol=${symbol}${date ? `&expiration=${date}`: ''}`)
           .then(response => response.json())
@@ -52,7 +56,9 @@ class YahooAPI {
 
             let quote = Promise.resolve(res.quote);
             
-            return Promise.all([quote, chain]);
+            
+            
+            return Promise.all([quote, chain, rate]);
           })
           .catch(error => reject(error))
       );

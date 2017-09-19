@@ -6,12 +6,12 @@ import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import DatePicker from 'material-ui/DatePicker';
 
 import polyfill from 'es6-promise';
 import 'isomorphic-fetch';
 
 import PlotBasket from './plot-basket';
-import {Phi, phi} from './modeling.js';
 
 const styles = {
   inline: {
@@ -35,6 +35,7 @@ const source = 'http://flowersync.com:8080/api';
 // TODO: Make some sort of pop up window that shows quote/chain data when elements are clicked on.
 // TODO: Generate x-axis labels from this.state.chain. What should the domain be?
 
+// Everything that has to do with API requests gets done here.
 class Graph extends React.Component {
   constructor(props) {
     super(props);
@@ -47,6 +48,7 @@ class Graph extends React.Component {
       expDate: null,
       expDates: [],
       fetchError: false,
+      interestRate: null,
       loading: true,
       quote: {},  // Stores fetched data for underlying stock.
     };
@@ -85,8 +87,15 @@ class Graph extends React.Component {
           chain: vals[1][0],
           expDate: vals[1][1][0],
           expDates: vals[1][1],
+          interestRate: vals[2],
           loading: false,
           quote: vals[0],
+        });
+      })
+      .catch(error => {
+        this.setState({
+          fetchError: true,
+          loading: false,
         });
       });
   }
@@ -102,6 +111,12 @@ class Graph extends React.Component {
           chain: vals[1][0],
           loading: false,
           quote: vals[0],
+        });
+      })
+      .catch(error => {
+        this.setState({
+          fetchError: true,
+          loading: false,
         });
       });
     
@@ -141,6 +156,7 @@ class Graph extends React.Component {
                  chain={this.state.chain}
                  expDate={this.state.expDate}
                  handleChipChange={this.handleChipChange}
+                 rate={this.state.interestRate}
                  symbol={this.props.item[1]}
                />}
           

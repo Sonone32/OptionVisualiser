@@ -42,7 +42,9 @@ body {
 }
 
 .plot {
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: auto 10px;
 }
 
 .plotControl {
