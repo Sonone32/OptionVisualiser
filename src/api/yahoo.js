@@ -19,7 +19,7 @@ class YahooAPI {
         newChain[type][item.strike] = {ask: item.ask,
                                        bid: item.bid,
                                        color: color,
-                                       IV: item.impliedVolatility,
+                                       IV: item.impliedVolatility || null,
                                        last: item.lastPrice,
                                        raw: item,
                                        strike: item.strike,

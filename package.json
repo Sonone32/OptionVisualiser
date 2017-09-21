@@ -3,22 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^3.3.7",
     "chart.js": "^2.7.0",
     "fetch": "^1.1.0",
     "material-ui": "^0.18.7",
     "material-ui-search-bar": "^0.2.4",
     "math-erf": "^1.0.0",
-    "npm": "^5.4.1",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.1",
     "react-chartjs-2": "^2.6.2",
     "react-color": "^2.13.8",
     "react-dom": "^15.6.1",
-    "react-redux": "^5.0.5",
     "react-scripts": "1.0.10",
-    "react-tap-event-plugin": "^2.0.1",
-    "redux": "^3.7.2"
+    "react-swipeable-views": "^0.12.8",
+    "react-tap-event-plugin": "^2.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -30,6 +27,6 @@
     "babel-preset-stage-1": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^7.3.0",
-    "redux-devtools": "^3.4.0"
+    "webpack-visualizer-plugin": "^0.1.11"
   }
 }

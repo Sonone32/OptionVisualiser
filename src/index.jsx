@@ -1,5 +1,5 @@
 import React from 'react';
-import * as RBS from 'react-bootstrap' //RBS for React-BootStrap
+import * as RBS from 'react-bootstrap' //RBS for React-BootStrap, should use css grids instead
 import SearchBar from 'material-ui-search-bar'
 import Graph from './graph/graph.jsx';
 import APIClient from './api/api-client'

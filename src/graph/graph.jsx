@@ -22,7 +22,7 @@ const styles = {
     height: '100%'
   },
   appbar: {
-    backgroundColor: '#00A2E1',
+    
   },
   dateSelector: {
     maxWidth: '140px',
@@ -53,7 +53,7 @@ class Graph extends React.Component {
       quote: {},  // Stores fetched data for underlying stock.
     };
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
-    this.makeChartDatasets = this.makeChartDatasets.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
     this.handleChipChange = this.handleChipChange.bind(this);
   }
   
@@ -69,13 +69,7 @@ class Graph extends React.Component {
       chain: newChain,
     });
   }
-  
-  makeChartDatasets(options) {
-    // Available dataset options are the ones present in this.state.chain.
-    // This is where most of the math will happen.
-    // Calculate data on added/removed elements and push to state.
-  }
-  
+
   // Fetching all data using this.props.APIClient.
   // Promise resolves to [quote, [chain, expDates]] to accommodate API sources.
   // A bit of a hack...
@@ -99,6 +93,40 @@ class Graph extends React.Component {
         });
       });
   }
+  
+  handleRefresh() {
+    this.setState({
+      loading: true,
+    });
+    
+    this.props.APIClient.fetchData(this.props.item[1], this.state.expDate)
+      .then(vals => {
+        let oldChain = this.state.chain;
+        let newChain = vals[1][0];
+        
+        for (let type in oldChain) {
+          for (let strike in oldChain) {
+            newChain[type][strike]['color'] = oldChain[type][strike]['color'];
+            newChain[type][strike]['volume'] = oldChain[type][strike]['volume'];
+          }
+        }
+        
+        newChain['refreshed'] = newChain['refreshed'] ? (newChain['refreshed'] + 1) : 1;
+        
+        this.setState({
+          chain: newChain,
+          expDates: vals[1][1],
+          loading: false,
+          quote: vals[0],
+        });
+      })
+      .catch(error => {
+        this.setState({
+          fetchError: true,
+          loading: false,
+        });
+      });
+  };
   
   handleExpDateChange(event, index, value) {
     this.setState({
@@ -146,9 +174,6 @@ class Graph extends React.Component {
             handleKill={this.props.handleKill}
             item={this.props.item}
           />
-          
-          {core}
-          
           {this.state.loading
              ? null
              : <PlotBasket
@@ -159,7 +184,7 @@ class Graph extends React.Component {
                  rate={this.state.interestRate}
                  symbol={this.props.item[1]}
                />}
-          
+           {core}
         </Card>
       </Paper>
     );
@@ -186,6 +211,7 @@ function GraphTitle(props) {
       style={styles.appbar}
       title={<div style={styles.title}>{symbol}</div>}
       titleStyle={styles.inline}
+      zDepth={0}
     />
   );
 }

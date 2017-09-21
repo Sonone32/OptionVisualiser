@@ -41,12 +41,6 @@ body {
   margin: 10px 0;
 }
 
-.plot {
-  display: flex;
-  justify-content: center;
-  margin: auto 10px;
-}
-
 .plotControl {
   
 }

@@ -8,6 +8,7 @@ const styles = {
   flexWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
+    margin: 10,
   },
 };
 
@@ -109,6 +110,8 @@ class PlotBasket extends React.PureComponent {
           chips={this.state.chips}
           rate={this.props.rate}
           date={new Date()}
+          expDate={this.props.expDate}
+          chain={this.props.chain}
         />
         
         <div style={styles.flexWrapper}>
