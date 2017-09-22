@@ -1,7 +1,7 @@
 import Chip from 'material-ui/Chip';
 import React from 'react';
 import AddMenu from './add-menu';
-import PlotChart from './plot-chart';
+import Charts from './charts/charts';
 import {OptionChip, ChipDialog} from './option-chip';
 
 const styles = {
@@ -106,12 +106,13 @@ class PlotBasket extends React.PureComponent {
     
     return (
       <div>
-        <PlotChart
+        <Charts
           chips={this.state.chips}
           rate={this.props.rate}
-          date={new Date()}
+          date={new Date().toISOString().slice(0,10)}
           expDate={this.props.expDate}
           chain={this.props.chain}
+          quote={this.props.quote}
         />
         
         <div style={styles.flexWrapper}>
@@ -133,12 +134,12 @@ class PlotBasket extends React.PureComponent {
           expDate={this.props.expDate}
           handleChipClose={this.handleChipClose}
           handleSubmit={this.props.handleChipChange}
-          symbol={this.props.symbol}
+          symbol={this.props.quote.symbol}
         />
         <AddMenu
           expDate={this.props.expDate}
           handleAdd={this.props.handleChipChange}
-          symbol={this.props.symbol}
+          symbol={this.props.quote.symbol}
           unusedCalls={this.state.unusedCalls}
           unusedPuts={this.state.unusedPuts}
         />

@@ -53,8 +53,11 @@ class YahooAPI {
             });
 
             let chain = Promise.resolve([this.makeDataTransform(res.options[0]), expDates]);
-
-            let quote = Promise.resolve(res.quote);
+            
+            let quote = Promise.resolve({symbol: symbol,
+                                         price: res.quote.postMarketPrice || res.quote.regularMarketPrice,
+                                         raw: res.quote,
+                                        });
             
             
             

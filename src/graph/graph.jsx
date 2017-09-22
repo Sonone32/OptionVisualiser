@@ -50,7 +50,7 @@ class Graph extends React.Component {
       fetchError: false,
       interestRate: null,
       loading: true,
-      quote: {},  // Stores fetched data for underlying stock.
+      quote: {symbol: this.props.item[1]},  // Stores fetched data for underlying stock.
     };
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
     this.handleRefresh = this.handleRefresh.bind(this);
@@ -182,7 +182,7 @@ class Graph extends React.Component {
                  expDate={this.state.expDate}
                  handleChipChange={this.handleChipChange}
                  rate={this.state.interestRate}
-                 symbol={this.props.item[1]}
+                 quote={this.state.quote}
                />}
            {core}
         </Card>
@@ -192,12 +192,11 @@ class Graph extends React.Component {
 }
 
 function GraphTitle(props) {
-  let key = props.item[0];
-  let symbol = props.item[1];
+  // props.item := [<key>, <symbol>]
   return (
     <AppBar
       iconElementLeft={
-        <IconButton onClick={() => props.handleKill(key)}>
+        <IconButton onClick={() => props.handleKill(props.item[0])}>
           <NavigationClose />
         </IconButton>
       }
@@ -209,7 +208,7 @@ function GraphTitle(props) {
         />
       }
       style={styles.appbar}
-      title={<div style={styles.title}>{symbol}</div>}
+      title={<div style={styles.title}>{props.item[1]}</div>}
       titleStyle={styles.inline}
       zDepth={0}
     />

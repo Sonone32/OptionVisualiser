@@ -7,10 +7,10 @@ import APIClient from './api/api-client'
 const hintText = 'Add a graph'
 
 class MainPanel extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      APIClient: APIClient.connectTo('YAHOO'),
+      APIClient: APIClient.connectTo(this.props.source),
       items: [[-1, 'AMD']],
       key: 0,
       searchTerm: '',

@@ -42,7 +42,10 @@ class TradierAPI {
                     .then(response => response.json())
                     .then(json => {
                       // process quote data in here 
-                      return Promise.resolve(json);
+                      return Promise.resolve({symbol: symbol,
+                                              price: json.quotes.quote.last,
+                                              raw: json.quotes.quote,
+                                             });
                     })
                     .catch(error => reject(error));
       
