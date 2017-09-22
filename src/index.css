@@ -1,9 +1,5 @@
 html {
   background: white;
-  min-height: 100%;
-  margin: 0;
-  border: 0;
-  padding: 0;
 }
 
 body {
@@ -12,35 +8,61 @@ body {
   background: -o-linear-gradient(#57B0E3, white); /* For Opera 11.1 to 12.0 */
   background: -moz-linear-gradient(#57B0E3, white); /* For Firefox 3.6 to 15 */
   background: linear-gradient(#57B0E3, white); /* Standard syntax */
-  min-height: 100vh;
-  max-height: 100vh;
   border: 0;
+  margin: 0;
 }
 
-#mainPanel {
-}
-
-#title {
+.title {
   text-align: center;
+  padding: 10px 20px;
+  margin: 0;
 }
 
 #searchField {
-  margin: 10px;
+  text-align: center;
+  margin: 20px auto;
+  width: 70%;
 }
 
 #graphBox {
+  margin: auto;
   background: white;
   border-radius: 30px;
   padding: 3vh 3vw;
+  width: 80%;
 }
 
-.graph {
-  border-radius: 40px;
-  background: white;
-  width: 100%;
-  margin: 10px 0;
+/* define grids in here*/
+@media all and (max-device-width : 767px) {
+/* Phones */
 }
 
-.plotControl {
-  
+@media all and (min-device-width : 768px) and (max-device-width : 1024px) {
+/* Tablet */
 }
+
+@media all and (min-device-width : 1025px) {
+/* 1080p Desktops */
+}
+
+/* somehow fit into center grid */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

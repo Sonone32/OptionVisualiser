@@ -166,7 +166,7 @@ class Graph extends React.Component {
     
     return (
       <Paper zDepth={2}>
-        <Card className="graph">
+        <Card>
           <GraphTitle
             expDate={this.state.expDate}
             expDates={this.state.expDates}

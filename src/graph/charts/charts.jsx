@@ -11,9 +11,8 @@ const model = 'BSM';
 const styles = {
   slide: {
     padding: 10,
-    height: '50vh',
+    height: '40vh',
     minHeight: 300,
-    maxHeight: 800,
     width: 'auto',
   },
 };

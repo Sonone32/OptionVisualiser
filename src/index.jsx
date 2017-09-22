@@ -1,5 +1,4 @@
 import React from 'react';
-import * as RBS from 'react-bootstrap' //RBS for React-BootStrap, should use css grids instead
 import SearchBar from 'material-ui-search-bar'
 import Graph from './graph/graph.jsx';
 import APIClient from './api/api-client'
@@ -67,53 +66,41 @@ class MainPanel extends React.Component {
       searchTerm: "",
     });
   }
-  
+  //fd
   render() {
     return (
-      <RBS.Grid>
-        <RBS.Row className="show-grid">
-          <RBS.Col lg={4} lgOffset={4}>
-            <Title />
-          </RBS.Col>
-        </RBS.Row>
-        
-        <RBS.Row className="show-grid">
-          <RBS.Col lg={10} lgOffset={1}>
-            <div id="searchField">
-              <SearchBar
-                hintText={hintText}
-                id="search"
-                onChange={this.handleSearchChange}
-                onRequestSearch={this.handleSearch}
-                value={this.state.searchTerm}
-              />
-            </div>
-          </RBS.Col>
-        </RBS.Row>
-        
-        <RBS.Row className="show-grid">
-          <RBS.Col lg={12}>
-            <div id="graphBox">
-              {this.state.items.map(
-                x => <Graph 
-                       APIClient={this.state.APIClient}
-                       handleKill={this.handleKill}
-                       item={x}
-                       key={x[0]}
-                     />
-              )}
-            </div>
-          </RBS.Col>
-        </RBS.Row>
-      </RBS.Grid>
+      <div>
+        <Title />
+
+        <div id="searchField">
+          <SearchBar
+            hintText={hintText}
+            id="search"
+            onChange={this.handleSearchChange}
+            onRequestSearch={this.handleSearch}
+            value={this.state.searchTerm}
+          />
+        </div>
+
+        <div id="graphBox">
+          {this.state.items.map(
+            x => <Graph 
+                   APIClient={this.state.APIClient}
+                   handleKill={this.handleKill}
+                   item={x}
+                   key={x[0]}
+                 />
+          )}
+        </div>
+      </div>
     );
   }
 }
 
 function Title(props) {
   return (
-    <div id="title">
-      <h1>flowersYnc</h1>
+    <div className="title">
+      <h1 className="title">flowersYnc</h1>
     </div>
   );
 }
