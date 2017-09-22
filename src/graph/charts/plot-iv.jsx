@@ -8,7 +8,7 @@ class IVChart extends React.Component {
   
   render() {
     return (
-      <div style={this.props.style}>iv here</div>
+      <div className="chart">iv here</div>
     );
   }
 }

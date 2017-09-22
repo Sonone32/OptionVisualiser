@@ -10,12 +10,19 @@ body {
   background: linear-gradient(#57B0E3, white); /* Standard syntax */
   border: 0;
   margin: 0;
+  height: 95vh;
+}
+
+#main {
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto;
 }
 
 .title {
+  margin-top: 0;
+  padding-top: 40px;
   text-align: center;
-  padding: 10px 20px;
-  margin: 0;
 }
 
 #searchField {
@@ -25,44 +32,67 @@ body {
 }
 
 #graphBox {
-  margin: auto;
-  background: white;
+  margin: 0;
   border-radius: 30px;
-  padding: 3vh 3vw;
-  width: 80%;
+  max-width: 100%;
+}
+
+.chart {
+  max-height: 
 }
 
 /* define grids in here*/
 @media all and (max-device-width : 767px) {
 /* Phones */
+  #main {
+    /* Makes the paper component more symmetric/centered. */
+    grid-template-columns: 2% 6% 84% 6% 2%;
+  }
+  
+  .chart {
+    height: 40vh;
+    min-height: 300px;
+    width: inherit;
+  }
 }
 
-@media all and (min-device-width : 768px) and (max-device-width : 1024px) {
+@media all and (min-device-width : 768px) and (max-device-width : 1023px) {
 /* Tablet */
+  #main {
+    grid-template-columns: 2% 8% 80% 8% 2%;
+  }
+  
+  .chart {
+    height: 40vh;
+    min-height: 400px;
+    width: inherit;
+  }
 }
 
-@media all and (min-device-width : 1025px) {
+@media all and (min-device-width : 1024px) {
 /* 1080p Desktops */
+  #main {
+    grid-template-columns: 1fr 50px 900px 50px 1fr;
+  }
+  
+  .chart {
+    height: 35vh;
+    min-height: 450px;
+    width: inherit;
+  }
+  
+  #graphBox {
+    background: white;
+    padding-top: 30px;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
+  }
 }
 
-/* somehow fit into center grid */
+#graphBox {
+  grid-column: 2 / 5;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#searchField {
+  grid-column: 3 / 4;
+}

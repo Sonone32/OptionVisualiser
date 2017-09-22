@@ -54,11 +54,13 @@ class PayoffChart extends React.Component {
   
   render() {
     return (
-      <Bar
+      <div className="chart">
+        <Bar
         style={this.props.style}
         data={data}
         options={options}
-      />
+        />
+      </div>
     );
   }
 }

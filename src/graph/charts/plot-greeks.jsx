@@ -8,7 +8,7 @@ class GreeksChart extends React.Component {
   
   render() {
     return (
-      <div style={this.props.style}> hi </div>
+      <div className="chart"> hi </div>
     );
   }
 }

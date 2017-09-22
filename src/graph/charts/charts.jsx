@@ -8,15 +8,6 @@ import IVChart from './plot-iv';
 
 const model = 'BSM';
 
-const styles = {
-  slide: {
-    padding: 10,
-    height: '40vh',
-    minHeight: 300,
-    width: 'auto',
-  },
-};
-
 class Charts extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -57,19 +48,16 @@ class Charts extends React.PureComponent {
             chips={this.props.chips}
             date={this.props.date}
             expDate={this.props.expDate}
-            style={styles.slide}
             model={this.state.model}
           />
           <GreeksChart
             chips={this.props.chips}
             date={this.props.date}
             expDate={this.props.expDate}
-            style={styles.slide}
             model={this.state.model}
           />
           <IVChart
             chain={this.props.chain}
-            style={styles.slide}
             model={this.state.model}
           />
         </SwipeableViews>

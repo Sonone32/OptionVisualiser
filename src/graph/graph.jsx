@@ -28,6 +28,10 @@ const styles = {
     maxWidth: '140px',
     margin: '0',
   },
+  paper: {
+    maxWidth: '100%',
+    marginBottom: '3%',
+  },
 };
 
 const source = 'http://flowersync.com:8080/api';
@@ -165,7 +169,7 @@ class Graph extends React.Component {
     }
     
     return (
-      <Paper zDepth={2}>
+      <Paper zDepth={2} style={styles.paper}>
         <Card>
           <GraphTitle
             expDate={this.state.expDate}

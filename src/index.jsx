@@ -71,26 +71,28 @@ class MainPanel extends React.Component {
     return (
       <div>
         <Title />
+        
+        <div id="main">
+          <div id="searchField">
+            <SearchBar
+              hintText={hintText}
+              id="search"
+              onChange={this.handleSearchChange}
+              onRequestSearch={this.handleSearch}
+              value={this.state.searchTerm}
+            />
+          </div>
 
-        <div id="searchField">
-          <SearchBar
-            hintText={hintText}
-            id="search"
-            onChange={this.handleSearchChange}
-            onRequestSearch={this.handleSearch}
-            value={this.state.searchTerm}
-          />
-        </div>
-
-        <div id="graphBox">
-          {this.state.items.map(
-            x => <Graph 
-                   APIClient={this.state.APIClient}
-                   handleKill={this.handleKill}
-                   item={x}
-                   key={x[0]}
-                 />
-          )}
+          <div id="graphBox">
+            {this.state.items.map(
+              x => <Graph 
+                     APIClient={this.state.APIClient}
+                     handleKill={this.handleKill}
+                     item={x}
+                     key={x[0]}
+                   />
+            )}
+          </div>
         </div>
       </div>
     );
@@ -99,9 +101,7 @@ class MainPanel extends React.Component {
 
 function Title(props) {
   return (
-    <div className="title">
       <h1 className="title">flowersYnc</h1>
-    </div>
   );
 }
 
