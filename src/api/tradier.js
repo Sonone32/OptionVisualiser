@@ -18,15 +18,16 @@ class TradierAPI {
     
     for (let i = 0; i < bound; i++) {
       color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-      cleanedChain[chain[i].option_type === 'put' ? 'puts' : 'calls'][chain[i].strike] = {ask: chain[i].ask,
-                                                                                          bid: chain[i].bid,
-                                                                                          color: color,
-                                                                                          IV: 0,
-                                                                                          last: chain[i].last,
-                                                                                          raw: chain[i],
-                                                                                          strike: chain[i].strike,
-                                                                                          volume: 0,
-                                                                                         };
+      cleanedChain[chain[i].option_type === 'put' ? 'puts' : 'calls'][chain[i].strike] = {
+        ask: chain[i].ask,
+        bid: chain[i].bid,
+        color: color,
+        IV: 0,
+        last: chain[i].last,
+        raw: chain[i],
+        strike: chain[i].strike,
+        volume: 0,
+      };
     }
     
     return cleanedChain;
@@ -42,10 +43,11 @@ class TradierAPI {
                     .then(response => response.json())
                     .then(json => {
                       // process quote data in here 
-                      return Promise.resolve({symbol: symbol,
-                                              price: json.quotes.quote.last,
-                                              raw: json.quotes.quote,
-                                             });
+                      return Promise.resolve({
+                        symbol: symbol,
+                        price: json.quotes.quote.last,
+                        raw: json.quotes.quote,
+                       });
                     })
                     .catch(error => reject(error));
       

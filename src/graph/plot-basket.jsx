@@ -75,13 +75,13 @@ class PlotBasket extends React.PureComponent {
   }
   
   processChips(newChain) {
-    console.log('drawing chips')
     // Return an array of chips to be rendered from this.props.chain.
     let chain = newChain ? newChain : this.props.chain;
     let chips = [];
     let unused = {calls: [], puts: []};
     
     for (let type in chain) {
+      if (type === 'refresh') continue;
       for (let strike in chain[type]) {
         if (chain[type][strike].volume !== 0) {
           chips.push([chain[type][strike].strike,
@@ -116,7 +116,6 @@ class PlotBasket extends React.PureComponent {
         />
         
         <div style={styles.flexWrapper}>
-          <Chip>stock position</Chip>
           {this.state.chips.map(chip => 
             <OptionChip
               data={chip}

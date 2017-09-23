@@ -56,7 +56,6 @@ class PayoffChart extends React.Component {
     return (
       <div className="chart">
         <Bar
-        style={this.props.style}
         data={data}
         options={options}
         />

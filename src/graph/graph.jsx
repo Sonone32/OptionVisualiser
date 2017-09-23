@@ -25,7 +25,7 @@ const styles = {
     
   },
   dateSelector: {
-    maxWidth: '140px',
+    maxWidth: '9em',
     margin: '0',
   },
   paper: {
@@ -33,11 +33,6 @@ const styles = {
     marginBottom: '3%',
   },
 };
-
-const source = 'http://flowersync.com:8080/api';
-
-// TODO: Make some sort of pop up window that shows quote/chain data when elements are clicked on.
-// TODO: Generate x-axis labels from this.state.chain. What should the domain be?
 
 // Everything that has to do with API requests gets done here.
 class Graph extends React.Component {
@@ -55,6 +50,7 @@ class Graph extends React.Component {
       interestRate: null,
       loading: true,
       quote: {symbol: this.props.item[1]},  // Stores fetched data for underlying stock.
+      refresh: 1,
     };
     this.handleExpDateChange = this.handleExpDateChange.bind(this);
     this.handleRefresh = this.handleRefresh.bind(this);
@@ -109,19 +105,20 @@ class Graph extends React.Component {
         let newChain = vals[1][0];
         
         for (let type in oldChain) {
-          for (let strike in oldChain) {
+          for (let strike in oldChain[type]) {
             newChain[type][strike]['color'] = oldChain[type][strike]['color'];
             newChain[type][strike]['volume'] = oldChain[type][strike]['volume'];
           }
         }
         
-        newChain['refreshed'] = newChain['refreshed'] ? (newChain['refreshed'] + 1) : 1;
+        newChain['refreshed'] = this.state.refresh;
         
         this.setState({
           chain: newChain,
           expDates: vals[1][1],
           loading: false,
           quote: vals[0],
+          refresh: this.state.refresh + 1,
         });
       })
       .catch(error => {
@@ -177,6 +174,7 @@ class Graph extends React.Component {
             handleExpDateChange={this.handleExpDateChange}
             handleKill={this.props.handleKill}
             item={this.props.item}
+            handleRefresh={this.handleRefresh}
           />
           {this.state.loading
              ? null
@@ -199,10 +197,13 @@ function GraphTitle(props) {
   // props.item := [<key>, <symbol>]
   return (
     <AppBar
-      iconElementLeft={
+      iconElementLeft={<div>
         <IconButton onClick={() => props.handleKill(props.item[0])}>
           <NavigationClose />
         </IconButton>
+        <IconButton onClick={props.handleRefresh}>
+          <NavigationClose />
+        </IconButton></div>
       }
       iconElementRight={
         <ExpDateSelector

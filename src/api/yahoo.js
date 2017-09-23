@@ -16,15 +16,16 @@ class YahooAPI {
     types.forEach(type => {
       chain[type].forEach(item => {
         color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
-        newChain[type][item.strike] = {ask: item.ask,
-                                       bid: item.bid,
-                                       color: color,
-                                       IV: item.impliedVolatility || null,
-                                       last: item.lastPrice,
-                                       raw: item,
-                                       strike: item.strike,
-                                       volume: 0,
-                                      };
+        newChain[type][item.strike] = {
+          ask: item.ask,
+          bid: item.bid,
+          color: color,
+          IV: item.impliedVolatility || null,
+          last: item.lastPrice,
+          raw: item,
+          strike: item.strike,
+          volume: 0,
+        };
       })
     })
     
@@ -54,10 +55,11 @@ class YahooAPI {
 
             let chain = Promise.resolve([this.makeDataTransform(res.options[0]), expDates]);
             
-            let quote = Promise.resolve({symbol: symbol,
-                                         price: res.quote.postMarketPrice || res.quote.regularMarketPrice,
-                                         raw: res.quote,
-                                        });
+            let quote = Promise.resolve({
+              symbol: symbol,
+              price: res.quote.postMarketPrice || res.quote.regularMarketPrice,
+              raw: res.quote,
+            });
             
             
             

@@ -17,10 +17,6 @@ class Charts extends React.PureComponent {
     };
   }
   
-  componentWillReceiveProps(nextProps) {
-    console.log('chart log ', nextProps);
-  }
-  
   handleChange = (value) => {
     this.setState({
       slideIndex: value,
@@ -58,7 +54,6 @@ class Charts extends React.PureComponent {
           />
           <IVChart
             chain={this.props.chain}
-            model={this.state.model}
           />
         </SwipeableViews>
       </div>

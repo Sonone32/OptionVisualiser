@@ -1,3 +1,6 @@
+*{   cursor: url(//b.thumbs.redditmedia.com/4ZxOF0Jq21KHWSQUDunb3iUrawRW8aALcFq-5bb9NkM.png),default!important;
+}
+
 html {
   background: white;
 }
@@ -32,17 +35,16 @@ body {
 }
 
 #graphBox {
-  margin: 0;
+  margin: auto;
   border-radius: 30px;
   max-width: 100%;
 }
 
 .chart {
-  max-height: 
+  width: inherit;
 }
 
-/* define grids in here*/
-@media all and (max-device-width : 767px) {
+@media all and (max-width : 767px) {
 /* Phones */
   #main {
     /* Makes the paper component more symmetric/centered. */
@@ -52,24 +54,22 @@ body {
   .chart {
     height: 40vh;
     min-height: 300px;
-    width: inherit;
   }
 }
 
-@media all and (min-device-width : 768px) and (max-device-width : 1023px) {
+@media all and (min-width : 768px) and (max-width : 1023px) {
 /* Tablet */
   #main {
-    grid-template-columns: 2% 8% 80% 8% 2%;
+    grid-template-columns: 2% 4% 88% 4% 2%;
   }
   
   .chart {
     height: 40vh;
     min-height: 400px;
-    width: inherit;
   }
 }
 
-@media all and (min-device-width : 1024px) {
+@media all and (min-width : 1024px) {
 /* 1080p Desktops */
   #main {
     grid-template-columns: 1fr 50px 900px 50px 1fr;
@@ -78,7 +78,6 @@ body {
   .chart {
     height: 35vh;
     min-height: 450px;
-    width: inherit;
   }
   
   #graphBox {
