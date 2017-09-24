@@ -44,6 +44,8 @@ class TradierAPI {
                     .then(json => {
                       // process quote data in here 
                       return Promise.resolve({
+                        change: json.quotes.quote.change,
+                        changePercent: json.quotes.quote.change_percentage,
                         symbol: symbol,
                         price: json.quotes.quote.last,
                         raw: json.quotes.quote,

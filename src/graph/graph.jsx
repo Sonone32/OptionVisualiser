@@ -12,22 +12,9 @@ import polyfill from 'es6-promise';
 import 'isomorphic-fetch';
 
 import PlotBasket from './plot-basket';
+import GraphTitle from './graph-title';
 
 const styles = {
-  inline: {
-    textAlign: 'left',
-  },
-  title: {
-    cursor: 'pointer',
-    height: '100%'
-  },
-  appbar: {
-    
-  },
-  dateSelector: {
-    maxWidth: '9em',
-    margin: '0',
-  },
   paper: {
     maxWidth: '100%',
     marginBottom: '3%',
@@ -175,6 +162,7 @@ class Graph extends React.Component {
             handleKill={this.props.handleKill}
             item={this.props.item}
             handleRefresh={this.handleRefresh}
+            quote={this.state.quote}
           />
           {this.state.loading
              ? null
@@ -191,48 +179,6 @@ class Graph extends React.Component {
       </Paper>
     );
   }
-}
-
-function GraphTitle(props) {
-  // props.item := [<key>, <symbol>]
-  return (
-    <AppBar
-      iconElementLeft={<div>
-        <IconButton onClick={() => props.handleKill(props.item[0])}>
-          <NavigationClose />
-        </IconButton>
-        <IconButton onClick={props.handleRefresh}>
-          <NavigationClose />
-        </IconButton></div>
-      }
-      iconElementRight={
-        <ExpDateSelector
-          expDate={props.expDate}
-          expDates={props.expDates}
-          handleExpDateChange={props.handleExpDateChange}
-        />
-      }
-      style={styles.appbar}
-      title={<div style={styles.title}>{props.item[1]}</div>}
-      titleStyle={styles.inline}
-      zDepth={0}
-    />
-  );
-}
-
-function ExpDateSelector(props) {
-  return (
-    <SelectField
-      floatingLabelText="Expiration Date"
-      onChange={props.handleExpDateChange}
-      style={styles.dateSelector}
-      value={props.expDate}
-    >
-      {props.expDates.map(
-          date => <MenuItem key={date} primaryText={date} value={date} />
-      )}
-    </SelectField>
-  );
 }
 
 export default Graph

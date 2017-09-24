@@ -57,7 +57,9 @@ class YahooAPI {
             
             let quote = Promise.resolve({
               symbol: symbol,
-              price: res.quote.postMarketPrice || res.quote.regularMarketPrice,
+              change: res.quote.regularMarketChange,
+              changePercent: res.quote.regularMarketChangePercent,
+              price: res.quote.regularMarketPrice,
               raw: res.quote,
             });
             

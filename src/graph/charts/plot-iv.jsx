@@ -1,5 +1,5 @@
 import React from 'react';
-import {Line} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
 import {roundFloat} from '../models/maths';
 
 const options = {
@@ -7,13 +7,14 @@ const options = {
   maintainAspectRatio: false,
   scales: {
     yAxes: [{
-      stacked: true,
+      stacked: false,
       ticks: {
         maxTicksLimit: 10,
         autoSkip: true,
       },
     }],
     xAxes: [{
+      stacked: false,
       ticks: {
         maxTicksLimit: 10,
         autoSkip: true,
@@ -23,6 +24,9 @@ const options = {
   tooltips: {
     intersect: false,
     mode: 'index',
+    callbacks: {
+      label: item => (item['yLabel'] ? item['yLabel'].toFixed(4) : 'no value'),
+    },
   },
   layout: {
     padding: {
@@ -48,18 +52,21 @@ class IVChart extends React.Component {
       labels:  [],
       datasets: [
         {
-          borderColor: 'rgba(255,99,132,0.2)',
+          backgroundColor: 'rgba(255, 99, 132, .9)',
+          borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1,
           data: [],
-          hoverBackgroundColor: 'rgba(255,99,132,1)',
-          hoverBorderColor: 'rgba(255,99,132,1)',
+          hoverBackgroundColor: 'rgba(255, 99, 132, .6)',
+          hoverBorderColor: 'black',
           label: 'Calls IV',
         },
         {
-          borderColor: '#bdc948',
+          backgroundColor: 'rgba(208, 255, 0, 1)',
+          borderColor: 'rgba(208, 255, 0, 1)',
           borderWidth: 1,
           data: [],
-          interpolation: 'linear',
+          hoverBackgroundColor: 'rgba(208, 255, 0, .6)',
+          hoverBorderColor: 'black',
           label: 'Puts IV',
         },
       ],
@@ -72,13 +79,13 @@ class IVChart extends React.Component {
         option = chain[type][strike];
         if (option.strike > max) max = option.strike;
         if (option.strike < min) min = option.strike;
-        basket[option.strike] = option.IV;
+        basket[option.strike] = roundFloat(option.IV, -4);
       }
     }
     
     while (min <= max) {
-      data.datasets[0].data.push(callData[min] ? callData[min] : NaN);
-      data.datasets[1].data.push(putData[min] ? putData[min] : NaN);
+      data.datasets[0].data.push(callData[min] ? callData[min] : null);
+      data.datasets[1].data.push(putData[min] ? putData[min] : null);
       data['labels'].push(`$${min.toFixed(2)}`);
       min += .5;
     }
@@ -107,7 +114,7 @@ class IVChart extends React.Component {
     if (this.state.refresh === null) return null;
     return (
       <div className="chart">
-        <Line
+        <Bar
           data={this.processData(this.props.chain)}
           options={options}
         />

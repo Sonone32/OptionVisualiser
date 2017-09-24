@@ -92,6 +92,10 @@ body {
   grid-column: 2 / 5;
 }
 
+.appBar {
+  grid-column: 2 / 5;
+}
+
 #searchField {
   grid-column: 3 / 4;
 }

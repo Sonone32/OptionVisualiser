@@ -50,11 +50,10 @@ class MainPanel extends React.Component {
     this.setState({
       searchTerm: value,
     })
-    console.log("term changed to: "+value);
   }
   
   handleSearch() {
-    console.log("searching for: "+this.state.searchTerm);
+    if (!this.state.searchTerm) return;
     // Clear this.state.searchTerm after searching.
     // Maybe add verification here or on handleSearchChange.
     let newItems = [[this.state.key, this.state.searchTerm.toUpperCase()]];

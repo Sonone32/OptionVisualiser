@@ -109,7 +109,6 @@ class PlotBasket extends React.PureComponent {
         <Charts
           chips={this.state.chips}
           rate={this.props.rate}
-          date={new Date().toISOString().slice(0,10)}
           expDate={this.props.expDate}
           chain={this.props.chain}
           quote={this.props.quote}
