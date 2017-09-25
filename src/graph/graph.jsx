@@ -1,14 +1,7 @@
 import React from 'react';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {Card} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import DatePicker from 'material-ui/DatePicker';
 
-import polyfill from 'es6-promise';
 import 'isomorphic-fetch';
 
 import PlotBasket from './plot-basket';
@@ -39,22 +32,6 @@ class Graph extends React.Component {
       quote: {symbol: this.props.item[1]},  // Stores fetched data for underlying stock.
       refresh: 1,
     };
-    this.handleExpDateChange = this.handleExpDateChange.bind(this);
-    this.handleRefresh = this.handleRefresh.bind(this);
-    this.handleChipChange = this.handleChipChange.bind(this);
-  }
-  
-  // Use the presence of color to determine whether to add changes to or to reset volume.
-  handleChipChange(type, strike, volume, color) {
-    if (!volume && !color) return;
-    if ((volume === this.state.chain[type][strike].volume)
-        && (color === this.state.chain[type][strike].color)) return;
-    let newChain = Object.assign({}, this.state.chain);
-    newChain[type][strike].volume = color ? volume : newChain[type][strike].volume + volume;
-    if (color) newChain[type][strike].color = color;
-    this.setState({
-      chain: newChain,
-    });
   }
 
   // Fetching all data using this.props.APIClient.
@@ -80,8 +57,21 @@ class Graph extends React.Component {
         });
       });
   }
+    
+  // Use the presence of color to determine whether to add changes to or to reset volume.
+  handleChipChange = (type, strike, volume, color) => {
+    if (!volume && !color) return;
+    if ((volume === this.state.chain[type][strike].volume)
+        && (color === this.state.chain[type][strike].color)) return;
+    let newChain = Object.assign({}, this.state.chain);
+    newChain[type][strike].volume = color ? volume : newChain[type][strike].volume + volume;
+    if (color) newChain[type][strike].color = color;
+    this.setState({
+      chain: newChain,
+    });
+  };
   
-  handleRefresh() {
+  handleRefresh = () => {
     this.setState({
       loading: true,
     });
@@ -116,7 +106,7 @@ class Graph extends React.Component {
       });
   };
   
-  handleExpDateChange(event, index, value) {
+  handleExpDateChange = (event, index, value) => {
     this.setState({
       loading: true,
     });
@@ -141,7 +131,7 @@ class Graph extends React.Component {
     this.setState({
       expDate: value,
     });
-  }
+  };
   
   render() {
     // Call makeChartDatasets() in here somewhere if loading is finished.

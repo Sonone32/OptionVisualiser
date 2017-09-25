@@ -1,4 +1,3 @@
-import Chip from 'material-ui/Chip';
 import React from 'react';
 import AddMenu from './add-menu';
 import Charts from './charts/charts';
@@ -32,10 +31,6 @@ class PlotBasket extends React.PureComponent {
       unusedCalls: [],
       unusedPuts: [],
     };
-    
-    this.handleChipClose = this.handleChipClose.bind(this);
-    this.handleChipOpen = this.handleChipOpen.bind(this);
-    this.processChips = this.processChips.bind(this);
   }
   
   // Initialization after data has been fetched => basket is mounted.
@@ -60,21 +55,21 @@ class PlotBasket extends React.PureComponent {
     }
   }
   
-  handleChipOpen(type, data) {
+  handleChipOpen = (type, data) => {
     this.setState({
       chipData: data,
       chipOpen: true,
       chipType: type,
     });
-  }
+  };
   
-  handleChipClose() {
+  handleChipClose = () => {
     this.setState({
       chipOpen: false,
     });
-  }
+  };
   
-  processChips(newChain) {
+  processChips = (newChain) => {
     // Return an array of chips to be rendered from this.props.chain.
     let chain = newChain ? newChain : this.props.chain;
     let chips = [];
@@ -99,7 +94,7 @@ class PlotBasket extends React.PureComponent {
             unused['calls'].sort((a, b) => a - b),
             unused['puts'].sort((a, b) => a - b),
            ];
-  }
+  };
   
   render() {
     if (!this.props.chain.hasOwnProperty('puts')) return null;
@@ -111,7 +106,7 @@ class PlotBasket extends React.PureComponent {
           rate={this.props.rate}
           expDate={this.props.expDate}
           chain={this.props.chain}
-          quote={this.props.quote}
+          price={this.props.quote.price}
         />
         
         <div style={styles.flexWrapper}>

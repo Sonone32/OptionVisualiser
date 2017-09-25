@@ -3,12 +3,9 @@ import 'isomorphic-fetch';
 class YahooAPI {
   constructor(address) {
     this.endpoint = address;
-    
-    this.fetchData = this.fetchData.bind(this);
-    this.makeDataTransform = this.makeDataTransform.bind(this);
   }
   
-  makeDataTransform(chain) {
+  makeDataTransform = (chain) => {
     let newChain = {calls: {}, puts: {}};
     let types = ['calls', 'puts'];
     let color;
@@ -30,9 +27,9 @@ class YahooAPI {
     })
     
     return newChain;
-  }
+  };
   
-  fetchData(symbol, date) {
+  fetchData = (symbol, date) => {
     date = new Date(date).getTime() / 1000;
     
     return new Promise((resolve, reject) => {
@@ -70,7 +67,7 @@ class YahooAPI {
           .catch(error => reject(error))
       );
     })
-  }
+  };
 }
 
 export default YahooAPI;

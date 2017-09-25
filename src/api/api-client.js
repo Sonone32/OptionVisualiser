@@ -2,15 +2,6 @@ import TradierAPI from './tradier.js'
 import YahooAPI from './yahoo.js'
 
 class APIClient {
-  constructor(endpoint) {
-    this.fetchData = this.fetchData.bind(this);
-  }
-  
-  fetchData(symbol, date) {
-    // Resolves to [stock data, [chain data, exp dates], 1-year-risk-free-interest-rate]
-    // because Tradier requires a separate call to get expDates and chain.
-  }
-  
   static connectTo(endpoint) {
     let apiAddress = 'http://flowersync.com:8080/api';
     switch (endpoint) {

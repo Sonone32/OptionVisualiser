@@ -42,11 +42,9 @@ class IVChart extends React.Component {
       refresh: null,
       shouldUpdate: false,
     };
-    
-    this.processData = this.processData.bind(this);
   }
   // NaN for discontinuity, null if interpolate over it
-  processData(chain) {
+  processData = (chain) => {
     let min = Infinity, max = 0, callData = {}, putData = {}, option;
     let data = {
       labels:  [],

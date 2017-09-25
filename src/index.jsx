@@ -14,9 +14,6 @@ class MainPanel extends React.Component {
       key: 0,
       searchTerm: '',
     }
-    this.handleKill = this.handleKill.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
   
   componentDidMount() {
@@ -35,7 +32,7 @@ class MainPanel extends React.Component {
     }
   }
   
-  handleKill(key) {
+  handleKill = (key) => {
     let newData = this.state.items.slice();
     let index = newData.map(x => x[0]).indexOf(key);
     if (index > -1) {
@@ -44,15 +41,15 @@ class MainPanel extends React.Component {
     this.setState({
       items: newData,
     });
-  }
+  };
   
-  handleSearchChange(value) {
+  handleSearchChange = (value) => {
     this.setState({
       searchTerm: value,
     })
-  }
+  };
   
-  handleSearch() {
+  handleSearch = () => {
     if (!this.state.searchTerm) return;
     // Clear this.state.searchTerm after searching.
     // Maybe add verification here or on handleSearchChange.
@@ -64,8 +61,8 @@ class MainPanel extends React.Component {
       key: this.state.key + 1,
       searchTerm: "",
     });
-  }
-  //fd
+  };
+  
   render() {
     return (
       <div>

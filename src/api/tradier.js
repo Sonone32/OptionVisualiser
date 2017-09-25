@@ -3,15 +3,12 @@ import 'isomorphic-fetch';
 class TradierAPI {
   constructor(address) {
     this.endpoint = address;
-    
-    this.fetchData = this.fetchData.bind(this);
-    this.makeDataTransform = this.makeDataTransform.bind(this);
   }
   
   // Transforms fetched chain data into something usable by this application.
   // May be imported from another file a la factory pattern, and return
   // whatever version works for the data source.
-  makeDataTransform(chain) {
+  makeDataTransform = (chain) => {
     let cleanedChain = {puts: {}, calls: {}};
     let bound = chain.length;
     let color;
@@ -31,9 +28,9 @@ class TradierAPI {
     }
     
     return cleanedChain;
-  }
+  };
   
-  fetchData(symbol, date) {
+  fetchData = (symbol, date) => {
     // call resolve after all the necessary data are returned
     // call reject if any step fails
     return new Promise((resolve, reject) => {
@@ -84,7 +81,7 @@ class TradierAPI {
       
       resolve(Promise.all([quote, chain, rate]));
     })
-  }
+  };
 }
 
 export default TradierAPI;

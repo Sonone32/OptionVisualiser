@@ -35,56 +35,48 @@ class AddMenu extends React.PureComponent {
       strike: null,
       verb: 1,  // 1 for buy and -1 for sell
     };
-    
-    this.handleMenuOpen = this.handleMenuOpen.bind(this);
-    this.handleMenuClose = this.handleMenuClose.bind(this);
-    this.handleVerbChange = this.handleVerbChange.bind(this);
-    this.handleQuantityChange = this.handleQuantityChange.bind(this);
-    this.handleStrikeChange = this.handleStrikeChange.bind(this);
-    this.handleCallChange = this.handleCallChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
   
-  handleMenuOpen() {
+  handleMenuOpen = () => {
     this.setState({
       menuOpen: true,
     });
-  }
+  };
   
-  handleMenuClose() {
+  handleMenuClose = () => {
     this.setState({
       menuOpen: false,
     });
-  }
+  };
   
-  handleVerbChange(event, index, value) {
+  handleVerbChange = (event, index, value) => {
     if (this.state.verb === value) return;
     this.setState({
       verb: value,
     });
-  }
+  };
   
-  handleQuantityChange(event, value) {
+  handleQuantityChange = (event, value) => {
     this.setState({
       quantity: value,
     });
-  }
+  };
   
-  handleCallChange(event, index, value) {
+  handleCallChange = (event, index, value) => {
     if (this.state.call === value) return;
     this.setState({
       call: value,
     });
-  }
+  };
   
-  handleStrikeChange(event, index, value) {
+  handleStrikeChange = (event, index, value) => {
     if (this.state.strike === value) return;
     this.setState({
       strike: value,
     });
-  }
+  };
   
-  handleSubmit() {    
+  handleSubmit = () => {    
     this.props.handleAdd(this.state.call ? 'calls' : 'puts',
                          this.state.strike,
                          this.state.verb * parseInt(this.state.quantity, 10));
@@ -96,7 +88,7 @@ class AddMenu extends React.PureComponent {
       strike: null,
       verb: 1,
     });
-  }
+  };
   
   render() {
     let validQuantity = !/[^0-9]+/.test(this.state.quantity);

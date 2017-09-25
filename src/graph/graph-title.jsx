@@ -1,10 +1,8 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
 import SelectField from 'material-ui/SelectField';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import Popover from 'material-ui/Popover';
 
 const styles = {
@@ -42,42 +40,37 @@ class GraphTitle extends React.Component {
       displayPercent: true,
       menuOpen: false, 
     };
-    
-    this.handleMenuClick = this.handleMenuClick.bind(this);
-    this.handleMenuClose = this.handleMenuClose.bind(this);
-    this.handleRefresh = this.handleRefresh.bind(this);
-    this.handleTitleClick = this.handleTitleClick.bind(this);
   }
   
-  handleMenuClick(event) {
+  handleMenuClick = (event) => {
     event.preventDefault();
     
     this.setState({
       anchorEl: event.currentTarget,
       menuOpen: true,
     });
-  }
+  };
   
-  handleMenuClose() {
+  handleMenuClose = () => {
     this.setState({
       menuOpen: false,
     });
-  }
+  };
   
-  handleRefresh() {
+  handleRefresh = () => {
     this.setState({
       menuOpen: false,
     });
     this.props.handleRefresh();
-  }
+  };
 
-  handleTitleClick() {
+  handleTitleClick = () => {
     this.setState({
       displayPercent: !this.state.displayPercent,
     });
-  }
+  };
   
-  displayPrice() {
+  displayPrice = () => {
     if (!this.props.quote.price) return '';
     let amount;
     if (this.state.displayPercent) {
@@ -90,7 +83,7 @@ class GraphTitle extends React.Component {
       ? `${this.props.quote.price.toFixed(2)}(+${amount})`
       : `${this.props.quote.price.toFixed(2)}(${amount})`
     );
-  }
+  };
   
   render() {
     return (

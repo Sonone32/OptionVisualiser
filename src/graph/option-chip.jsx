@@ -38,11 +38,6 @@ class ChipDialog extends React.PureComponent {
       type: '',
       volume: null,
     };
-    
-    this.handleChipRemove = this.handleChipRemove.bind(this);
-    this.handleColorChangeComplete = this.handleColorChangeComplete.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleVolumeChange = this.handleVolumeChange.bind(this);
   }
   
   componentWillReceiveProps(nextProps) {
@@ -57,35 +52,35 @@ class ChipDialog extends React.PureComponent {
     }
   }
   
-  handleColorChangeComplete(color, event) {
+  handleColorChangeComplete = (color, event) => {
     if (this.state.color === color.hex) return;
     this.setState({
       color: color.hex,
     });
-  }
+  };
   
-  handleVolumeChange(event, value) {
+  handleVolumeChange = (event, value) => {
     this.setState({
       volume: value,
     });
-  }
+  };
   
   // Make a call to this.props.handleSubmit(type, strike, volume, color)
-  handleSubmit() {
+  handleSubmit = () => {
     this.props.handleSubmit(this.state.type,
                             this.state.strike,
                             this.state.volume,
                             this.state.color);
     this.props.handleChipClose();
-  }
+  };
   
-  handleChipRemove() {
+  handleChipRemove = () => {
     this.props.handleSubmit(this.state.type,
                             this.state.strike,
                             0,
                             this.state.color);
     this.props.handleChipClose();
-  }
+  };
   
   render() {
     if (this.props.chipData === null) return null;
@@ -147,13 +142,7 @@ class ChipDialog extends React.PureComponent {
 
 // Wrapper for material-ui chip that can handle sending info to dialog.
 class OptionChip extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    
-    this.openDialog = this.openDialog.bind(this);
-  }
-  
-  openDialog() {
+  openDialog = () => {
     let data = this.props.data;
     this.props.onChipOpen(data.type, data.option);
   }
