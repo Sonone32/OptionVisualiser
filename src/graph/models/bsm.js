@@ -3,7 +3,7 @@ import {Phi, phi, roundFloat} from './maths';
 function getValue(type, s, k, r, t, v) {
   // Need to treat on-expiry options separately
   if (!t || !v) {
-    return roundFloat((type === 'calls') ? s - k : k - s, -4);
+    return Math.max(roundFloat((type === 'calls') ? s - k : k - s, -4), 0);
   }
 
   const d1 = (Math.log(s / k) + (r + v**2 / 2) * t) / (v * Math.sqrt(t));

@@ -2,6 +2,7 @@ import React from 'react'
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import DatePicker from 'material-ui/DatePicker';
+import TextField from 'material-ui/TextField';
 import Model from '../models/model'
 import PayoffChart from './plot-payoff';
 import GreeksChart from './plot-greeks';
@@ -12,10 +13,15 @@ const model = 'BSM';
 const styles = {
   controls: {
     marginLeft: '30px',
+    displayt: 'flex',
   },
   datePicker: {
-    width: 100,
+    width: '7em',
     overflow: 'hidden'
+  },
+  textField: {
+    margin: 5,
+    width: '5em',
   },
 }
 
@@ -27,7 +33,7 @@ class Charts extends React.PureComponent {
     expiry = new Date(expiry.getTime() + expiry.getTimezoneOffset() * 60 * 1000);
     this.state = {
       domain: null,
-      dayDiff: this.computeDayDifference(now, expiry),
+      period: this.computeDayDifference(now, expiry) / 365,
       now: now,
       expDate: expiry,
       slideIndex: 0,
@@ -45,6 +51,34 @@ class Charts extends React.PureComponent {
     }
   }
   
+  // Might wanna limit domain size.
+  handleDomainChange = (min, max) => {
+    console.log(min, max)
+    if (isNaN(min)) {
+      // Max changed
+      max = parseInt(max, 10);
+      if (!max) return; // Max parsed as NaN or is 0
+      min = this.state.domain[0];
+      if (max > min) {
+        // Valid max, compute new domain
+        this.setState({
+          domain: this.computeDomain(this.props.chips, min, max),
+        });
+      }
+    } else {
+      // Min changed
+      min = parseInt(min, 10);
+      if (isNaN(min)) return;
+      max = this.state.domain[this.state.domain.length - 1];
+      if (min < max) {
+        // Valid min, compute new domain
+        this.setState({
+          domain: this.computeDomain(this.props.chips, min, max),
+        });
+      }
+    }
+  }
+  
   handleTabChange = (value) => {
     this.setState({
       slideIndex: value,
@@ -54,7 +88,7 @@ class Charts extends React.PureComponent {
   handleDatePick = (event, value) => {
     if (value === this.state.value) return;
     this.setState({
-      dayDiff: this.computeDayDifference(value, this.state.expDate),
+      period: this.computeDayDifference(value, this.state.expDate) / 365,
       value: value,
     });
   };
@@ -64,9 +98,9 @@ class Charts extends React.PureComponent {
     return Math.ceil(Math.abs(d1.getTime() - d2.getTime()) / (3600000 * 24));
   };
 
-  computeDomain = (chips) => {
+  computeDomain = (chips, min, max) => {
     let domain = [];
-    let [min, max] = this.computeMinMax(chips);
+    if (!min && !max) [min, max] = this.computeMinMax(chips);
     let interval = max - min, increment;
     
     if (interval <= 11) {
@@ -75,8 +109,10 @@ class Charts extends React.PureComponent {
       increment = .25;
     } else if (interval <= 501) {
       increment = .5;
-    } else {
+    } else if (interval <= 1001) {
       increment = 1;
+    } else {
+      increment = Math.ceil(interval / 1000);
     }
     
     while (min <= max) {
@@ -133,30 +169,51 @@ class Charts extends React.PureComponent {
             model={this.state.model}
             rate={this.props.rate}
             domain={this.state.domain}
-            dayDiff={this.state.dayDiff}
+            period={this.state.period}
           />
           <GreeksChart
             chips={this.props.chips}
             model={this.state.model}
             rate={this.props.rate}
             domain={this.state.domain}
-            dayDiff={this.state.dayDiff}
+            period={this.state.period}
           />
           <IVChart
             chain={this.props.chain}
           />
         </SwipeableViews>
-        <div style={styles.controls}>
-          <div style={styles.datePicker}>
-            <DatePicker
-              floatingLabelText="Estimate value on:"
-              value={this.state.value}
-              onChange={this.handleDatePick}
-              minDate={this.state.now}
-              maxDate={this.state.expDate}
-            />
-          </div>
-        </div>
+        {
+          (this.state.domain)
+          ? <div style={styles.controls}>
+              <TextField
+                defaultValue={Math.round(this.state.domain[0])}
+                floatingLabelText="Min. Price:"
+                onChange={(event, val) => {this.handleDomainChange(val, NaN)}}
+                style={styles.textField}
+                type="tel"
+              />
+
+              <TextField
+                defaultValue={Math.round(this.state.domain[this.state.domain.length - 1])}
+                floatingLabelText="Max. Price:"
+                onChange={(event, val) => {this.handleDomainChange(NaN, val)}}
+                style={styles.textField}
+                type="tel"
+              />
+
+              <div style={styles.datePicker}>
+                <DatePicker
+                  floatingLabelText="Estimate value on:"
+                  value={this.state.value}
+                  onChange={this.handleDatePick}
+                  minDate={this.state.now}
+                  maxDate={this.state.expDate}
+                />
+              </div>
+            </div>
+          : null
+        }
+        
       </div>
     )
   }

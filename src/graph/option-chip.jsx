@@ -64,7 +64,7 @@ class ChipDialog extends React.PureComponent {
       volume: value,
     });
   };
-  
+
   // Make a call to this.props.handleSubmit(type, strike, volume, color)
   handleSubmit = () => {
     this.props.handleSubmit(this.state.type,

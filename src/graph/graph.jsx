@@ -1,9 +1,7 @@
 import React from 'react';
 import {Card} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
-
 import 'isomorphic-fetch';
-
 import PlotBasket from './plot-basket';
 import GraphTitle from './graph-title';
 
@@ -59,6 +57,7 @@ class Graph extends React.Component {
   }
     
   // Use the presence of color to determine whether to add changes to or to reset volume.
+  // Should consider letting users enter their own price.
   handleChipChange = (type, strike, volume, color) => {
     if (!volume && !color) return;
     if ((volume === this.state.chain[type][strike].volume)
