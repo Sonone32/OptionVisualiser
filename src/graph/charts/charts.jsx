@@ -21,7 +21,7 @@ const styles = {
   },
   textField: {
     margin: 5,
-    width: '5em',
+    width: '5.5em',
   },
 }
 
@@ -53,7 +53,6 @@ class Charts extends React.PureComponent {
   
   // Might wanna limit domain size.
   handleDomainChange = (min, max) => {
-    console.log(min, max)
     if (isNaN(min)) {
       // Max changed
       max = parseInt(max, 10);
@@ -162,7 +161,7 @@ class Charts extends React.PureComponent {
         <SwipeableViews
           index={this.state.slideIndex}
           onChangeIndex={this.handleTabChange}
-          threshold={10}
+          threshold={15}
         >
           <PayoffChart
             chips={this.props.chips}
@@ -183,7 +182,7 @@ class Charts extends React.PureComponent {
           />
         </SwipeableViews>
         {
-          (this.state.domain)
+          this.state.domain
           ? <div style={styles.controls}>
               <TextField
                 defaultValue={Math.round(this.state.domain[0])}
@@ -213,7 +212,6 @@ class Charts extends React.PureComponent {
             </div>
           : null
         }
-        
       </div>
     )
   }

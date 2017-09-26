@@ -21,6 +21,7 @@ class TradierAPI {
         color: color,
         IV: 0,
         last: chain[i].last,
+        premium: chain[i].last || chain[i].ask || chain[i].bid,
         raw: chain[i],
         strike: chain[i].strike,
         volume: 0,

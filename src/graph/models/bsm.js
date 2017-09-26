@@ -1,5 +1,13 @@
 import {Phi, phi, roundFloat} from './maths';
 
+/*
+type: 'calls' or 'puts'
+s: price of underlying
+k: strike price
+r: risk-free interest rate in decimal, currently using rate for 1 year US treasury note
+t: (actual days from expiry)/365
+v: implied volatility calculated through current market premium in decimals
+*/
 function getValue(type, s, k, r, t, v) {
   // Need to treat on-expiry options separately
   if (!t || !v) {

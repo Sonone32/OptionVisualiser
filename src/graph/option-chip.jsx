@@ -28,7 +28,7 @@ const styles = {
 };
 
 // Functional... now it's just a matter of design.
-// Should present any data pertinent to the raw data source(this.props.chipData.raw).
+// Need to make error-checking more rigorous.
 class ChipDialog extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -37,6 +37,7 @@ class ChipDialog extends React.PureComponent {
       strike: null,
       type: '',
       volume: null,
+      premium: null,
     };
   }
   
@@ -48,6 +49,7 @@ class ChipDialog extends React.PureComponent {
         strike: nextProps.chipData.strike,
         type: nextProps.chipType,
         volume: nextProps.chipData.volume,
+        premium: nextProps.chipData.premium,
       });
     }
   }
@@ -65,12 +67,19 @@ class ChipDialog extends React.PureComponent {
     });
   };
 
+  handlePremiumChange = (event, value) => {
+    this.setState({
+      premium: value,
+    });
+  };
+
   // Make a call to this.props.handleSubmit(type, strike, volume, color)
   handleSubmit = () => {
     this.props.handleSubmit(this.state.type,
                             this.state.strike,
                             this.state.volume,
-                            this.state.color);
+                            this.state.color,
+                            this.state.premium);
     this.props.handleChipClose();
   };
   
@@ -85,8 +94,8 @@ class ChipDialog extends React.PureComponent {
   render() {
     if (this.props.chipData === null) return null;
     
-    let validVolume = /^-?[0-9]+$/.test(this.state.volume) ;
-    let displayedStrike = '$' + this.state.strike + ((this.state.strike % 1 === 0) ? '.00' : '0')
+    let validVolume = /^-?[0-9]+$/.test(this.state.volume);
+    let validPremium = true;
     
     const chipActions = [
       <FlatButton
@@ -114,7 +123,7 @@ class ChipDialog extends React.PureComponent {
         modal={false}
         onRequestClose={this.props.handleChipClose}
         open={this.props.chipOpen}
-        title={`${this.props.expDate} ${this.props.symbol} ${this.state.type.slice(0,-1)} ${displayedStrike}`}
+        title={`${this.props.expDate} ${this.props.symbol} ${this.state.type.slice(0,-1)} $${this.state.strike.toFixed(2)}`}
       >
         <div style={styles.flexDialog}>
           <span>I am holding </span>
@@ -127,6 +136,15 @@ class ChipDialog extends React.PureComponent {
             type="tel"
           />
           <span>{parseInt(this.state.volume, 10) > 1 ? 'contracts' : 'contract'} of this option.</span>
+          <span>Its premium is </span>
+          <TextField
+            defaultValue={this.state.premium}
+            errorText={validPremium ? '' : 'Please enter a valid price.'}
+            hintText="Enter premium"
+            onChange={this.handlePremiumChange}
+            style={styles.textField}
+            type="tel"
+          />
           <span>
             {`\nASK: ${this.props.chipData.ask} BID: ${this.props.chipData.bid} LAST: ${this.props.chipData.last}`}
           </span>

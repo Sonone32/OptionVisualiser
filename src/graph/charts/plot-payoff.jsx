@@ -43,7 +43,7 @@ class PayoffChart extends React.PureComponent {
   
   processData = (model, chips, domain, period, rate) => {
     let bound = domain.length, total = new Array(bound).fill(0);
-    let vals, val, vol, type, v, strike;
+    let vals, val, volume, type, v, strike, premium, time;
     let data = {
       labels: domain.map(x => `$${x.toFixed(2)}`),
       datasets: [{
@@ -61,13 +61,16 @@ class PayoffChart extends React.PureComponent {
       strike = chips[i].option.strike;
       type = chips[i].type;
       v = chips[i].option.IV;
-      vol = chips[i].option.volume;
+      volume = chips[i].option.volume;
+      time = (volume < 0) ? 0 : period; // A short position doesn't have varying time value.
+      premium = chips[i].option.premium;
+      console.log(premium * volume, 'prem')
       
       for (let j = 0; j < bound; j++) {
-        val = roundFloat(model.getValue(type, domain[j], strike, rate, period, v) * vol, -2);
+        val = roundFloat(model.getValue(type, domain[j], strike, rate, period, v) * volume, -2);
+        val -= volume * premium;
         vals[j] = val;
         total[j] += val;
-        // Add total to corresponding position in an array that sums the value of all positions.
       }
       
       data.datasets.push({
@@ -86,7 +89,6 @@ class PayoffChart extends React.PureComponent {
   
   render() {
     let dataset = {};
-    console.time('t')
     if (this.props.domain) {
       dataset = this.processData(this.props.model,
                                  this.props.chips,
@@ -95,8 +97,7 @@ class PayoffChart extends React.PureComponent {
                                  this.props.rate,
                                 );
     }
-    console.timeEnd('t')
-    console.log(dataset)
+    
     return (
       <div className="chart">
         <Line

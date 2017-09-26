@@ -19,6 +19,7 @@ class YahooAPI {
           color: color,
           IV: item.impliedVolatility || null,
           last: item.lastPrice,
+          premium: item.lastPrice || item.ask || item.bid,
           raw: item,
           strike: item.strike,
           volume: 0,
