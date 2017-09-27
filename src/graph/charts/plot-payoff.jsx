@@ -36,6 +36,7 @@ const options = {
   },
 }
 
+// Might wanna add a plot on expiry to show time value vs intrinsic value.
 class PayoffChart extends React.PureComponent {
   constructor(props) {
     super(props);

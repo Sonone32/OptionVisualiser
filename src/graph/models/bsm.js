@@ -26,7 +26,7 @@ function getValue(type, s, k, r, t, v) {
 
 function getGreeks(type, s, k, r, t, v) {
   // Should normalize the greeks
-  if (!t || !v) return null
+  if (!t || !v) return 0;
   
   const d1 = (Math.log(s / k) + (r + v**2 / 2) * t) / (v * Math.sqrt(t));
   const d2 = d1 - (v * Math.sqrt(t));
@@ -37,11 +37,11 @@ function getGreeks(type, s, k, r, t, v) {
   
   if (type === 'calls') {
     greeks['delta'] = roundFloat(Phi(d1), -4);
-    greeks['theta'] = roundFloat(-s * v * phi(d1) / (2 * t) - r * k * Math.exp(-r * t) * Phi(d2), -4);
+    greeks['theta'] = roundFloat(-s * v * phi(d1) / (2 * t) - r * k * Math.exp(-r * t) * Phi(d2), -4) / 365;
     greeks['rho'] = roundFloat(k * t * Math.exp(-r * t) * Phi(d2), -4);
   } else {
     greeks['delta'] = roundFloat(Phi(d1) - 1, -4);
-    greeks['theta'] = roundFloat(-s * v * phi(d1) / (2 * t) + r * k * Math.exp(-r * t) * Phi(-d2), -4);
+    greeks['theta'] = roundFloat(-s * v * phi(d1) / (2 * t) + r * k * Math.exp(-r * t) * Phi(-d2), -4) / 365;
     greeks['rho'] = roundFloat(-k * t * Math.exp(-r * t) * Phi(-d2), -4);
   }
 
