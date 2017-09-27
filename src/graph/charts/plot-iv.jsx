@@ -9,14 +9,14 @@ const options = {
     yAxes: [{
       stacked: false,
       ticks: {
-        maxTicksLimit: 10,
+        maxTicksLimit: 9,
         autoSkip: true,
       },
     }],
     xAxes: [{
       stacked: false,
       ticks: {
-        maxTicksLimit: 10,
+        maxTicksLimit: 16,
         autoSkip: true,
       },
     }],

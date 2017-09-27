@@ -4,6 +4,9 @@ import Charts from './charts/charts';
 import {OptionChip, ChipDialog} from './option-chip';
 
 const styles = {
+  chip: {
+    margin: 3,
+  },
   flexWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -115,10 +118,19 @@ class PlotBasket extends React.PureComponent {
               data={chip}
               key={chip.type + chip.option.strike}
               onChipOpen={this.handleChipOpen}
+              style={styles.chip}
             >
-              {chip.option.volume} {chip.type}@{chip.option.strike}
+              {chip.option.volume} at {`$${chip.option.strike.toFixed(2)}`}
             </OptionChip>
           )}
+          <AddMenu
+            expDate={this.props.expDate}
+            handleAdd={this.props.handleChipChange}
+            style={styles.chip}
+            symbol={this.props.quote.symbol}
+            unusedCalls={this.state.unusedCalls}
+            unusedPuts={this.state.unusedPuts}
+          />
         </div>
         <ChipDialog
           chipData={this.state.chipData}
@@ -129,15 +141,7 @@ class PlotBasket extends React.PureComponent {
           handleSubmit={this.props.handleChipChange}
           symbol={this.props.quote.symbol}
         />
-        <AddMenu
-          expDate={this.props.expDate}
-          handleAdd={this.props.handleChipChange}
-          symbol={this.props.quote.symbol}
-          unusedCalls={this.state.unusedCalls}
-          unusedPuts={this.state.unusedPuts}
-        />
       </div>
-      
     );
   }
 }

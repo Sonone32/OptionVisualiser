@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchBar from 'material-ui-search-bar'
+import TransitionGroup from 'react-transition-group/TransitionGroup'
 import Graph from './graph/graph.jsx';
 import APIClient from './api/api-client'
 

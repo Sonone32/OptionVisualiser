@@ -1,11 +1,10 @@
 import React from 'react';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import Chip from 'material-ui/Chip';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
+import TextField from 'material-ui/TextField';
 
 const styles = {
   flexDialog: {
@@ -109,9 +108,9 @@ class AddMenu extends React.PureComponent {
     
     return (
       <div>
-        <IconButton onClick={this.handleMenuOpen}>
-          <ContentAdd />
-        </IconButton>
+        <Chip onClick={this.handleMenuOpen} style={this.props.style}>
+          + add a position
+        </Chip>
         <Dialog
           title={`${this.props.expDate} ${this.props.symbol}`}
           actions={menuActions}

@@ -7,9 +7,6 @@ import TextField from 'material-ui/TextField';
 import { SliderPicker } from 'react-color';
 
 const styles = {
-  chip: {
-    margin: 4,
-  },
   flexDialog: {
     alignItems: 'center',
     display: 'flex',
@@ -28,7 +25,6 @@ const styles = {
 };
 
 // Functional... now it's just a matter of design.
-// Need to make error-checking more rigorous.
 class ChipDialog extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -50,6 +46,7 @@ class ChipDialog extends React.PureComponent {
         type: nextProps.chipType,
         volume: nextProps.chipData.volume,
         premium: nextProps.chipData.premium,
+        validPremium: true,
       });
     }
   }
@@ -68,8 +65,10 @@ class ChipDialog extends React.PureComponent {
   };
 
   handlePremiumChange = (event, value) => {
+    console.log(value, /^[-+]?[0-9]*\.?[0-9]+$/.test(value))
     this.setState({
       premium: value,
+      validPremium: /^[-+]?[0-9]*\.?[0-9]+$/.test(value),
     });
   };
 
@@ -79,7 +78,7 @@ class ChipDialog extends React.PureComponent {
                             this.state.strike,
                             this.state.volume,
                             this.state.color,
-                            this.state.premium);
+                            this.state.validPremium ? this.state.premium : this.props.chipData.premium);
     this.props.handleChipClose();
   };
   
@@ -95,7 +94,6 @@ class ChipDialog extends React.PureComponent {
     if (this.props.chipData === null) return null;
     
     let validVolume = /^-?[0-9]+$/.test(this.state.volume);
-    let validPremium = true;
     
     const chipActions = [
       <FlatButton
@@ -139,11 +137,10 @@ class ChipDialog extends React.PureComponent {
           <span>Its premium is </span>
           <TextField
             defaultValue={this.state.premium}
-            errorText={validPremium ? '' : 'Please enter a valid price.'}
+            errorText={this.state.validPremium ? '' : 'Please enter a valid price.'}
             hintText="Enter premium"
             onChange={this.handlePremiumChange}
             style={styles.textField}
-            type="tel"
           />
           <span>
             {`\nASK: ${this.props.chipData.ask} BID: ${this.props.chipData.bid} LAST: ${this.props.chipData.last}`}
@@ -169,7 +166,7 @@ class OptionChip extends React.PureComponent {
     return (
       <Chip
         onClick={this.openDialog}
-        style={styles.chip}
+        style={this.props.style}
       >
         <Avatar size={32} color={'#fff'} backgroundColor={this.props.data.option.color}>
           {this.props.data.type.slice(0, -1)}

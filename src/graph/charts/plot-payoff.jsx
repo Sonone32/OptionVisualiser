@@ -15,13 +15,18 @@ const options = {
   scales: {
     yAxes: [{
       ticks: {
-        maxTicksLimit: 10,
+        maxTicksLimit: 9,
         autoSkip: true,
       },
     }],
     xAxes: [{
       ticks: {
-        
+        maxTicksLimit: 16,
+        autoSkip: true,
+      },
+      scaleLabel: {
+        display: true,
+        labelString: 'Price of underlying',
       },
     }],
   },
@@ -30,7 +35,7 @@ const options = {
     mode: 'index',
     callbacks: {
       label: (item, data) => (
-        `${data.datasets[item.datasetIndex].label}: $${item.yLabel.toFixed(2)}`
+        `${data.datasets[item.datasetIndex].label}: ${item.yLabel >= 0 ? '$' : '-$'}${Math.abs(item.yLabel.toFixed(2))}`
       ),
     },
   },

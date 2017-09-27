@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
+import CircularProgress from 'material-ui/CircularProgress';
 import 'isomorphic-fetch';
 import PlotBasket from './plot-basket';
 import GraphTitle from './graph-title';
@@ -9,6 +10,11 @@ const styles = {
   paper: {
     maxWidth: '100%',
     marginBottom: '3%',
+  },
+  loadingIcon: {
+    display: 'block',
+    margin: 'auto',
+    padding: 10,
   },
 };
 
@@ -167,16 +173,18 @@ class Graph extends React.Component {
             handleRefresh={this.handleRefresh}
             quote={this.state.quote}
           />
-          {this.state.loading
-             ? null
-             : <PlotBasket
-                 basket={this.state.plotData}
-                 chain={this.state.chain}
-                 expDate={this.state.expDate}
-                 handleChipChange={this.handleChipChange}
-                 rate={this.state.interestRate}
-                 quote={this.state.quote}
-               />}
+          {
+            this.state.loading
+            ? <CircularProgress style={styles.loadingIcon} />
+            : <PlotBasket
+                basket={this.state.plotData}
+                chain={this.state.chain}
+                expDate={this.state.expDate}
+                handleChipChange={this.handleChipChange}
+                rate={this.state.interestRate}
+                quote={this.state.quote}
+              />
+          }
            {core}
         </Card>
       </Paper>
