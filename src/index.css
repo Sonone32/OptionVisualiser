@@ -2,16 +2,21 @@
   cursor: url(//b.thumbs.redditmedia.com/4ZxOF0Jq21KHWSQUDunb3iUrawRW8aALcFq-5bb9NkM.png);
 }
 
+@font-face {
+  font-family: "Kelvetica";
+  src: url("./fonts/Kelvetica.otf");
+}
+
 html {
   background: white;
 }
 
 body {
-  background: #57B0E3;
-  background: -webkit-linear-gradient(#57B0E3, white); /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#57B0E3, white); /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#57B0E3, white); /* For Firefox 3.6 to 15 */
-  background: linear-gradient(#57B0E3, white); /* Standard syntax */
+  background: #78bfe8;
+  background: -webkit-linear-gradient(#78bfe8, white); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#78bfe8, white); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#78bfe8, white); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#78bfe8, white); /* Standard syntax */
   border: 0;
   margin: 0;
   height: 95vh;
@@ -27,6 +32,8 @@ body {
   margin-top: 0;
   padding-top: 40px;
   text-align: center;
+  color: white;
+  font-family: Kelvetica;
 }
 
 #searchField {

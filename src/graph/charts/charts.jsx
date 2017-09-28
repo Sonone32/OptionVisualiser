@@ -67,7 +67,7 @@ class Charts extends React.PureComponent {
   
   componentWillReceiveProps(nextProps) {
     if (!nextProps.chips.length) return;
-    let domain, totalCost;
+    let domain;
     if (nextProps.chips.length !== this.props.chips.length) {
       domain = this.computeDomain(nextProps.chips);
     }
@@ -220,10 +220,6 @@ class Charts extends React.PureComponent {
         {
           this.state.domain
           ? <div style={styles.controls}>
-              <span style={styles.totalCost}>
-                Cost to set up: {`${this.state.totalCost >= 0 ? '$' : '-$'}${Math.abs(this.state.totalCost)}`}
-              </span>
-              
               <DatePicker
                 floatingLabelText="Estimate value on:"
                 maxDate={this.state.expDate}
@@ -251,6 +247,11 @@ class Charts extends React.PureComponent {
                   type="tel"
                 />
               </div>
+              
+              <span style={styles.totalCost}>
+                Cost to set up: 
+                {`${this.state.totalCost >= 0 ? '$' : '-$'}${Math.abs(this.state.totalCost).toFixed(2)}`}
+              </span>
             </div>
           : null
         }
