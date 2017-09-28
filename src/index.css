@@ -42,9 +42,29 @@ body {
 }
 
 .chart {
-  height: 40vh;
+  height: 35vh;
   width: inherit;
 }
+
+/* ms grid layout for edge, because microsoft */
+#main {
+  display: -ms-grid;
+  -ms-grid-columns: 1fr 50px 900px 50px 1fr;
+  -ms-grid-rows: auto;
+}
+
+#graphBox {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 3;
+  -ms-grid-row: 2;
+}
+
+#searchField {
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 2;
+  -ms-grid-row: 1;
+}
+/* end ms grid layout */
 
 @media all and (max-width : 767px) {
 /* Phones */
@@ -54,6 +74,7 @@ body {
   }
   
   .chart {
+    height: 40vh;
     min-height: 300px;
   }
 }
@@ -65,6 +86,7 @@ body {
   }
   
   .chart {
+    height: 40vh;
     min-height: 400px;
   }
 }
@@ -76,7 +98,6 @@ body {
   }
   
   .chart {
-    height: 35vh;
     min-height: 450px;
   }
   
