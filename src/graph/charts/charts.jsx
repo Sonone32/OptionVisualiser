@@ -16,6 +16,7 @@ const styles = {
     display: 'flex',
     alignItems: 'baseline',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
   datePicker: {
     height: '4em',
@@ -29,6 +30,11 @@ const styles = {
     margin: 5,
     width: '5.5em',
   },
+  totalCost: {
+    height: '4em',
+    margin: 5,
+    color: 'rgba(0, 0, 0, .6)',
+  },
 }
 
 class Charts extends React.PureComponent {
@@ -37,24 +43,39 @@ class Charts extends React.PureComponent {
     let now = new Date();
     let expiry = new Date(this.props.expDate);
     expiry = new Date(expiry.getTime() + expiry.getTimezoneOffset() * 60 * 1000);
+    
+    let mode;
+    try {
+      if (window.innerHeight < window.innerWidth) mode = 'landscape';
+    } catch (e) {
+      mode = 'portrait';
+    }
+    
     this.state = {
+      dataPickerMode: mode,
       domain: null,
-      period: this.computeDayDifference(now, expiry) / 365,
-      now: now,
       expDate: expiry,
-      slideIndex: 0,
       model: new Model(model),
+      mode: mode,
+      now: now,
+      period: this.computeDayDifference(now, expiry) / 365,
+      slideIndex: 0,
+      totalCost: 0,
       value: now,
     };
   }
   
   componentWillReceiveProps(nextProps) {
     if (!nextProps.chips.length) return;
+    let domain, totalCost;
     if (nextProps.chips.length !== this.props.chips.length) {
-      this.setState({
-        domain: this.computeDomain(nextProps.chips),
-      });
+      domain = this.computeDomain(nextProps.chips);
     }
+    
+    this.setState({
+      domain: domain || this.state.domain,
+      totalCost: this.computeTotalCost(nextProps.chips),
+    });
   }
   
   // Might wanna limit domain size.
@@ -96,6 +117,14 @@ class Charts extends React.PureComponent {
       period: this.computeDayDifference(value, this.state.expDate) / 365,
       value: value,
     });
+  };
+
+  computeTotalCost = (chips) => {
+    let total = 0;
+    for (let i = 0; i < chips.length; i++) {
+      total += chips[i].option.premium * chips[i].option.volume;
+    }
+    return total;
   };
 
   // Compute difference in number of days disregarding HH:MM:SS.sss.
@@ -165,24 +194,24 @@ class Charts extends React.PureComponent {
           <Tab label="IV" value={2} />
         </Tabs>
         <SwipeableViews
+          disabled={!this.props.config.slideableTabs}
           index={this.state.slideIndex}
           onChangeIndex={this.handleTabChange}
           threshold={15}
-          disabled={!this.props.config.slideableTabs}
         >
           <PayoffChart
             chips={this.props.chips}
-            model={this.state.model}
-            rate={this.props.rate}
             domain={this.state.domain}
+            model={this.state.model}
             period={this.state.period}
+            rate={this.props.rate}
           />
           <GreeksChart
             chips={this.props.chips}
-            model={this.state.model}
-            rate={this.props.rate}
             domain={this.state.domain}
+            model={this.state.model}
             period={this.state.period}
+            rate={this.props.rate}
           />
           <IVChart
             chain={this.props.chain}
@@ -191,13 +220,18 @@ class Charts extends React.PureComponent {
         {
           this.state.domain
           ? <div style={styles.controls}>
+              <span style={styles.totalCost}>
+                Cost to set up: {`${this.state.totalCost >= 0 ? '$' : '-$'}${Math.abs(this.state.totalCost)}`}
+              </span>
+              
               <DatePicker
                 floatingLabelText="Estimate value on:"
-                value={this.state.value}
-                onChange={this.handleDatePick}
-                minDate={this.state.now}
                 maxDate={this.state.expDate}
+                minDate={this.state.now}
+                mode={this.state.mode}
+                onChange={this.handleDatePick}
                 style={styles.datePicker}
+                value={this.state.value}
               />
               
               <div>

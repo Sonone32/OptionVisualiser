@@ -3,8 +3,10 @@ import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
-import { SliderPicker } from 'react-color';
+import {SliderPicker} from 'react-color';
 
 const styles = {
   flexDialog: {
@@ -22,13 +24,16 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  selectField: {
+    width: '8em',
+  },
 };
 
-// Functional... now it's just a matter of design.
 class ChipDialog extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      buy: true,
       color: '',
       strike: null,
       type: '',
@@ -41,15 +46,23 @@ class ChipDialog extends React.PureComponent {
     if (!nextProps.chipOpen) return;
     if (this.props !== nextProps) {
       this.setState({
+        buy: nextProps.chipData.volume > 0,
         color: nextProps.chipData.color,
         strike: nextProps.chipData.strike,
         type: nextProps.chipType,
-        volume: nextProps.chipData.volume,
+        volume: Math.abs(nextProps.chipData.volume),
         premium: nextProps.chipData.premium,
         validPremium: true,
       });
     }
   }
+  
+  handleActionChange = (event, index, value) => {
+    if (this.state.buy === value) return;
+    this.setState({
+      buy: value,
+    });
+  };
   
   handleColorChangeComplete = (color, event) => {
     if (this.state.color === color.hex) return;
@@ -65,20 +78,24 @@ class ChipDialog extends React.PureComponent {
   };
 
   handlePremiumChange = (event, value) => {
-    console.log(value, /^[-+]?[0-9]*\.?[0-9]+$/.test(value))
     this.setState({
       premium: value,
-      validPremium: /^[-+]?[0-9]*\.?[0-9]+$/.test(value),
+      validPremium: /^[-+]?[0-9]*\.?[0-9]+$/.test(value) || (value === ''),
     });
   };
 
   // Make a call to this.props.handleSubmit(type, strike, volume, color)
   handleSubmit = () => {
+    let premium = this.state.premium;
+    if (premium === '') premium = this.props.chipData.last
+                                  || this.props.chipData.ask
+                                  || this.props.chipData.bid;
+    
     this.props.handleSubmit(this.state.type,
                             this.state.strike,
-                            this.state.volume,
+                            this.state.volume * (this.state.buy ? 1 : -1),
                             this.state.color,
-                            this.state.validPremium ? this.state.premium : this.props.chipData.premium);
+                            this.state.validPremium ? premium : this.props.chipData.premium);
     this.props.handleChipClose();
   };
   
@@ -107,7 +124,7 @@ class ChipDialog extends React.PureComponent {
         primary={true}
       />,
       <FlatButton
-        disabled={!validVolume}
+        disabled={!validVolume || !this.state.validPremium}
         label="Okay"
         onClick={this.handleSubmit}
         primary={true}
@@ -124,27 +141,42 @@ class ChipDialog extends React.PureComponent {
         title={`${this.props.expDate} ${this.props.symbol} ${this.state.type.slice(0,-1)} $${this.state.strike.toFixed(2)}`}
       >
         <div style={styles.flexDialog}>
-          <span>I am holding </span>
+          <SelectField
+            floatingLabelText="Holding/Shorting"
+            onChange={this.handleActionChange}
+            style={styles.selectField}
+            value={this.state.buy}
+            >
+            <MenuItem
+              key={true}
+              primaryText="Holding"
+              value={true}
+            />
+            <MenuItem
+              key={false}
+              primaryText="Shorting"
+              value={false}
+            />
+          </SelectField>
+          
           <TextField
             defaultValue={this.state.volume}
             errorText={validVolume ? '' : 'Please enter an integer.'}
+            floatingLabelText="Amount"
             hintText="Enter an amount"
             onChange={this.handleVolumeChange}
             style={styles.textField}
             type="tel"
           />
-          <span>{parseInt(this.state.volume, 10) > 1 ? 'contracts' : 'contract'} of this option.</span>
-          <span>Its premium is </span>
+
           <TextField
             defaultValue={this.state.premium}
-            errorText={this.state.validPremium ? '' : 'Please enter a valid price.'}
-            hintText="Enter premium"
+            errorText={this.state.validPremium ? '' : 'Invalid price'}
+            floatingLabelText="Premium"
+            hintText="Blank for default"
             onChange={this.handlePremiumChange}
             style={styles.textField}
           />
-          <span>
-            {`\nASK: ${this.props.chipData.ask} BID: ${this.props.chipData.bid} LAST: ${this.props.chipData.last}`}
-          </span>
         </div>
         <SliderPicker
           color={this.state.color}

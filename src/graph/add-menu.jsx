@@ -1,9 +1,9 @@
 import React from 'react';
 import Chip from 'material-ui/Chip';
 import Dialog from 'material-ui/Dialog';
-import DropDownMenu from 'material-ui/DropDownMenu';
 import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
 
 const styles = {
@@ -22,6 +22,15 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  strikeField: {
+    width: '8em',
+  },
+  verbField: {
+    width: '6em',
+  },
+  typeField: {
+    width: '7em'
+  },
 };
 
 class AddMenu extends React.PureComponent {
@@ -30,10 +39,20 @@ class AddMenu extends React.PureComponent {
     this.state = {
       call: true, // false for put
       menuOpen: false,
-      quantity: '',
+      quantity: '1',
       strike: null,
       verb: 1,  // 1 for buy and -1 for sell
     };
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      call: true,
+      menuOpen: false,
+      quantity: '1',
+      strike: null,
+      verb: 1,
+    });
   }
   
   handleMenuOpen = () => {
@@ -102,7 +121,7 @@ class AddMenu extends React.PureComponent {
         label="Okay"
         primary={true}
         onClick={this.handleSubmit}
-        disabled={!(this.state.quantity && validQuantity && this.state.strike)}
+        disabled={!this.state.quantity || !validQuantity || !this.state.strike}
       />,
     ];
     
@@ -112,46 +131,56 @@ class AddMenu extends React.PureComponent {
           + add a position
         </Chip>
         <Dialog
-          title={`${this.props.expDate} ${this.props.symbol}`}
           actions={menuActions}
-          modal={false}
-          open={this.state.menuOpen}
-          onRequestClose={this.handleMenuClose}
           actionsContainerStyle={styles.flexAction}
+          modal={false}
+          onRequestClose={this.handleMenuClose}
+          open={this.state.menuOpen}
+          title={`${this.props.expDate} ${this.props.symbol}`}
         >
           <div style={styles.flexDialog}>
-            <span>I want to </span>
-
-            <DropDownMenu value={this.state.verb} onChange={this.handleVerbChange}>
-              <MenuItem value={1} primaryText="buy" />
-              <MenuItem value={-1} primaryText="sell" />
-            </DropDownMenu>
+            <SelectField
+              floatingLabelText="select action"
+              onChange={this.handleVerbChange}
+              style={styles.verbField}
+              value={this.state.verb}
+              >
+              <MenuItem value={1} primaryText="Buy" />
+              <MenuItem value={-1} primaryText="Sell" />
+            </SelectField>
 
             <TextField
+              defaultValue={1}
               errorText={validQuantity ? '' : 'Please enter a positive integer.'}
-              floatingLabelText="this amount of"
-              hintText="Enter an amount"
+              floatingLabelText="Enter an amount"
               onChange={this.handleQuantityChange}
               style={styles.textField}
               type="tel"
             />
 
-            <DropDownMenu value={this.state.call} onChange={this.handleCallChange}>
+            <SelectField
+              floatingLabelText="Select type"
+              onChange={this.handleCallChange}
+              style={styles.typeField}
+              value={this.state.call}
+              >
               <MenuItem value={true} primaryText="call" />
               <MenuItem value={false} primaryText="put" />
-            </DropDownMenu>
+            </SelectField>
 
-            <span>{parseInt(this.state.quantity, 10) > 1 ? 'contracts' : 'contract'} with the strike price at </span>
-
-            <DropDownMenu value={this.state.strike} onChange={this.handleStrikeChange}>
-              <MenuItem value={null} primaryText="-price-" />
+            <SelectField
+              floatingLabelText="Select strike price"
+              onChange={this.handleStrikeChange}
+              style={styles.strikeField}
+              value={this.state.strike}
+              >
               {(this.state.call ? this.props.unusedCalls : this.props.unusedPuts).map(
                   choice => <MenuItem key={choice}
                                       value={choice}
                                       primaryText={'$' + choice + ((choice % 1 === 0) ? '.00' : '0')}
                             />
                 )}
-            </DropDownMenu>
+            </SelectField>
           </div>
           
         </Dialog>
