@@ -19,13 +19,17 @@ const options = {
         maxTicksLimit: 16,
         autoSkip: true,
       },
+      scaleLabel: {
+        display: true,
+        labelString: 'Strike price',
+      },
     }],
   },
   tooltips: {
     intersect: false,
     mode: 'index',
     callbacks: {
-      label: item => (item['yLabel'] ? item['yLabel'].toFixed(4) : 'no value'),
+      label: item => (item['yLabel'] ? `${item['yLabel'].toFixed(2)}%` : 'no value'),
     },
   },
   layout: {
@@ -82,8 +86,8 @@ class IVChart extends React.Component {
     }
     
     while (min <= max) {
-      data.datasets[0].data.push(callData[min] ? callData[min] : null);
-      data.datasets[1].data.push(putData[min] ? putData[min] : null);
+      data.datasets[0].data.push(callData[min] ? callData[min] * 100 : null);
+      data.datasets[1].data.push(putData[min] ? putData[min] * 100 : null);
       data['labels'].push(`$${min.toFixed(2)}`);
       min += .5;
     }

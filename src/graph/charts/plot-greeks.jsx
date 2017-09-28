@@ -41,12 +41,7 @@ const options = {
   },
 }
 
-// Should be working now.
 class GreeksChart extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
-  
   processData = (model, chips, domain, period, rate) => {
     let bound = domain.length, total = new Array(bound).fill(0);
     const greeks = ['delta', 'gamma', 'vega', 'theta', 'rho'];
@@ -90,16 +85,23 @@ class GreeksChart extends React.PureComponent {
   };
   
   render() {
-    let dataset = {};
-    if (this.props.domain) {
-      dataset = this.processData(this.props.model,
-                                 this.props.chips,
-                                 this.props.domain,
-                                 this.props.period,
-                                 this.props.rate,
-                                );
+    if (!this.props.chips.length) {
+      return (
+        <div className="chart emptyChart">
+          <span className="emptyText">
+            Begin plotting by adding a position.
+          </span>
+        </div>
+      )
     }
     
+    let dataset = this.processData(this.props.model,
+                                   this.props.chips,
+                                   this.props.domain,
+                                   this.props.period,
+                                   this.props.rate,
+                                  );
+
     return (
       <div className="chart">
         <Line

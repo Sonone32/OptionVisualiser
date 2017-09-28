@@ -37,7 +37,7 @@ class YahooAPI {
       let rate = fetch(`${this.endpoint}/interest-rate`)
                          .then(response => response.json())
                          .then(json => json['rate'])
-                         .catch(error => reject(error))
+                         .catch(error => reject('Failed to fetch interest rate.'))
       
       resolve(
         fetch(`${this.endpoint}/ychain/?symbol=${symbol}${date ? `&expiration=${date}`: ''}`)
@@ -65,7 +65,7 @@ class YahooAPI {
             
             return Promise.all([quote, chain, rate]);
           })
-          .catch(error => reject(error))
+          .catch(error => reject('Failed to fetch market data.'))
       );
     })
   };

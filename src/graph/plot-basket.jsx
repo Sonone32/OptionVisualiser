@@ -11,6 +11,7 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     margin: 10,
+    padding: 10,
   },
 };
 
@@ -105,11 +106,12 @@ class PlotBasket extends React.PureComponent {
     return (
       <div>
         <Charts
-          chips={this.state.chips}
-          rate={this.props.rate}
-          expDate={this.props.expDate}
           chain={this.props.chain}
+          chips={this.state.chips}
+          config={this.props.config}
+          expDate={this.props.expDate}
           price={this.props.quote.price}
+          rate={this.props.rate}
         />
         
         <div style={styles.flexWrapper}>

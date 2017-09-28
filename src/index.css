@@ -99,3 +99,13 @@ body {
 #searchField {
   grid-column: 3 / 4;
 }
+
+.emptyChart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptyText {
+  color: rgba(0, 0, 0, .3);
+}

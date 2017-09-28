@@ -13,13 +13,19 @@ const model = 'BSM';
 const styles = {
   controls: {
     marginLeft: '30px',
-    displayt: 'flex',
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
   },
   datePicker: {
+    height: '4em',
     width: '7em',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    display: 'inline-block',
+    margin: 5,
   },
   textField: {
+    height: '4em',
     margin: 5,
     width: '5.5em',
   },
@@ -162,6 +168,7 @@ class Charts extends React.PureComponent {
           index={this.state.slideIndex}
           onChangeIndex={this.handleTabChange}
           threshold={15}
+          disabled={!this.props.config.slideableTabs}
         >
           <PayoffChart
             chips={this.props.chips}
@@ -184,29 +191,30 @@ class Charts extends React.PureComponent {
         {
           this.state.domain
           ? <div style={styles.controls}>
-              <TextField
-                defaultValue={Math.round(this.state.domain[0])}
-                floatingLabelText="Min. Price:"
-                onChange={(event, val) => {this.handleDomainChange(val, NaN)}}
-                style={styles.textField}
-                type="tel"
+              <DatePicker
+                floatingLabelText="Estimate value on:"
+                value={this.state.value}
+                onChange={this.handleDatePick}
+                minDate={this.state.now}
+                maxDate={this.state.expDate}
+                style={styles.datePicker}
               />
+              
+              <div>
+                <TextField
+                  defaultValue={Math.round(this.state.domain[0])}
+                  floatingLabelText="Min. Price:"
+                  onChange={(event, val) => {this.handleDomainChange(val, NaN)}}
+                  style={styles.textField}
+                  type="tel"
+                />
 
-              <TextField
-                defaultValue={Math.round(this.state.domain[this.state.domain.length - 1])}
-                floatingLabelText="Max. Price:"
-                onChange={(event, val) => {this.handleDomainChange(NaN, val)}}
-                style={styles.textField}
-                type="tel"
-              />
-
-              <div style={styles.datePicker}>
-                <DatePicker
-                  floatingLabelText="Estimate value on:"
-                  value={this.state.value}
-                  onChange={this.handleDatePick}
-                  minDate={this.state.now}
-                  maxDate={this.state.expDate}
+                <TextField
+                  defaultValue={Math.round(this.state.domain[this.state.domain.length - 1])}
+                  floatingLabelText="Max. Price:"
+                  onChange={(event, val) => {this.handleDomainChange(NaN, val)}}
+                  style={styles.textField}
+                  type="tel"
                 />
               </div>
             </div>

@@ -49,7 +49,7 @@ class TradierAPI {
                         raw: json.quotes.quote,
                        });
                     })
-                    .catch(error => reject(error));
+                    .catch(error => reject('Failed to fetch data for underlying.'));
       
       let chain;
       
@@ -67,18 +67,18 @@ class TradierAPI {
                   })
                   .then(vals => Promise.all([vals[0].json(), Promise.resolve(vals[1])]))
                   .then(vals => Promise.all([this.makeDataTransform(vals[0].options.option), Promise.resolve(vals[1])]))
-                  .catch(error => reject(error));
+                  .catch(error => reject('Failed to fetch option data.'));
       } else {
         chain = fetch(`${this.endpoint}/chain/?symbol=${symbol}&expiration=${date}`)
                   .then(response => response.json())
                   .then(chain => Promise.resolve([this.makeDataTransform(chain.options.option)]))
-                  .catch(error => reject(error));
+                  .catch(error => reject('Failed to fetch option data.'));
       }
       
       let rate = fetch(`${this.endpoint}/interest-rate`)
                    .then(response => response.json())
                    .then(json => json['rate'])
-                   .catch(error => reject(error))
+                   .catch(error => reject('Failed to fetch interest rate.'))
       
       resolve(Promise.all([quote, chain, rate]));
     })

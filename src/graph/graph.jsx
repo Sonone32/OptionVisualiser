@@ -2,9 +2,12 @@ import React from 'react';
 import {Card} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import CircularProgress from 'material-ui/CircularProgress';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import 'isomorphic-fetch';
 import PlotBasket from './plot-basket';
 import GraphTitle from './graph-title';
+
 
 const styles = {
   paper: {
@@ -30,7 +33,7 @@ class Graph extends React.Component {
       currentDate: null,
       expDate: null,
       expDates: [],
-      fetchError: false,
+      fetchError: 0,
       interestRate: null,
       loading: true,
       quote: {symbol: this.props.item[1]},  // Stores fetched data for underlying stock.
@@ -56,7 +59,7 @@ class Graph extends React.Component {
       })
       .catch(error => {
         this.setState({
-          fetchError: true,
+          fetchError: error,
           loading: false,
         });
       });
@@ -119,7 +122,7 @@ class Graph extends React.Component {
       })
       .catch(error => {
         this.setState({
-          fetchError: true,
+          fetchError: error,
           loading: false,
         });
       });
@@ -136,29 +139,39 @@ class Graph extends React.Component {
           chain: vals[1][0],
           loading: false,
           quote: vals[0],
+          expDate: value,
         });
       })
       .catch(error => {
         this.setState({
-          fetchError: true,
+          fetchError: error,
           loading: false,
         });
       });
-    
-    // Makes for a better perceived performance visually.
-    // Changes the displayed date instantly instead of lagging a bit.
-    this.setState({
-      expDate: value,
-    });
   };
   
   render() {
-    // Call makeChartDatasets() in here somewhere if loading is finished.
-    
-    let core = <div>all networks functional</div>;
-    
+    if (this.state.fetchError === 'remove') this.props.handleKill(this.props.item[0]);
     if (this.state.fetchError) {
-      core = <div>beep boop error!</div>;
+      const actions = [
+        <FlatButton
+          label="Okay"
+          primary={true}
+          keyboardFocused={true}
+          onClick={() => {this.setState({fetchError: this.state.expDate ? 'remove' : 0})}}
+        />,
+      ];
+      
+      return (
+        <Dialog
+          title={'Uh oh...'}
+          actions={actions}
+          open={this.state.fetchError}
+          onRequestClose={() => {this.setState({fetchError: this.state.expDate ? 'remove' : 0})}}
+          >
+          Something went wrong with the action, please try again later.
+        </Dialog>
+      )
     }
     
     return (
@@ -179,13 +192,13 @@ class Graph extends React.Component {
             : <PlotBasket
                 basket={this.state.plotData}
                 chain={this.state.chain}
+                config={this.props.config}
                 expDate={this.state.expDate}
                 handleChipChange={this.handleChipChange}
                 rate={this.state.interestRate}
                 quote={this.state.quote}
               />
           }
-           {core}
         </Card>
       </Paper>
     );

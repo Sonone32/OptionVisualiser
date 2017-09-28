@@ -1,8 +1,7 @@
 import React from 'react';
 import SearchBar from 'material-ui-search-bar'
-import TransitionGroup from 'react-transition-group/TransitionGroup'
 import Graph from './graph/graph.jsx';
-import APIClient from './api/api-client'
+import APIClient from './api/api-client';
 
 const hintText = 'Add a graph'
 
@@ -14,6 +13,9 @@ class MainPanel extends React.Component {
       items: [[-1, 'AMD']],
       key: 0,
       searchTerm: '',
+      config: {
+        slideableTabs: true,
+      },
     }
   }
   
@@ -23,7 +25,7 @@ class MainPanel extends React.Component {
     if (searchField) {
       searchField.focus();
       window.addEventListener('keypress', event => {
-        if (((event.charCode >= 97 && event.charCode <= 122)  // /[a-zA-Z]/, code looks ugly but will do for now...
+        if (((event.charCode >= 97 && event.charCode <= 122)  // /[a-zA-Z]/, looks ugly but will do for now...
             || (event.charCode >= 65 && event.charCode <= 90))
             && searchField !== document.activeElement 
             && document.activeElement.nodeName !== 'INPUT') {
@@ -80,16 +82,25 @@ class MainPanel extends React.Component {
             />
           </div>
 
-          <div id="graphBox">
-            {this.state.items.map(
-              x => <Graph 
-                     APIClient={this.state.APIClient}
-                     handleKill={this.handleKill}
-                     item={x}
-                     key={x[0]}
-                   />
-            )}
-          </div>
+          {
+            !this.state.items.length
+            ? null 
+            : <div id="graphBox">
+                  {
+                    this.state.items.map(
+                      x => (
+                        <Graph 
+                          APIClient={this.state.APIClient}
+                          config={this.state.config}
+                          handleKill={this.handleKill}
+                          item={x}
+                          key={x[0]}
+                        />
+                      )
+                    )
+                  }
+              </div>
+          }
         </div>
       </div>
     );
