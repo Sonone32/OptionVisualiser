@@ -5,6 +5,14 @@ class YahooAPI {
     this.endpoint = address;
   }
   
+  getReferral = (symbol) => {
+    return {
+      url: `https://finance.yahoo.com/quote/${symbol}/options`,
+      sourceName: 'Yahoo Finance',
+      interestUrl: 'https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Pages/TextView.aspx?data=yield',
+    };
+  };
+  
   makeDataTransform = (chain) => {
     let newChain = {calls: {}, puts: {}};
     let types = ['calls', 'puts'];
@@ -54,7 +62,7 @@ class YahooAPI {
             let chain = Promise.resolve([this.makeDataTransform(res.options[0]), expDates]);
             
             let quote = Promise.resolve({
-              symbol: symbol,
+              symbol: res.quote.symbol,
               change: res.quote.regularMarketChange,
               changePercent: res.quote.regularMarketChangePercent,
               price: res.quote.regularMarketPrice,

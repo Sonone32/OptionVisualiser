@@ -11,7 +11,7 @@ const styles = {
   flexWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
-    margin: 10,
+    margin: 5,
     padding: 5,
   },
 };

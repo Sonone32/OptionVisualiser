@@ -8,8 +8,6 @@ import PayoffChart from './plot-payoff';
 import GreeksChart from './plot-greeks';
 import IVChart from './plot-iv';
 
-const model = 'BSM';
-
 const styles = {
   controls: {
     marginLeft: '30px',
@@ -55,7 +53,7 @@ class Charts extends React.PureComponent {
       dataPickerMode: mode,
       domain: null,
       expDate: expiry,
-      model: new Model(model),
+      model: new Model(this.props.config.model),
       mode: mode,
       now: now,
       period: this.computeDayDifference(now, expiry) / 365,
@@ -66,14 +64,18 @@ class Charts extends React.PureComponent {
   }
   
   componentWillReceiveProps(nextProps) {
+    let domain, model;
+    if (nextProps.config.model !== this.props.config.model) {
+      model = new Model(this.props.config.model);
+    }
     if (!nextProps.chips.length) return;
-    let domain;
     if (nextProps.chips.length !== this.props.chips.length) {
       domain = this.computeDomain(nextProps.chips);
     }
     
     this.setState({
       domain: domain || this.state.domain,
+      model: model || this.state.model,
       totalCost: this.computeTotalCost(nextProps.chips),
     });
   }
@@ -95,6 +97,7 @@ class Charts extends React.PureComponent {
       // Min changed
       min = parseInt(min, 10);
       if (isNaN(min)) return;
+      min = Math.min(min, 0);
       max = this.state.domain[this.state.domain.length - 1];
       if (min < max) {
         // Valid min, compute new domain

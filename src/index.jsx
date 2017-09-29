@@ -111,7 +111,7 @@ class MainPanel extends React.Component {
     let empty = this.state.items.length;
     
     return (
-      <div>
+      <div id="root">
         <Title />
         
         <div id="main">

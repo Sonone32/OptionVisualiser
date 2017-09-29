@@ -12,9 +12,6 @@ const styles = {
     display: 'grid',
     gridTemplateRows: '65% 35%',
   },
-  appbar: {
-    
-  },
   dateSelector: {
     maxWidth: '9em',
     margin: '0',
@@ -99,11 +96,10 @@ class GraphTitle extends React.Component {
           className="appBar"
           onLeftIconButtonTouchTap={this.handleMenuClick}
           onTitleTouchTap={this.handleTitleClick}
-          style={styles.appbar}
           title={
             <div style={styles.title}>
               <span style={styles.symbol}>
-                {this.props.item[1]}
+                {this.props.quote.symbol}
               </span>
               <span style={styles.quote}>
                 {this.displayPrice()}

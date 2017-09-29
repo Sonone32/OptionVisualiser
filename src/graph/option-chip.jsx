@@ -19,6 +19,7 @@ const styles = {
   textField: {
     margin: 5,
     width: 130,
+    height: '4em',
   },
   flexAction: {
     display: 'flex',

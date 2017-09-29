@@ -51,7 +51,7 @@ class PayoffChart extends React.PureComponent {
       datasets: [{
         backgroundColor: mainColor,
         borderColor: mainColor,
-        label: 'total',
+        label: 'total value',
         data: total,
         fill: false,
         cubicInterpolationMode: 'monotone',

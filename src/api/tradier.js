@@ -5,6 +5,14 @@ class TradierAPI {
     this.endpoint = address;
   }
   
+  getReferral = (symbol) => {
+    return {
+      url: `https://developer.tradier.com/documentation`,
+      sourceName: 'Tradier API',
+      interestUrl: 'https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Pages/TextView.aspx?data=yield',
+    };
+  };
+  
   // Transforms fetched chain data into something usable by this application.
   // May be imported from another file a la factory pattern, and return
   // whatever version works for the data source.
@@ -44,7 +52,7 @@ class TradierAPI {
                       return Promise.resolve({
                         change: json.quotes.quote.change,
                         changePercent: json.quotes.quote.change_percentage,
-                        symbol: symbol,
+                        symbol: json.quotes.quote.symbol,
                         price: json.quotes.quote.last,
                         raw: json.quotes.quote,
                        });

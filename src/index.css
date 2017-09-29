@@ -12,14 +12,23 @@ html {
 }
 
 body {
-  background: #78bfe8;
-  background: -webkit-linear-gradient(#78bfe8, white); /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#78bfe8, white); /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#78bfe8, white); /* For Firefox 3.6 to 15 */
-  background: linear-gradient(#78bfe8, white); /* Standard syntax */
+  background: #00BCD4;
+  background: -webkit-linear-gradient(#00BCD4, white); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#00BCD4, white); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#00BCD4, white); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#00BCD4, white); /* Standard syntax */
   border: 0;
   margin: 0;
   height: 95vh;
+}
+
+#root {
+  height: auto;
+  min-height: 80vh;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
 }
 
 #main {
@@ -32,15 +41,18 @@ body {
   color: white;
   cursor: pointer;
   font-family: Kelvetica;
-  margin: auto;
-  margin-top: 0;
-  padding-top: 40px;
+  margin: 30 auto 30 auto;
   text-align: center;
-  transition: all .2s ease-in-out;
-  width: 8em;
+  transition: all 150ms ease-in-out;
+  width: 5em;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 
-.title:hover {
+.title:active{
   transform: scale(1.2);
 }
 
@@ -149,4 +161,19 @@ body {
 .emptyGraphBox {
   opacity: 0;
   transition: opacity 600ms ease-in;
+}
+
+.graphFooter {
+  color: rgba(0, 0, 0, .3);
+  display: flex;
+  font-size: 11px;
+  justify-content: flex-end;
+  padding: 2px;
+  padding-top: 0;
+}
+
+.graphFooter > a:link, .graphFooter > a:active, .graphFooter > a:visited {
+  color: rgba(0, 0, 0, .3);
+  text-decoration: none;
+  margin: 0 2px;
 }

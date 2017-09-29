@@ -28,6 +28,8 @@ class Graph extends React.PureComponent {
   constructor(props) {
     super(props);
     // props.item := [<key>, <symbol>]
+    
+    
     this.state = {  // Needs to calculate and store implied volatility.
       chain: {},  // Stores fetched & transformed data for current expDate.
       chartDatasets: [],
@@ -35,7 +37,7 @@ class Graph extends React.PureComponent {
       currentDate: null,
       expDate: null,
       expDates: [],
-      interestRate: null,
+      interestRate: 0,
       loading: true,
       quote: {symbol: this.props.item[1]},  // Stores fetched data for underlying stock.
       refresh: 1,
@@ -148,6 +150,8 @@ class Graph extends React.PureComponent {
   };
 
   render() {
+    let referral = this.props.APIClient.getReferral(this.state.quote.symbol);
+    
     return (
       <Paper zDepth={2} style={styles.paper}>
         <Card>
@@ -156,8 +160,8 @@ class Graph extends React.PureComponent {
             expDates={this.state.expDates}
             handleExpDateChange={this.handleExpDateChange}
             handleKill={this.props.handleKill}
-            item={this.props.item}
             handleRefresh={this.handleRefresh}
+            item={this.props.item}
             quote={this.state.quote}
           />
           {
@@ -171,10 +175,18 @@ class Graph extends React.PureComponent {
                 config={this.props.config}
                 expDate={this.state.expDate}
                 handleChipChange={this.handleChipChange}
-                rate={this.state.interestRate}
                 quote={this.state.quote}
+                rate={this.state.interestRate}
               />
           }
+          <div className="graphFooter">
+            <a href={referral.interestUrl} target="_blank">
+              Interest rate: {(this.state.interestRate * 100).toFixed(2)}%
+            </a>
+            <a href={referral.url} target="_blank">
+              Data source: {referral.sourceName} 
+            </a>
+          </div>
         </Card>
       </Paper>
     );
