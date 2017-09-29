@@ -12,7 +12,6 @@ const config = {
   slideableTabs: true,
   APIClient: 'YAHOO',
   model: 'BSM',
-  updateInterval: 15,
 }
 
 const App = () => (

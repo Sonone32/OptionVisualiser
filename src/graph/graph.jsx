@@ -28,8 +28,6 @@ class Graph extends React.PureComponent {
   constructor(props) {
     super(props);
     // props.item := [<key>, <symbol>]
-    
-    
     this.state = {  // Needs to calculate and store implied volatility.
       chain: {},  // Stores fetched & transformed data for current expDate.
       chartDatasets: [],
@@ -60,7 +58,8 @@ class Graph extends React.PureComponent {
         });
       })
       .catch(error => {
-        this.props.handleNetworkError(this.props.item[0]);
+        let content = `If the ticker symbol is valid according to ${this.props.APIClient.getReferral().sourceName}, then the server may be under some technical difficulties and we apologize for the inconvenience.`
+        this.handleNetworkError(null, content);
       });
   }
   
@@ -123,7 +122,7 @@ class Graph extends React.PureComponent {
         this.setState({
           loading: false,
         });
-        this.props.handleNetworkError(this.props.item[0], this.state.refresh);
+        this.handleNetworkError(null, null, true);
       });
   };
   
@@ -134,8 +133,54 @@ class Graph extends React.PureComponent {
     
     this.props.APIClient.fetchData(this.props.item[1], value)
       .then(vals => {
+        let oldChain = this.state.chain;
+        let newChain = vals[1][0];
+        let diff = [], totalVolume = 0;
+      
+        for (let type in oldChain) {
+          if (type === 'refreshed') continue;
+          for (let strike in oldChain[type]) {
+            let newOption = newChain[type][strike], oldOption = oldChain[type][strike];
+            if (oldOption.volume) {
+              try {
+                newOption.color = oldOption.color;
+                newOption.volume = oldOption.volume;
+              } catch (e) {
+                // No data for that (type, strike) combo in the new chain.
+                // Warn the user about it.
+                diff.push({
+                  strike: oldOption.strike,
+                  type: type,
+                  volume: oldOption.volume,
+                });
+                totalVolume += oldOption.volume;
+              }
+            }
+          }
+        }
+        
+        if (diff.length) {
+          // Construct the content for notification and send it.
+          let title = 'Then and now';
+          let text = `Epiry change for ${this.state.quote.symbol} from ${this.state.expDate} to ${value} removed the following position${totalVolume > 1 ? 's' : ''} due to insufficient data: `;
+          
+          let content = <div>
+                <div>{text}</div>
+                {
+                  diff.map(item => {
+                    let type = item.type.slice(0, item.volume > 1 ? item.type.length : -1);
+                    return (
+                      <div>{`${item.volume} ${type} at strike $${item.strike.toFixed(2)}`}</div>
+                    )
+                  })
+                }
+              </div>
+          
+          this.props.handleNotification(title, content);
+        }
+      
         this.setState({
-          chain: vals[1][0],
+          chain: newChain,
           loading: false,
           quote: vals[0],
           expDate: value,
@@ -145,8 +190,16 @@ class Graph extends React.PureComponent {
         this.setState({
           loading: false,
         });
-        this.props.handleNetworkError(this.props.item[0], this.state.refresh);
+        this.handleNetworkError(null, null, true);
       });
+  };
+
+  handleNetworkError = (newTitle, newContent, refresh) => {
+    let title = 'Uh oh...';
+    let content = 'Something went wrong with the action, please try again later.';
+    // Kill graph if it's not a refresh/expDate update.
+    let callback = refresh ? null : (() => {this.props.handleKill(this.props.item[0])});
+    this.props.handleNotification(newTitle || title, newContent || content, callback);
   };
 
   render() {

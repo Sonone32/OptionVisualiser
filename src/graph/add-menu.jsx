@@ -140,7 +140,7 @@ class AddMenu extends React.PureComponent {
         >
           <div style={styles.flexDialog}>
             <SelectField
-              floatingLabelText="select action"
+              floatingLabelText="Select action"
               onChange={this.handleVerbChange}
               style={styles.verbField}
               value={this.state.verb}

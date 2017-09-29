@@ -13,11 +13,11 @@ class MainPanel extends React.Component {
     super(props);
     this.state = {
       APIClient: APIClient.connectTo(this.props.config.APIClient),
-      items: [[0, 'AMD']],
-      key: 1,
-      searchTerm: '',
       config: this.props.config,
-      fetchError: false,
+      items: [],
+      key: 0,
+      notification: false,
+      searchTerm: '',
     }
   }
   
@@ -53,17 +53,19 @@ class MainPanel extends React.Component {
     });
   };
   
-  handleNetworkError = (itemIndex, refreshState) => {
+  handleNotification = (title, content, callback) => {
+    if (callback) callback();
     this.setState({
-      fetchError: true,
+      notification: {
+        title: title,
+        content: content,
+      },
     });
-    
-    if (!refreshState) this.handleKill(itemIndex);
   };
 
   handleCloseDialog = () => {
     this.setState({
-      fetchError: false,
+      notification: false,
     });
   }
 
@@ -102,13 +104,13 @@ class MainPanel extends React.Component {
         APIClient={this.state.APIClient}
         config={this.state.config}
         handleKill={this.handleKill}
-        handleNetworkError={this.handleNetworkError}
+        handleNotification={this.handleNotification}
         item={x}
         key={x[0]}
       />
     ));
     
-    let empty = this.state.items.length;
+    let empty = !this.state.items.length;
     
     return (
       <div id="root">
@@ -124,8 +126,8 @@ class MainPanel extends React.Component {
               value={this.state.searchTerm}
             />
           </div>
-
-          <div id="graphBox" className={empty ? '' : 'emptyGraphBox'}>
+          
+          <div id="graphBox" className={empty ? 'emptyGraphBox' : ''}>
             <ReactCSSTransitionGroup
               transitionName="graph"
               transitionEnterTimeout={500}
@@ -134,14 +136,14 @@ class MainPanel extends React.Component {
             </ReactCSSTransitionGroup>
           </div>
         </div>
-        
+
         <Dialog
-          title={'Uh oh...'}
+          title={this.state.notification ? this.state.notification.title : ''}
           actions={actions}
-          open={this.state.fetchError}
+          open={this.state.notification ? true : false}
           modal={true}
           >
-          Something went wrong with the action, please try again later.
+          {this.state.notification ? this.state.notification.content : ''}
         </Dialog>
       </div>
     );
@@ -150,7 +152,7 @@ class MainPanel extends React.Component {
 
 function Title(props) {
   return (
-      <h1 className="title">flowersYnc</h1>
+      <h1 className="title noSelect">flowersYnc</h1>
   );
 }
 

@@ -88,7 +88,7 @@ class GreeksChart extends React.PureComponent {
     if (!this.props.chips.length) {
       return (
         <div className="chart emptyChart">
-          <span className="emptyText">
+          <span className="emptyText noSelect">
             Begin plotting by adding a position.
           </span>
         </div>

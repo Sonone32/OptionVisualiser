@@ -39,17 +39,12 @@ body {
 
 .title {
   color: white;
-  cursor: pointer;
   font-family: Kelvetica;
+  font-size: 45px;
   margin: 30 auto 30 auto;
   text-align: center;
   transition: all 150ms ease-in-out;
   width: 5em;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 
 .title:active{
@@ -176,4 +171,17 @@ body {
   color: rgba(0, 0, 0, .3);
   text-decoration: none;
   margin: 0 2px;
+}
+
+.chipType {
+  font-family: Kelvetica;
+}
+
+.noSelect {
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }

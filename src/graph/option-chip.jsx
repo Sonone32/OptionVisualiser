@@ -202,9 +202,9 @@ class OptionChip extends React.PureComponent {
         style={this.props.style}
       >
         <Avatar size={32} color={'#fff'} backgroundColor={this.props.data.option.color}>
-          {this.props.data.type.slice(0, -1)}
+          <span className="chipType">{this.props.data.type.slice(0, -1)}</span>
         </Avatar>
-        {this.props.children}
+        <span className="chipContent">{this.props.children}</span>
       </Chip>
     )
   }
