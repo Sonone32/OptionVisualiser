@@ -9,6 +9,7 @@
     "material-ui-search-bar": "^0.2.4",
     "math-erf": "^1.0.0",
     "react": "^15.6.2",
+    "react-addons-css-transition-group": "^15.6.2",
     "react-chartjs-2": "^2.6.2",
     "react-color": "^2.13.8",
     "react-dom": "^15.6.2",

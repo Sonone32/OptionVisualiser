@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import AddMenu from './add-menu';
 import Charts from './charts/charts';
 import {OptionChip, ChipDialog} from './option-chip';
@@ -11,7 +12,7 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     margin: 10,
-    padding: 10,
+    padding: 5,
   },
 };
 
@@ -114,7 +115,12 @@ class PlotBasket extends React.PureComponent {
           rate={this.props.rate}
         />
         
-        <div style={styles.flexWrapper}>
+        <ReactCSSTransitionGroup
+          transitionName="chip"
+          transitionEnterTimeout={200}
+          transitionLeaveTimeout={200}
+          style={styles.flexWrapper}
+          >
           {this.state.chips.map(chip => 
             <OptionChip
               data={chip}
@@ -133,7 +139,8 @@ class PlotBasket extends React.PureComponent {
             unusedCalls={this.state.unusedCalls}
             unusedPuts={this.state.unusedPuts}
           />
-        </div>
+        </ReactCSSTransitionGroup>
+        
         <ChipDialog
           chipData={this.state.chipData}
           chipOpen={this.state.chipOpen}

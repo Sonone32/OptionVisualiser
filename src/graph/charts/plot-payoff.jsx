@@ -69,7 +69,7 @@ class PayoffChart extends React.PureComponent {
       console.log(premium * volume, 'prem')
       
       for (let j = 0; j < bound; j++) {
-        val = roundFloat(model.getValue(type, domain[j], strike, rate, period, v) * volume, -2);
+        val = roundFloat(model.getValue(type, domain[j], strike, rate, time, v) * volume, -2);
         val -= volume * premium;
         vals[j] = val;
         total[j] += val;

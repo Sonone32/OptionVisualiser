@@ -43,7 +43,7 @@ const options = {
 
 class GreeksChart extends React.PureComponent {
   processData = (model, chips, domain, period, rate) => {
-    let bound = domain.length, total = new Array(bound).fill(0);
+    let bound = domain.length;
     const greeks = ['delta', 'gamma', 'vega', 'theta', 'rho'];
     let val, volume, type, v, strike, short;
     let data = {

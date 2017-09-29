@@ -1,0 +1,49 @@
+/* Animates graphs */
+.graph-enter {
+  opacity: 0.01;
+  max-height: 0vh;
+}
+
+.graph-enter.graph-enter-active {
+  opacity: 1;
+  max-height: 50vh;
+  transition: opacity 500ms ease-in;
+  transition: max-height 500ms ease-in;
+}
+
+.graph-leave {
+  opacity: 1;
+  max-height: 50vh;
+}
+
+.graph-leave.graph-leave-active {
+  opacity: 0.01;
+  max-height: 0vh;
+  transition: opacity 500ms ease-in;
+  transition: max-height 500ms ease-in;
+}
+
+/* Animates option chips */
+.chip-enter {
+  opacity: 0.01;
+  max-width: 0;
+}
+
+.chip-enter.chip-enter-active {
+  opacity: 1;
+  max-width: 10em;
+  transition: opacity 200ms ease-in;
+  transition: max-width 200ms ease-in;
+}
+
+.chip-leave {
+  opacity: 1;
+  max-width: auto;
+}
+
+.chip-leave.chip-leave-active {
+  opacity: 0.01;
+  max-width: 10em;
+  transition: opacity 200ms ease-out;
+  transition: max-width 200ms ease-out;
+}

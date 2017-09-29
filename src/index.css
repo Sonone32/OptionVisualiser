@@ -29,16 +29,24 @@ body {
 }
 
 .title {
+  color: white;
+  cursor: pointer;
+  font-family: Kelvetica;
+  margin: auto;
   margin-top: 0;
   padding-top: 40px;
   text-align: center;
-  color: white;
-  font-family: Kelvetica;
+  transition: all .2s ease-in-out;
+  width: 8em;
+}
+
+.title:hover {
+  transform: scale(1.2);
 }
 
 #searchField {
   text-align: center;
-  margin: 20px auto;
+  margin: 30px auto;
   width: 70%;
 }
 
@@ -136,4 +144,9 @@ body {
 
 .emptyText {
   color: rgba(0, 0, 0, .3);
+}
+
+.emptyGraphBox {
+  opacity: 0;
+  transition: opacity 600ms ease-in;
 }

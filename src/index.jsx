@@ -1,7 +1,10 @@
 import React from 'react';
-import SearchBar from 'material-ui-search-bar'
-import Graph from './graph/graph.jsx';
 import APIClient from './api/api-client';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import Graph from './graph/graph.jsx';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import SearchBar from 'material-ui-search-bar'
 
 const hintText = 'Add a graph'
 
@@ -9,13 +12,12 @@ class MainPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      APIClient: APIClient.connectTo(this.props.source),
-      items: [[-1, 'AMD']],
-      key: 0,
+      APIClient: APIClient.connectTo(this.props.config.APIClient),
+      items: [[0, 'AMD']],
+      key: 1,
       searchTerm: '',
-      config: {
-        slideableTabs: true,
-      },
+      config: this.props.config,
+      fetchError: false,
     }
   }
   
@@ -35,17 +37,36 @@ class MainPanel extends React.Component {
     }
   }
   
+  componentWillReceiveProps(nextProp) {
+    if (this.props.config === nextProp.config) return;
+    this.setState({
+      APIClient: APIClient.connectTo(this.props.config.APIClient)
+    });
+  }
+  
   handleKill = (key) => {
     let newData = this.state.items.slice();
     let index = newData.map(x => x[0]).indexOf(key);
-    if (index > -1) {
-      newData.splice(index, 1);
-    }
+    if (index > -1) newData.splice(index, 1);
     this.setState({
       items: newData,
     });
   };
   
+  handleNetworkError = (itemIndex, refreshState) => {
+    this.setState({
+      fetchError: true,
+    });
+    
+    if (!refreshState) this.handleKill(itemIndex);
+  };
+
+  handleCloseDialog = () => {
+    this.setState({
+      fetchError: false,
+    });
+  }
+
   handleSearchChange = (value) => {
     this.setState({
       searchTerm: value,
@@ -67,6 +88,28 @@ class MainPanel extends React.Component {
   };
   
   render() {
+    const actions = [
+      <FlatButton
+        label="Okay"
+        primary={true}
+        keyboardFocused={true}
+        onClick={this.handleCloseDialog}
+      />,
+    ];
+    
+    let graphs = this.state.items.map(x => (
+      <Graph 
+        APIClient={this.state.APIClient}
+        config={this.state.config}
+        handleKill={this.handleKill}
+        handleNetworkError={this.handleNetworkError}
+        item={x}
+        key={x[0]}
+      />
+    ));
+    
+    let empty = this.state.items.length;
+    
     return (
       <div>
         <Title />
@@ -82,26 +125,24 @@ class MainPanel extends React.Component {
             />
           </div>
 
-          {
-            !this.state.items.length
-            ? null 
-            : <div id="graphBox">
-                  {
-                    this.state.items.map(
-                      x => (
-                        <Graph 
-                          APIClient={this.state.APIClient}
-                          config={this.state.config}
-                          handleKill={this.handleKill}
-                          item={x}
-                          key={x[0]}
-                        />
-                      )
-                    )
-                  }
-              </div>
-          }
+          <div id="graphBox" className={empty ? '' : 'emptyGraphBox'}>
+            <ReactCSSTransitionGroup
+              transitionName="graph"
+              transitionEnterTimeout={500}
+              transitionLeaveTimeout={500}>
+              {graphs}
+            </ReactCSSTransitionGroup>
+          </div>
         </div>
+        
+        <Dialog
+          title={'Uh oh...'}
+          actions={actions}
+          open={this.state.fetchError}
+          modal={true}
+          >
+          Something went wrong with the action, please try again later.
+        </Dialog>
       </div>
     );
   }

@@ -218,7 +218,7 @@ class Charts extends React.PureComponent {
           />
         </SwipeableViews>
         {
-          this.state.domain
+          this.props.chips.length
           ? <div style={styles.controls}>
               <DatePicker
                 floatingLabelText="Estimate value on:"
