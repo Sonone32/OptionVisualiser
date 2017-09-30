@@ -1,9 +1,9 @@
 import React from 'react';
 import {Line} from 'react-chartjs-2';
 
+// Colors for 'delta', 'gamma', 'vega', 'theta', 'rho'
 const colors = ['green', 'red', 'purple', 'darkgoldenrod', 'blue'];
 
-// Might move options to ./charts.jsx if it ends up the same/similar to the one in ./plot-payoff.jsx
 const options = {
   elements: {
     point: {
@@ -39,10 +39,10 @@ const options = {
       ),
     },
   },
-}
+};
 
 class GreeksChart extends React.PureComponent {
-  processData = (model, chips, domain, period, rate) => {
+  processData = (model, chips, domain, period, rate, multiplier) => {
     let bound = domain.length;
     const greeks = ['delta', 'gamma', 'vega', 'theta', 'rho'];
     let val, volume, type, v, strike, short;
@@ -71,11 +71,11 @@ class GreeksChart extends React.PureComponent {
         
         if (short) {
           // A short position has partials behaving the same as shares of underlying
-          data.datasets[0].data[j] += volume;
+          data.datasets[0].data[j] += volume * multiplier;
         } else {
           // Not a short, so compute greeks
           for (let k = 0; k < 5; k++) {
-            data.datasets[k].data[j] += val[greeks[k]] * volume;
+            data.datasets[k].data[j] += val[greeks[k]] * volume * multiplier;
           }
         }
       }
@@ -100,6 +100,7 @@ class GreeksChart extends React.PureComponent {
                                    this.props.domain,
                                    this.props.period,
                                    this.props.rate,
+                                   this.props.multiplier,
                                   );
 
     return (

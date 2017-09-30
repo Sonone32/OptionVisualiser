@@ -39,11 +39,11 @@ const options = {
       ),
     },
   },
-}
+};
 
 // Might wanna add a plot on expiry to show time value vs intrinsic value.
 class PayoffChart extends React.PureComponent {
-  processData = (model, chips, domain, period, rate) => {
+  processData = (model, chips, domain, period, rate, multiplier) => {
     let bound = domain.length, total = new Array(bound).fill(0);
     let vals, val, volume, type, v, strike, premium, time;
     let data = {
@@ -66,11 +66,10 @@ class PayoffChart extends React.PureComponent {
       volume = chips[i].option.volume;
       time = (volume < 0) ? 0 : period; // A short position doesn't have varying time value.
       premium = chips[i].option.premium;
-      console.log(premium * volume, 'prem')
       
       for (let j = 0; j < bound; j++) {
-        val = roundFloat(model.getValue(type, domain[j], strike, rate, time, v) * volume, -2);
-        val -= volume * premium;
+        val = roundFloat(model.getValue(type, domain[j], strike, rate, time, v) * volume, -2) * multiplier;
+        val -= volume * premium * multiplier;
         vals[j] = val;
         total[j] += val;
       }
@@ -87,7 +86,7 @@ class PayoffChart extends React.PureComponent {
     }
     
     return data;
-  }
+  };
   
   render() {
     if (!this.props.chips.length) {
@@ -105,6 +104,7 @@ class PayoffChart extends React.PureComponent {
                                    this.props.domain,
                                    this.props.period,
                                    this.props.rate,
+                                   this.props.multiplier,
                                   );
 
     

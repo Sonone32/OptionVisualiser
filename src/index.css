@@ -1,5 +1,6 @@
 * {
   cursor: url(//b.thumbs.redditmedia.com/4ZxOF0Jq21KHWSQUDunb3iUrawRW8aALcFq-5bb9NkM.png);
+  font-family: Helvetica;
 }
 
 @font-face {
@@ -184,4 +185,22 @@ body {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+#mainFooter {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 0;
+  margin-bottom: 30px;
+}
+
+#disclaimer {
+  font-family: Helvetica;
+  color: rgba(0, 0, 0, .6);
+  display: flex;
+  justify-content: center;
+  flex-flow: column wrap;
+  align-items: center;
+  margin: 20px;
+  max-width: 500px;
 }

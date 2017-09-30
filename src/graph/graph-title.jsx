@@ -16,9 +16,6 @@ const styles = {
     maxWidth: '9em',
     margin: '0',
   },
-  titleText: {
-    
-  },
   symbol: {
     gridRow: '1 / 2',
   },

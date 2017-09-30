@@ -24,12 +24,16 @@ const styles = {
   },
   strikeField: {
     width: '8em',
+    margin: 5,
   },
   verbField: {
     width: '6em',
   },
   typeField: {
     width: '7em'
+  },
+  dialogStyle: {
+    width: '90%',
   },
 };
 
@@ -127,12 +131,17 @@ class AddMenu extends React.PureComponent {
     
     return (
       <div>
-        <Chip onClick={this.handleMenuOpen} style={this.props.style}>
+        <Chip
+          className="chip"
+          onClick={this.handleMenuOpen}
+          style={this.props.style}
+          >
           + add a position
         </Chip>
         <Dialog
           actions={menuActions}
           actionsContainerStyle={styles.flexAction}
+          contentStyle={styles.dialogStyle}
           modal={false}
           onRequestClose={this.handleMenuClose}
           open={this.state.menuOpen}

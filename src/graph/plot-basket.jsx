@@ -7,6 +7,7 @@ import {OptionChip, ChipDialog} from './option-chip';
 const styles = {
   chip: {
     margin: 3,
+    cursor: 'pointer',
   },
   flexWrapper: {
     display: 'flex',
@@ -18,12 +19,6 @@ const styles = {
 
 // Everything that doesn't have API requests gets done here.
 // Has a (+) button and on clicking displays in a dialog the message below:
-// I want to {buy, sell} {n} {call, put} contract(s) with strike price at {list of price not in use}.
-// Disable (+) if all prices are in use.
-// Also renders a list of chips which on click opens up a dialog for configuration.
-//
-// Make a dialog window shared by all chips that loads and submits data based on which chip triggered it.
-//
 class PlotBasket extends React.PureComponent {
   constructor(props) {
     super(props);

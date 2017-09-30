@@ -28,6 +28,9 @@ const styles = {
   selectField: {
     width: '8em',
   },
+  dialogStyle: {
+    width: '90%',
+  },
 };
 
 class ChipDialog extends React.PureComponent {
@@ -136,6 +139,7 @@ class ChipDialog extends React.PureComponent {
       <Dialog
         actions={chipActions}
         actionsContainerStyle={styles.flexAction}
+        contentStyle={styles.dialogStyle}
         modal={false}
         onRequestClose={this.props.handleChipClose}
         open={this.props.chipOpen}

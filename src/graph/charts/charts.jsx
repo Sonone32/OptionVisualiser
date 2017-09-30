@@ -10,7 +10,7 @@ import IVChart from './plot-iv';
 
 const styles = {
   controls: {
-    marginLeft: '30px',
+    margin: '3px 10px',
     display: 'flex',
     alignItems: 'baseline',
     justifyContent: 'space-between',
@@ -55,6 +55,7 @@ class Charts extends React.PureComponent {
       expDate: expiry,
       model: new Model(this.props.config.model),
       mode: mode,
+      multiplier: this.props.config.contractMultiplier ? 100 : 1,
       now: now,
       period: this.computeDayDifference(now, expiry) / 365,
       slideIndex: 0,
@@ -64,7 +65,7 @@ class Charts extends React.PureComponent {
   }
   
   componentWillReceiveProps(nextProps) {
-    let domain, model;
+    let domain, model, multiplier = nextProps.config.contractMultiplier ? 100 : 1;
     if (nextProps.config.model !== this.props.config.model) {
       model = new Model(this.props.config.model);
     }
@@ -76,7 +77,8 @@ class Charts extends React.PureComponent {
     this.setState({
       domain: domain || this.state.domain,
       model: model || this.state.model,
-      totalCost: this.computeTotalCost(nextProps.chips),
+      multiplier: multiplier,
+      totalCost: this.computeTotalCost(nextProps.chips, multiplier),
     });
   }
   
@@ -122,10 +124,10 @@ class Charts extends React.PureComponent {
     });
   };
 
-  computeTotalCost = (chips) => {
+  computeTotalCost = (chips, multiplier) => {
     let total = 0;
     for (let i = 0; i < chips.length; i++) {
-      total += chips[i].option.premium * chips[i].option.volume;
+      total += chips[i].option.premium * chips[i].option.volume * multiplier;
     }
     return total;
   };
@@ -206,6 +208,7 @@ class Charts extends React.PureComponent {
             chips={this.props.chips}
             domain={this.state.domain}
             model={this.state.model}
+            multiplier={this.state.multiplier}
             period={this.state.period}
             rate={this.props.rate}
           />
@@ -213,6 +216,7 @@ class Charts extends React.PureComponent {
             chips={this.props.chips}
             domain={this.state.domain}
             model={this.state.model}
+            multiplier={this.state.multiplier}
             period={this.state.period}
             rate={this.props.rate}
           />

@@ -58,7 +58,7 @@ class Graph extends React.PureComponent {
         });
       })
       .catch(error => {
-        let content = `If the ticker symbol is valid according to ${this.props.APIClient.getReferral().sourceName}, then the server may be under some technical difficulties and we apologize for the inconvenience.`
+        let content = `If the ticker symbol is valid according to ${this.props.APIClient.getReferral().sourceName} then the server may be under some technical difficulties.`
         this.handleNetworkError(null, content);
       });
   }

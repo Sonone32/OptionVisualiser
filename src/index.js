@@ -1,8 +1,8 @@
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import MainPanel from './index.jsx';
+import Entry from './entry'
 import './animation.css';
 import './index.css';
 
@@ -12,11 +12,12 @@ const config = {
   slideableTabs: true,
   APIClient: 'YAHOO',
   model: 'BSM',
+  contractMultiplier: false,  // Reflect the conventional 100 contract size or not.
 }
 
 const App = () => (
   <MuiThemeProvider>
-    <MainPanel config={config} />
+    <Entry config={config}/>
   </MuiThemeProvider>
 );
 
@@ -24,23 +25,3 @@ ReactDOM.render(
   <App />,
   document.getElementById('mainPanel')
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

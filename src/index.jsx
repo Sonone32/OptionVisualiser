@@ -2,9 +2,11 @@ import React from 'react';
 import APIClient from './api/api-client';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import Graph from './graph/graph.jsx';
+import Graph from './graph/graph';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import SearchBar from 'material-ui-search-bar'
+import SearchBar from 'material-ui-search-bar';
+import IconButton from 'material-ui/IconButton';
+import ConfigMenu from './config-menu'
 
 const hintText = 'Add a graph'
 
@@ -14,6 +16,7 @@ class MainPanel extends React.Component {
     this.state = {
       APIClient: APIClient.connectTo(this.props.config.APIClient),
       config: this.props.config,
+      configMenuOpen: false,
       items: [],
       key: 0,
       notification: false,
@@ -67,7 +70,7 @@ class MainPanel extends React.Component {
     this.setState({
       notification: false,
     });
-  }
+  };
 
   handleSearchChange = (value) => {
     this.setState({
@@ -75,6 +78,13 @@ class MainPanel extends React.Component {
     })
   };
   
+  handleSubmitSettings = (newConfig) => {
+    this.setState({
+      config: newConfig || this.state.config,
+      configMenuOpen: false,
+    });
+  };
+
   handleSearch = () => {
     if (!this.state.searchTerm) return;
     // Clear this.state.searchTerm after searching.
@@ -88,6 +98,12 @@ class MainPanel extends React.Component {
       searchTerm: "",
     });
   };
+
+  handleOpenSettings = () => {
+    this.setState({
+      configMenuOpen: true,
+    });
+  }
   
   render() {
     const actions = [
@@ -110,11 +126,11 @@ class MainPanel extends React.Component {
       />
     ));
     
-    let empty = !this.state.items.length;
+    let empty = !graphs.length;
     
     return (
       <div id="root">
-        <Title />
+        <h1 className="title noSelect">flowersync</h1>
         
         <div id="main">
           <div id="searchField">
@@ -137,6 +153,32 @@ class MainPanel extends React.Component {
           </div>
         </div>
 
+        <div id="mainFooter">
+          <IconButton
+            iconClassName="material-icons"
+            tooltip="About the site"
+            >
+            help
+          </IconButton>
+          
+          <IconButton
+            iconClassName="material-icons"
+            onClick={this.handleOpenSettings}
+            tooltip="Settings"
+            >
+            settings
+          </IconButton>
+          
+          <IconButton
+            href="https://github.com/Sonone32/OptionVisualiser"
+            iconClassName="material-icons"
+            target="_blank"
+            tooltip="Github link"
+            >
+            code
+          </IconButton>
+        </div>
+        
         <Dialog
           title={this.state.notification ? this.state.notification.title : ''}
           actions={actions}
@@ -145,15 +187,15 @@ class MainPanel extends React.Component {
           >
           {this.state.notification ? this.state.notification.content : ''}
         </Dialog>
+        
+        <ConfigMenu
+          config={this.state.config}
+          handleSubmit={this.handleSubmitSettings}
+          open={this.state.configMenuOpen}
+        />
       </div>
     );
   }
-}
-
-function Title(props) {
-  return (
-      <h1 className="title noSelect">flowersYnc</h1>
-  );
 }
 
 export default MainPanel;
