@@ -141,6 +141,7 @@ class AddMenu extends React.PureComponent {
         <Dialog
           actions={menuActions}
           actionsContainerStyle={styles.flexAction}
+          autoScrollBodyContent={true}
           contentStyle={styles.dialogStyle}
           modal={false}
           onRequestClose={this.handleMenuClose}

@@ -139,6 +139,7 @@ class ChipDialog extends React.PureComponent {
       <Dialog
         actions={chipActions}
         actionsContainerStyle={styles.flexAction}
+        autoScrollBodyContent={true}
         contentStyle={styles.dialogStyle}
         modal={false}
         onRequestClose={this.props.handleChipClose}

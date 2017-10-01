@@ -63,7 +63,7 @@ class ConfigMenu extends React.PureComponent {
     return (
       <Dialog
         actions={actions}
-        contentStyle={{width: '90%'}}
+        contentStyle={{maxWidth: '20em'}}
         onRequestClose={() => {this.props.handleSubmit()}}
         open={this.props.open}
         title="Settings"

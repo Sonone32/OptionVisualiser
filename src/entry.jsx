@@ -44,7 +44,7 @@ class Entry extends React.PureComponent {
     if (this.state.disclaimerDeclined) {
       return (
         <div id="root">
-          <span>FEAR IS HOW I FALL</span>
+          <h1 className="title noSelect">flowersync</h1>
         </div>
       );
     }
@@ -73,7 +73,7 @@ class Entry extends React.PureComponent {
               This website was built for educational purposes and the data directly or indirectly served here shall not act as guidance to any financial action. This website or any of its affiliates is not liable for any errors, defects, or bugs present.
             </p>
             <p>
-              By clicking 'Agree' you, the user, agree that you have read this disclaimer and is aware that your financial decisions should not be influenced in any way by this website.
+              By clicking 'AGREE' you, the user, agree that you have read this disclaimer and is aware that your financial decisions should not be influenced in any way by this website.
             </p>
             <div style={{margin: 10}}>
               {actions[0]} {actions[1]}

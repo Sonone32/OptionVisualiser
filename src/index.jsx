@@ -7,6 +7,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import SearchBar from 'material-ui-search-bar';
 import IconButton from 'material-ui/IconButton';
 import ConfigMenu from './config-menu'
+import About from './about'
 
 const hintText = 'Add a graph'
 
@@ -15,6 +16,7 @@ class MainPanel extends React.Component {
     super(props);
     this.state = {
       APIClient: APIClient.connectTo(this.props.config.APIClient),
+      aboutOpen: false,
       config: this.props.config,
       configMenuOpen: false,
       items: [],
@@ -60,14 +62,15 @@ class MainPanel extends React.Component {
     if (callback) callback();
     this.setState({
       notification: {
-        title: title,
         content: content,
+        title: title,
       },
     });
   };
 
   handleCloseDialog = () => {
     this.setState({
+      aboutOpen: false,
       notification: false,
     });
   };
@@ -102,6 +105,12 @@ class MainPanel extends React.Component {
   handleOpenSettings = () => {
     this.setState({
       configMenuOpen: true,
+    });
+  }
+  
+  handleOpenAbout = () => {
+    this.setState({
+      aboutOpen: true,
     });
   }
   
@@ -156,6 +165,7 @@ class MainPanel extends React.Component {
         <div id="mainFooter">
           <IconButton
             iconClassName="material-icons"
+            onClick={this.handleOpenAbout}
             tooltip="About the site"
             >
             help
@@ -192,6 +202,11 @@ class MainPanel extends React.Component {
           config={this.state.config}
           handleSubmit={this.handleSubmitSettings}
           open={this.state.configMenuOpen}
+        />
+        
+        <About
+          handleClose={this.handleCloseDialog}
+          open={this.state.aboutOpen}
         />
       </div>
     );

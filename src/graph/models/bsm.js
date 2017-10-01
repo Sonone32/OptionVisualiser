@@ -33,16 +33,16 @@ function getGreeks(type, s, k, r, t, v) {
   let greeks = {};
 
   greeks['gamma'] = roundFloat(phi(d1) / (s * v * Math.sqrt(t)), -4);
-  greeks['vega'] = roundFloat(s * phi(d1) * Math.sqrt(t), -4);
+  greeks['vega'] = roundFloat((s * phi(d1) * Math.sqrt(t)) / 100, -4);
   
   if (type === 'calls') {
     greeks['delta'] = roundFloat(Phi(d1), -4);
-    greeks['theta'] = roundFloat(-s * v * phi(d1) / (2 * t) - r * k * Math.exp(-r * t) * Phi(d2), -4) / 365;
-    greeks['rho'] = roundFloat(k * t * Math.exp(-r * t) * Phi(d2), -4);
+    greeks['theta'] = roundFloat((-s * v * phi(d1) / (2 * t) - r * k * Math.exp(-r * t) * Phi(d2)) / 365, -4);
+    greeks['rho'] = roundFloat(k * t * Math.exp(-r * t) * Phi(d2) / 100, -4);
   } else {
     greeks['delta'] = roundFloat(Phi(d1) - 1, -4);
-    greeks['theta'] = roundFloat(-s * v * phi(d1) / (2 * t) + r * k * Math.exp(-r * t) * Phi(-d2), -4) / 365;
-    greeks['rho'] = roundFloat(-k * t * Math.exp(-r * t) * Phi(-d2), -4);
+    greeks['theta'] = roundFloat((-s * v * phi(d1) / (2 * t) + r * k * Math.exp(-r * t) * Phi(-d2)) / 365, -4);
+    greeks['rho'] = roundFloat(-k * t * Math.exp(-r * t) * Phi(-d2) / 100, -4);
   }
 
   return greeks;
