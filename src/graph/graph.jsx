@@ -182,7 +182,9 @@ class Graph extends React.PureComponent {
         this.setState({
           chain: newChain,
           loading: false,
-          quote: vals[0],
+          // Update the quote only if it's newer. Since chain data has to be cached
+          // there will be asynchronicity between chain and quote age if using Yahoo Finance.
+          quote: (vals[0].time > this.state.quote.time) ? vals[0] : this.state.quote,
           expDate: value,
         });
       })

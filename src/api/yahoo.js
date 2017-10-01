@@ -67,8 +67,8 @@ class YahooAPI {
               changePercent: res.quote.regularMarketChangePercent,
               price: res.quote.regularMarketPrice,
               raw: res.quote,
+              time: res.quote.regularMarketTime,
             });
-            
             
             
             return Promise.all([quote, chain, rate]);

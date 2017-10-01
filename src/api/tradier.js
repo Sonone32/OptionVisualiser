@@ -54,6 +54,7 @@ class TradierAPI {
                         changePercent: json.quotes.quote.change_percentage,
                         symbol: json.quotes.quote.symbol,
                         price: json.quotes.quote.last,
+                        time: json.quotes.quote.trade_date,
                         raw: json.quotes.quote,
                        });
                     })

@@ -10,7 +10,7 @@ injectTapEventPlugin();
 
 const config = {
   slideableTabs: true,
-  APIClient: 'YAHOO',
+  APIClient: 'TRADIER',
   model: 'BSM',
   contractMultiplier: false,  // Reflect the conventional 100 contract size or not.
 }
