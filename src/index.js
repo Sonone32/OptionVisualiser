@@ -10,12 +10,13 @@ import docCookies from './cookies_min.js';
 injectTapEventPlugin();
 
 const config = {
-  slideableTabs: docCookies.hasItem('slide') || true,
+  slideableTabs: docCookies.hasItem('slide') ? (docCookies.getItem('slide') === 'true' ? true : false) : true,
   APIClient: 'YAHOO',
   model: 'BSM',
-  contractMultiplier: docCookies.hasItem('hundo') || false,  // Reflect the conventional 100 contract size or not.
+  // Decide whether to reflect the conventional 100 share per contract size or not.
+  contractMultiplier: docCookies.hasItem('hundo') ? (docCookies.getItem('hundo') === 'true' ? true : false) : true,
 }
-
+console.log(docCookies)
 const App = () => (
   <MuiThemeProvider>
     <Entry config={config}/>

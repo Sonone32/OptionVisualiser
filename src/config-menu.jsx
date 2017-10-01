@@ -44,17 +44,8 @@ class ConfigMenu extends React.PureComponent {
       // Being lazy here, since I cannot find if being blocked from accessing cookies 
       // will throw an error or not.
       
-      if (this.state.slideableTabs) {
-        docCookies.setItem('slide', '1');
-      } else {
-        docCookies.removeItem('slide');
-      }
-      
-      if (this.state.contractMultiplier) {
-        docCookies.setItem('hundo', '1');
-      } else {
-        docCookies.removeItem('hundo');
-      }
+      docCookies.setItem('slide', this.state.slideableTabs);
+      docCookies.setItem('hundo', this.state.contractMultiplier);
       
       this.props.handleSubmit({...this.state});
     } else {
