@@ -2,6 +2,7 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
+import docCookies from './cookies_min.js';
 
 class ConfigMenu extends React.PureComponent {
   constructor(props) {
@@ -40,6 +41,21 @@ class ConfigMenu extends React.PureComponent {
         || (this.state.slideableTabs !== this.props.config.slideableTabs)
         || (this.state.model !== this.props.config.model)
         || (this.state.APIClient !== this.props.config.APIClient)) {
+      // Being lazy here, since I cannot find if being blocked from accessing cookies 
+      // will throw an error or not.
+      
+      if (this.state.slideableTabs) {
+        docCookies.setItem('slide', '1');
+      } else {
+        docCookies.removeItem('slide');
+      }
+      
+      if (this.state.contractMultiplier) {
+        docCookies.setItem('hundo', '1');
+      } else {
+        docCookies.removeItem('hundo');
+      }
+      
       this.props.handleSubmit({...this.state});
     } else {
       this.props.handleSubmit();  

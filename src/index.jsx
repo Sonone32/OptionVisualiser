@@ -1,13 +1,13 @@
 import React from 'react';
-import APIClient from './api/api-client';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import Graph from './graph/graph';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import SearchBar from 'material-ui-search-bar';
-import IconButton from 'material-ui/IconButton';
-import ConfigMenu from './config-menu'
+import APIClient from './api/api-client';
 import About from './about'
+import ConfigMenu from './config-menu'
+import Graph from './graph/graph';
+import IconButton from 'material-ui/IconButton';
+import SearchBar from 'material-ui-search-bar';
 
 const hintText = 'Add a graph'
 
