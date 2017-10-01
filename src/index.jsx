@@ -60,6 +60,7 @@ class MainPanel extends React.Component {
   
   handleNotification = (title, content, callback) => {
     if (callback) callback();
+    
     this.setState({
       notification: {
         content: content,

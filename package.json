@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://www.flowersync.com",
   "dependencies": {
     "chart.js": "^2.7.0",
     "fetch": "^1.1.0",
