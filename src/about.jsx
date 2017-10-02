@@ -47,6 +47,9 @@ class About extends React.PureComponent {
         <p>
           The option premiums displayed are chosen from the first available market prices in this order: last price, ask price, bid price.
         </p>
+        <p>
+          The total value line in payoff plot has the cost to set up subtracted from it already.
+        </p>
         
         <h4>About the Greeks</h4>
         <p>

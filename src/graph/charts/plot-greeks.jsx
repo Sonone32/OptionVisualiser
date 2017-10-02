@@ -67,24 +67,9 @@ class GreeksChart extends React.PureComponent {
       short = (volume < 0)
       
       for (let j = 0; j < bound; j++) {
-        if (short) {
-          // A short position has partials behaving the same as shares of underlying
-          // Therefore only delta will change.
-          if (type === 'calls') {
-            // A short call loses $1 per $1 increase in spot price if the spot price is greater than strike.
-            // Otherwise its delta is zero.
-            data.datasets[0].data[j] -= (domain[j] >= strike) ? (Math.abs(volume) * multiplier) : 0;
-          } else {
-            // A short put loses $1 per $1 decrease in spot price if the spot price is lesser than strike.
-            // Otherwise its delta is zero.
-            data.datasets[0].data[j] -= (domain[j] <= strike) ? (Math.abs(volume) * multiplier) : 0;
-          }
-        } else {
-          // Not a short, so compute greeks
-          val = model.getGreeks(type, domain[j], strike, rate, period, v);
-          for (let k = 0; k < 5; k++) {
-            data.datasets[k].data[j] += val[greeks[k]] * volume * multiplier;
-          }
+        val = model.getGreeks(type, domain[j], strike, rate, period, v);
+        for (let k = 0; k < 5; k++) {
+          data.datasets[k].data[j] += val[greeks[k]] * volume * multiplier;
         }
       }
     }
