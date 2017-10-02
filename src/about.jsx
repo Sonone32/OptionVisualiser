@@ -53,15 +53,15 @@ class About extends React.PureComponent {
           The details for the greeks displayed are as follows:
           <dl>
             <dt>Delta</dt>
-            <dd>Change in position value per one dollar change in price of underlying.</dd>
+            <dd>Change in position value per one dollar increase in price of underlying.</dd>
             <dt>Gamma</dt>
-            <dd>Change in delta per one dollar change in the price of underlying.</dd>
+            <dd>Change in delta per one dollar increase in the price of underlying.</dd>
             <dt>Vega</dt>
-            <dd>Change in position value per one percent change in volatiliy.</dd>
+            <dd>Change in position value per one percent increase in volatiliy.</dd>
             <dt>Theta</dt>
-            <dd>Change in position value per one day change in time to expiration.</dd>
+            <dd>Change in position value per one day decrease in time to expiration.</dd>
             <dt>Rho</dt>
-            <dd>Change in position value per 100 basis point change in interest rate.</dd>
+            <dd>Change in position value per 100 basis point increase in interest rate.</dd>
           </dl>
         </p>
         
