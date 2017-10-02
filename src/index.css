@@ -25,7 +25,8 @@ body {
 
 #root {
   height: auto;
-  min-height: 80vh;
+  min-height: 90vh;
+  width: 100%;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -201,6 +202,6 @@ body {
   justify-content: center;
   flex-flow: column wrap;
   align-items: center;
-  margin: 20px;
+  margin: auto;
   max-width: 500px;
 }

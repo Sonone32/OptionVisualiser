@@ -15,9 +15,14 @@ class Entry extends React.PureComponent {
     }
     
     this.state = {
-      disclaimerAgreed: agreed,
+      disclaimerAgreed: true,
       disclaimerDeclined: false,
     };
+    
+    // Display the disclaimer after 100ms for SEO purposes.
+    if (!agreed) {
+      setTimeout(() => {this.setState({disclaimerAgreed: false})}, 100);
+    }
   }
   
   handleDisclaimerAgree = () => {
@@ -41,31 +46,31 @@ class Entry extends React.PureComponent {
   };
   
   render() {
+    const actions = [
+      <FlatButton
+        key="1"
+        label="Agree"
+        labelStyle={{fontFamilt: 'Helvetica'}}
+        onClick={this.handleDisclaimerAgree}
+      />,
+      <FlatButton
+        key="2"
+        label="Decline"
+        labelStyle={{fontFamilt: 'Helvetica'}}
+        onClick={this.handleDisclaimerDeclined}
+      />,
+    ];
+    
+    let returnValue;
+    
     if (this.state.disclaimerDeclined) {
-      return (
+      returnValue = (
         <div id="root">
           <h1 className="title noSelect">flowersync</h1>
         </div>
       );
-    }
-    
-    if (!this.state.disclaimerAgreed) {
-      const actions = [
-        <FlatButton
-          key="1"
-          label="Agree"
-          labelStyle={{fontFamilt: 'Helvetica'}}
-          onClick={this.handleDisclaimerAgree}
-        />,
-        <FlatButton
-          key="2"
-          label="Decline"
-          labelStyle={{fontFamilt: 'Helvetica'}}
-          onClick={this.handleDisclaimerDeclined}
-        />,
-      ];
-      
-      return (
+    } else if (!this.state.disclaimerAgreed) {
+      returnValue = (
         <div id="root">
           <div id="disclaimer">
             <h2>Disclaimer</h2>
@@ -81,11 +86,16 @@ class Entry extends React.PureComponent {
           </div>
         </div>
       );
+    } else {
+      returnValue = (
+        <MainPanel
+          config={this.props.config}
+          key="agreed"
+        />
+      );
     }
     
-    return (
-      <MainPanel config={this.props.config} />
-    );
+    return returnValue;
   }
 }
 

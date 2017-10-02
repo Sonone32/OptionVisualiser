@@ -45,7 +45,7 @@ class GreeksChart extends React.PureComponent {
   processData = (model, chips, domain, period, rate, multiplier) => {
     let bound = domain.length;
     const greeks = ['delta', 'gamma', 'vega', 'theta', 'rho'];
-    let val, volume, type, v, strike, short;
+    let val, volume, type, v, strike;
     let data = {
       labels: domain.map(x => `$${x.toFixed(2)}`),
       datasets: [{}, {}, {}, {}, {}].map((obj, index) => {
@@ -64,7 +64,6 @@ class GreeksChart extends React.PureComponent {
       type = chips[i].type;
       v = chips[i].option.IV;
       volume = chips[i].option.volume;
-      short = (volume < 0)
       
       for (let j = 0; j < bound; j++) {
         val = model.getGreeks(type, domain[j], strike, rate, period, v);

@@ -157,7 +157,8 @@ class MainPanel extends React.Component {
             <ReactCSSTransitionGroup
               transitionName="graph"
               transitionEnterTimeout={500}
-              transitionLeaveTimeout={500}>
+              transitionLeaveTimeout={500}
+              >
               {graphs}
             </ReactCSSTransitionGroup>
           </div>
