@@ -16,7 +16,7 @@ const config = {
   // Decide whether to reflect the conventional 100 share per contract size or not.
   contractMultiplier: docCookies.hasItem('hundo') ? (docCookies.getItem('hundo') === 'true' ? true : false) : true,
 }
-console.log(docCookies)
+
 const App = () => (
   <MuiThemeProvider>
     <Entry config={config}/>
