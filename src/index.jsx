@@ -22,11 +22,24 @@ class MainPanel extends React.Component {
       items: [],
       key: 0,
       notification: false,
+      rate: .013,
       searchTerm: '',
     }
   }
   
   componentDidMount() {
+    // Fetch interest rate at top level.
+    this.state.APIClient.fetchRate()
+      .then(rate => {
+        this.setState({
+          rate: rate / 100,
+        });
+      })
+      .catch(error => {
+        this.handleNotification('Uh oh...', 'Failed to fetch risk-free rate, defaulting to 1.30%.');
+      });
+    
+    
     // The id of the actual html input field contains the hint text of SearchBar.
     let searchField = document.querySelector('[id*=' + hintText.replace(/\s/g, '') + ']');
     if (searchField) {
@@ -133,6 +146,7 @@ class MainPanel extends React.Component {
         handleNotification={this.handleNotification}
         item={x}
         key={x[0]}
+        rate={this.state.rate}
       />
     ));
     

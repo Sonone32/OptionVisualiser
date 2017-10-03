@@ -1,5 +1,6 @@
 import 'isomorphic-fetch';
 
+// TradierAPI currently not ported to Sanic
 class TradierAPI {
   constructor(address) {
     this.endpoint = address;
@@ -84,13 +85,15 @@ class TradierAPI {
                   .catch(error => reject('Failed to fetch option data.'));
       }
       
-      let rate = fetch(`${this.endpoint}/interest-rate`)
-                   .then(response => response.json())
-                   .then(json => json['rate'])
-                   .catch(error => reject('Failed to fetch interest rate.'))
-      
-      resolve(Promise.all([quote, chain, rate]));
+      resolve(Promise.all([quote, chain]));
     })
+  };
+
+  fetchRate = () => {
+    let rate = fetch(`${this.endpoint}/interest-rate`)
+                       .then(response => response.json())
+                       .then(json => json['rate']);
+    return rate;
   };
 }
 

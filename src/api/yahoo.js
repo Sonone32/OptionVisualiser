@@ -42,11 +42,6 @@ class YahooAPI {
     date = new Date(date).getTime() / 1000;
     
     return new Promise((resolve, reject) => {
-      let rate = fetch(`${this.endpoint}/interest-rate`)
-                         .then(response => response.json())
-                         .then(json => json['rate'])
-                         .catch(error => reject('Failed to fetch interest rate.'))
-      
       resolve(
         fetch(`${this.endpoint}/ychain/?symbol=${symbol}${date ? `&expiration=${date}`: ''}`)
           .then(response => response.json())
@@ -71,12 +66,19 @@ class YahooAPI {
             });
             
             
-            return Promise.all([quote, chain, rate]);
+            return Promise.all([quote, chain]);
           })
           .catch(error => reject('Failed to fetch market data.'))
       );
-    })
+    });
   };
+
+  fetchRate = () => {
+    let rate = fetch(`${this.endpoint}/interest-rate`)
+                         .then(response => response.json())
+                         .then(json => json['rate']);
+    return rate;
+  }
 }
 
 export default YahooAPI;

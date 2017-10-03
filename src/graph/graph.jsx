@@ -35,7 +35,6 @@ class Graph extends React.PureComponent {
       currentDate: null,
       expDate: null,
       expDates: [],
-      interestRate: 0,
       loading: true,
       quote: {symbol: this.props.item[1]},  // Stores fetched data for underlying stock.
       refresh: 1,
@@ -52,7 +51,6 @@ class Graph extends React.PureComponent {
           chain: vals[1][0],
           expDate: vals[1][1][0],
           expDates: vals[1][1],
-          interestRate: vals[2],
           loading: false,
           quote: vals[0],
         });
@@ -231,12 +229,12 @@ class Graph extends React.PureComponent {
                 expDate={this.state.expDate}
                 handleChipChange={this.handleChipChange}
                 quote={this.state.quote}
-                rate={this.state.interestRate}
+                rate={this.props.rate}
               />
           }
           <div className="graphFooter">
             <a href={referral.interestUrl} target="_blank">
-              Interest rate: {(this.state.interestRate * 100).toFixed(2)}%
+              Interest rate: {(this.props.rate * 100).toFixed(2)}%
             </a>
             <a href={referral.url} target="_blank">
               Data source: {referral.sourceName} 
