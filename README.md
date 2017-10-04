@@ -20,7 +20,7 @@ Inside the `src` folder contains all of the written source files for this repo.
     * `charts.jsx` A wrapper component that displays one of the three plots below based on user's choice.
     * `plot-greeks.jsx` Plots option greeks. A child of `charts.jsx`.
     * `plot-iv.jsx` IV stands for implied volatility. Also a child of `charts.jsx`.
-    * `plot-payoff.jsx` Creatie name speaks for itself. And its parent is apparent.
+    * `plot-payoff.jsx` Creative name speaks for itself. And its parent is apparent.
   * `models`
     * `bsm.js` Implementation solutions to aspects of Black-Scholes-Merton model.
     * `math.js` General math formulae. Currently contains normal distribution cdf, pdf, and a rounding function.
