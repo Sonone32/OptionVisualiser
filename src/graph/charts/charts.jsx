@@ -108,7 +108,7 @@ class Charts extends React.PureComponent {
         });
       }
     }
-  }
+  };
   
   handleTabChange = (value) => {
     this.setState({
