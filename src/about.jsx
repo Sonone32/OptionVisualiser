@@ -78,7 +78,7 @@ class About extends React.PureComponent {
         
         <h4>About the Technology</h4>
         <p>
-          This website was built with ReactJS, Chart.js, and Material-UI. The server runs Django with Redis cache on Google Cloud Platform.
+          This website was built with ReactJS, Chart.js, and Material-UI. The server runs Python Sanic with Redis cache on Google Cloud Platform.
         </p>
         
         <h4>About the Owner</h4>
