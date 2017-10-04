@@ -68,6 +68,7 @@ class AddMenu extends React.PureComponent {
   handleMenuClose = () => {
     this.setState({
       menuOpen: false,
+      quantity: '1',
     });
   };
   

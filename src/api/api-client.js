@@ -3,7 +3,7 @@ import YahooAPI from './yahoo.js'
 
 class APIClient {
   static connectTo(endpoint) {
-    let apiAddress = 'http://api.flowersync.com:8080';
+    let apiAddress = 'http://api.flowersync.com:8000';
     switch (endpoint) {
       case 'TRADIER':
         return new TradierAPI(apiAddress);
