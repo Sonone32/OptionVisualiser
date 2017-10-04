@@ -10,7 +10,7 @@ My brokerage account did not come with a option payout graphing utility and judg
 Inside the `src` folder contains all of the written source files for this repo.
 
 * `api`
-  * `api-client.js` - Factory function or class (since inheritance in ES6 classes do not have imposed virtual methods so the line is really blurry) which returns an object that interacts with the backend API.
+  * `api-client.js` - Factory function or class (since inheritance in ES6 classes does not have imposed virtual methods so the line is really blurry) which returns an object that interacts with the backend API.
   * `yahoo.js` - Class which uses data from Yahoo Finance. Currently the default one.
   * `tradier.js` - Class which uses data from Tradier. Since Tradier offers a free development API so this project was built with their API until later when I figured out that Yahoo Finance is better to work with.
 * `fonts`
