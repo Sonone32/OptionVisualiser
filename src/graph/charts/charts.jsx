@@ -71,7 +71,7 @@ class Charts extends React.PureComponent {
     }
     if (!nextProps.chips.length) return;
     if (nextProps.chips.length !== this.props.chips.length) {
-      domain = this.computeDomain(nextProps.chips);
+      domain = this.computeDomain(nextProps.chips, nextProps.price);
     }
     
     this.setState({
@@ -92,7 +92,7 @@ class Charts extends React.PureComponent {
       if (max > min) {
         // Valid max, compute new domain
         this.setState({
-          domain: this.computeDomain(this.props.chips, min, max),
+          domain: this.computeDomain(this.props.chips, null, min, max),
         });
       }
     } else {
@@ -104,7 +104,7 @@ class Charts extends React.PureComponent {
       if (min < max) {
         // Valid min, compute new domain
         this.setState({
-          domain: this.computeDomain(this.props.chips, min, max),
+          domain: this.computeDomain(this.props.chips, null, min, max),
         });
       }
     }
@@ -137,9 +137,9 @@ class Charts extends React.PureComponent {
     return Math.ceil(Math.abs(d1.getTime() - d2.getTime()) / (3600000 * 24));
   };
 
-  computeDomain = (chips, min, max) => {
+  computeDomain = (chips, price, min, max) => {
     let domain = [];
-    if (!min && !max) [min, max] = this.computeMinMax(chips);
+    if (!min && !max) [min, max] = this.computeMinMax(chips, price);
     let interval = max - min, increment;
     
     if (interval <= 11) {
@@ -164,12 +164,17 @@ class Charts extends React.PureComponent {
 
   // Should take into consideration expDate since time value will shift the graph a lot.
   // Should also limit domain to have < 1000 in size.
-  computeMinMax = (chips) => {
-    let min = Infinity, max = 0, window = 3;  // window controls the size of initial domain
+  computeMinMax = (chips, price) => {
+    // window controls the size of initial domain
+    let min = Infinity, max = 0, window = 3;
     for (let i = 0; i < chips.length; i++) {
       if (chips[i].option.strike > max) max = chips[i].option.strike;
       if (chips[i].option.strike < min) min = chips[i].option.strike;
     }
+    
+    // Always display data at spot price
+    max = max > price ? max : price;
+    min = min < price ? min : price;
     
     let interval = max - min;
     

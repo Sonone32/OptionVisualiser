@@ -26,8 +26,10 @@ const options = {
     }],
   },
   tooltips: {
+    // Display tooltip even when the cursor doesn't intersect,
+    // and display the nearest one to cursor.
     intersect: false,
-    mode: 'index',
+    mode: 'nearest',
     callbacks: {
       label: item => (item['yLabel'] ? `${item['yLabel'].toFixed(2)}%` : 'no value'),
     },
@@ -113,11 +115,19 @@ class IVChart extends React.Component {
   }
   
   render() {
+    // Guards against accessing empty chain.
     if (this.state.refresh === null) return null;
+    
+    let data = this.processData(this.props.chain);
+    // Might use this later, keeping it here.
+    let min = Math.min(data.datasets[0].data[0], data.datasets[1].data[0]);
+    let max = Math.max(data.datasets[0].data[data.datasets[0].data.length - 1],
+                       data.datasets[1].data[data.datasets[1].data.length - 1]);
+    
     return (
       <div className="chart">
         <Bar
-          data={this.processData(this.props.chain)}
+          data={data}
           options={options}
         />
       </div>
