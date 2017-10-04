@@ -39,7 +39,6 @@ class MainPanel extends React.Component {
         this.handleNotification('Uh oh...', 'Failed to fetch risk-free rate, defaulting to 1.30%.');
       });
     
-    
     // The id of the actual html input field contains the hint text of SearchBar.
     let searchField = document.querySelector('[id*=' + hintText.replace(/\s/g, '') + ']');
     if (searchField) {
@@ -92,7 +91,7 @@ class MainPanel extends React.Component {
   handleSearchChange = (value) => {
     this.setState({
       searchTerm: value,
-    })
+    });
   };
   
   handleSubmitSettings = (newConfig) => {
@@ -120,13 +119,13 @@ class MainPanel extends React.Component {
     this.setState({
       configMenuOpen: true,
     });
-  }
+  };
   
   handleOpenAbout = () => {
     this.setState({
       aboutOpen: true,
     });
-  }
+  };
   
   render() {
     const actions = [
