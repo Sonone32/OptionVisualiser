@@ -33,7 +33,7 @@ class About extends React.PureComponent {
           As the previous section explains, this website uses the Black-Scholes-Merton model which requires five essential parameters to estimate the value of options: strike price, price of underlying, volatility in the price of underlying, interest rate, and time to expiration.
         </p>
         <p>
-          The strike price is self-evident parameter. The price of the underlying asset is simply the current underlying stock price fetched from the data source without regards for pre-market or after-market movements.
+          The strike price is a self-evident parameter. The price of the underlying asset is simply the current underlying stock price fetched from the data source without regards for pre-market or after-market movements.
         </p>
         <p>
           Volatility is a tricky parameter as it poses itself as the most difficult headache for all models dealing with option valuation. Currently Yahoo Finance supplies the implied volatility parameter which is derived from back-tracing on market option premiums with some variation of the Black-Scholes-Merton model. This website currently uses the implied volatility to make its calculations, or zero if none is supplied. You can see the used values in the IV tab in graphs. Future updates will include this website's own implied volatility calculator.
@@ -56,7 +56,7 @@ class About extends React.PureComponent {
           The details for the greeks displayed are as follows:
           <dl>
             <dt>Delta</dt>
-            <dd>Change in position value per one dollar increase in price of underlying.</dd>
+            <dd>Change in position value per one dollar increase in the price of underlying.</dd>
             <dt>Gamma</dt>
             <dd>Change in delta per one dollar increase in the price of underlying.</dd>
             <dt>Vega</dt>
