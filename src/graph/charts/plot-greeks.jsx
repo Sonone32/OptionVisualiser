@@ -2,7 +2,7 @@ import React from 'react';
 import {Line} from 'react-chartjs-2';
 
 // Colors for 'delta', 'gamma', 'vega', 'theta', 'rho'
-const colors = ['green', 'red', 'purple', 'darkgoldenrod', 'blue'];
+const colors = ['darkgoldenrod', 'green', 'violet', 'teal', 'red'];
 
 const options = {
   elements: {
