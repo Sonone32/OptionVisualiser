@@ -99,7 +99,7 @@ class Charts extends React.PureComponent {
       // Min changed
       min = parseInt(min, 10);
       if (isNaN(min)) return;
-      min = Math.min(min, 0);
+      min = Math.max(min, 0);
       max = this.state.domain[this.state.domain.length - 1];
       if (min < max) {
         // Valid min, compute new domain
