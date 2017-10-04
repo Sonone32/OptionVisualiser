@@ -1,7 +1,7 @@
 ## React frontend for www.flowersync.com
 ---
 ### What is this?
-An option visualiser built mainly with React, Chart.js, and Material-UI. Hosted on a Github page and interacts with a Django + Redis backend via a REST API. Visit the website for more information about the conceptual aspects of it, and hopefully you will find this website useful.
+An option visualiser built mainly with React, Chart.js, and Material-UI. Hosted on a Github page and interacts with a Sanic + Redis [backend](https://github.com/Sonone32/OptionVisualiserAPI) via a REST API. Visit the website for more information about the conceptual aspects of it, and hopefully you will find this website useful.
 
 ### Why this?
 My brokerage account did not come with a option payout graphing utility and judging by Google results not a lot of other brokers have them. Online searches yield difficult-to-use tools which require users to input everything that could easily have been gathered from Yahoo Finance or other sources while also requiring a number of parameters difficult to obtain for the average users who just want an intuition on how multi-legged positions behave. So I built this website to make everything easier for everyone and myself, educationally of course.
