@@ -47,7 +47,7 @@ class IVChart extends React.Component {
       shouldUpdate: false,
     };
   }
-  // NaN for discontinuity, null if interpolate over it
+  
   processData = (chain) => {
     let min = Infinity, max = 0, callData = {}, putData = {}, option;
     let data = {
@@ -93,7 +93,7 @@ class IVChart extends React.Component {
     }
     
     return data;
-  }
+  };
   
   componentWillReceiveProps(nextProps) {
     if (nextProps.chain['refresh'] !== this.state.refresh) {
