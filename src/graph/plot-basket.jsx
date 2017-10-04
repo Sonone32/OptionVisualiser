@@ -18,7 +18,7 @@ const styles = {
 };
 
 // Everything that doesn't have API requests gets done here.
-// Has a (+) button and on clicking displays in a dialog the message below:
+// Controls the plots.
 class PlotBasket extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -90,10 +90,11 @@ class PlotBasket extends React.PureComponent {
     
     chips = chips.sort((a, b) => a[0] - b[0]);
     
-    return [chips.map(x => x[1]),
-            unused['calls'].sort((a, b) => a - b),
-            unused['puts'].sort((a, b) => a - b),
-           ];
+    return [
+      chips.map(x => x[1]),
+      unused['calls'].sort((a, b) => a - b),
+      unused['puts'].sort((a, b) => a - b),
+    ];
   };
   
   render() {
