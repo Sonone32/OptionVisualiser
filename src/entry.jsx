@@ -11,7 +11,7 @@ class Entry extends React.PureComponent {
       agreed = docCookies.hasItem('agreed');
     } catch (e) {
       agreed = false;
-      console.log('Unable to read disclaimer agreement status in cookie.')
+      console.log('Unable to read disclaimer agreement status in cookie.');
     }
     
     this.state = {
@@ -31,7 +31,7 @@ class Entry extends React.PureComponent {
       let exp = new Date(new Date().getTime() + 3600000 * 24 * 7);
       docCookies.setItem('agreed', 'true', exp);
     } catch (e) {
-      console.log('Unable to set cookie for disclaimer agreement.')
+      console.log('Unable to set cookie for disclaimer agreement.');
     }
     
     this.setState({
