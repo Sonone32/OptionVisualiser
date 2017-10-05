@@ -227,6 +227,7 @@ class Charts extends React.PureComponent {
           />
           <IVChart
             chain={this.props.chain}
+            controlStyle={styles.controls}
           />
         </SwipeableViews>
         {

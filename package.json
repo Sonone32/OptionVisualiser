@@ -9,6 +9,7 @@
     "material-ui": "^0.18.7",
     "material-ui-search-bar": "^0.2.4",
     "math-erf": "^1.0.0",
+    "rc-slider": "^8.3.1",
     "react": "^15.6.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-chartjs-2": "^2.6.2",
@@ -23,7 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "deploy" : "npm run build && echo www.flowersync.com > build/CNAME && gh-pages -d build",
+    "deploy": "npm run build && echo www.flowersync.com > build/CNAME && gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "devDependencies": {

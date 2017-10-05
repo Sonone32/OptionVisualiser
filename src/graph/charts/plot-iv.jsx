@@ -1,6 +1,12 @@
 import React from 'react';
 import {Bar} from 'react-chartjs-2';
+import Slider from 'rc-slider';
+// Webpack wants css to be imported for the slider to show
+import 'rc-slider/assets/index.css';
+import {cyan500} from 'material-ui/styles/colors';
 import {roundFloat} from '../models/maths';
+
+const Range = Slider.Range;
 
 const options = {
   responsive: true,
@@ -45,9 +51,24 @@ class IVChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      refresh: null,
-      shouldUpdate: false,
+      data: null,
+      value: null,
     };
+  }
+  
+  componentDidMount() {
+    let data = this.processData(this.props.chain);
+    let min = 0;
+    let max = data.labels.length - 1;
+    
+    // Store the maximum amount of data and let subsequent controls view parts of it.
+    this.setState({
+      data: data,
+      maxLabels: data.labels,
+      maxCallsIV: data.datasets[0].data,
+      maxPutsIV: data.datasets[1].data,
+      domain: [min, max],
+    });
   }
   
   processData = (chain) => {
@@ -87,6 +108,10 @@ class IVChart extends React.Component {
       }
     }
     
+    // Round to integers 
+    min = Math.floor(min);
+    max = Math.ceil(max);
+    
     while (min <= max) {
       data.datasets[0].data.push(callData[min] ? callData[min] * 100 : null);
       data.datasets[1].data.push(putData[min] ? putData[min] * 100 : null);
@@ -97,39 +122,41 @@ class IVChart extends React.Component {
     return data;
   };
   
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.chain['refresh'] !== this.state.refresh) {
-      this.setState({
-        refresh: nextProps.chain['refresh'],
-        shouldUpdate: true,
-      });
-    } else {
-      this.setState({
-        shouldUpdate: false,
-      });
-    }
-  }
-  
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextState.shouldUpdate;
-  }
-  
-  render() {
-    // Guards against accessing empty chain.
-    if (this.state.refresh === null) return null;
+  handleSliderChange = (newRange) => {
+    let [min, max] = newRange;
+    let newData = {...this.state.data};
+    newData.labels = this.state.maxLabels.slice(min, max + 1);
+    newData.datasets[0].data = this.state.maxCallsIV.slice(min, max + 1);
+    newData.datasets[1].data = this.state.maxPutsIV.slice(min, max + 1);
     
-    let data = this.processData(this.props.chain);
-    // Might use this later, keeping it here.
-    let min = Math.min(data.datasets[0].data[0], data.datasets[1].data[0]);
-    let max = Math.max(data.datasets[0].data[data.datasets[0].data.length - 1],
-                       data.datasets[1].data[data.datasets[1].data.length - 1]);
+    this.setState({
+      data: newData,
+    });
+  };
+
+  render() {
+    // Plot only after mounting.
+    if (!this.state.data) return null;
     
     return (
-      <div className="chart">
-        <Bar
-          data={data}
-          options={options}
-        />
+      <div>
+        <div className="chart">
+          <Bar
+            data={this.state.data}
+            options={options}
+          />
+        </div>
+        <div style={this.props.controlStyle}>
+          <Range
+            style={{width: '90%', margin: 'auto'}}
+            trackStyle={[{backgroundColor: cyan500}]}
+            allowCross={false}
+            defaultValue={this.state.domain}
+            min={this.state.domain[0]}
+            max={this.state.domain[1]}
+            onAfterChange={this.handleSliderChange}
+          />
+        </div>
       </div>
     );
   }

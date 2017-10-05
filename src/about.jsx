@@ -25,7 +25,7 @@ class About extends React.PureComponent {
         >
         <h4>About the Model</h4>
         <p>
-          This website currently uses a simple Black-Scholes-Merton model to estimate values for European vanilla puts and calls without considerations for dividend payout in the underlying. Although it has its limitations when one is heavily concerned about accuracy, it can provide an intuitive and visually appealing representation of how a multi-legged option position should behave in the general direction. If anything, the ability to see the value of such position at expiry should be itself a useful resource. For more information on the model you may visit its <a href="https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model" target="_blank">Wikipedia page</a> as a starting point.
+          This website currently uses a simple Black-Scholes-Merton model to estimate values for European vanilla puts and calls without considerations for dividend payout in the underlying. Although it has its limitations when one is heavily concerned about accuracy, it can provide an intuitive and visually appealing representation of how a multi-legged option position should behave in the general direction. If anything, the ability to see the value of such position at expiry should be itself a useful resource. For more information on the model you may visit its <a href="https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model" rel="noopener noreferrer" target="_blank">Wikipedia page</a> as a starting point.
         </p>
         
         <h4>About the Calculations</h4>
