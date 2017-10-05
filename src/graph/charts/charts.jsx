@@ -35,6 +35,19 @@ const styles = {
   },
 }
 
+/*
+  Description:
+    Control and plot positions inputted by user here.
+  Used in:
+    ../plot-basket.jsx
+  Props:
+    chain - Fetched chain data. See more in /api/api-client.js.
+    chips - An array of chips representing user-input positions to be plotted.
+    config - Configuration object. See more in index.js.
+    expDate - Expiry string in the form of "yyyy-mm-dd".
+    price - Spot price of underlying as float.
+    rate - Fetched interest rate as a decimal float.
+*/
 class Charts extends React.PureComponent {
   constructor(props) {
     super(props);

@@ -9,8 +9,15 @@ import Graph from './graph/graph';
 import IconButton from 'material-ui/IconButton';
 import SearchBar from 'material-ui-search-bar';
 
+// Putting this here allows hintText to match the code that MainPanel uses to listen to keyboard input.
 const hintText = 'Add a graph'
 
+/*
+  Used in:
+    ./entry.js
+  Props:
+    config - Configuration object. See more in index.js.
+*/
 class MainPanel extends React.Component {
   constructor(props) {
     super(props);

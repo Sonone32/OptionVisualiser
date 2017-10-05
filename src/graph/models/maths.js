@@ -13,6 +13,7 @@ function phi(x) {
   return Math.exp(-.5 * Math.pow(x, 2)) / Math.sqrt(2 * PI);
 }
 
+// Seemingly rounds floating point numbers...
 function roundFloat(f, place) {
   return Math.round(f * (10**-place)) / 10**-place;
 }

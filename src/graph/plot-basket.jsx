@@ -17,8 +17,21 @@ const styles = {
   },
 };
 
-// Everything that doesn't have API requests gets done here.
-// Controls the plots.
+/*
+  Description:
+    The user directly controls the plots in here.
+    Everything that doesn't have to do with API requests gets done here.
+    This component will only get rendered if fetched data is ready, so no precautions needed from here down.
+  Used in:
+    ./graph.jsx
+  Props:
+    chain - Fetched chain data. See more in /api/api-client.js.
+    config - Configuration object. See more in index.js.
+    expDate - Expiry string in the form of "yyyy-mm-dd".
+    handleChipChange(<type: str 'calls' or 'puts'>, <strike: float>, <volume: int>, <color: str>, <premium: float>) - Submit only the first three parameters to add a chip, or submit at least four to edit a chip.
+    quote - Fetched quote data. See more in /api/api-client.js.
+    rate - Fetched interest rate as a decimal float.
+*/
 class PlotBasket extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -121,7 +134,7 @@ class PlotBasket extends React.PureComponent {
             <OptionChip
               data={chip}
               key={chip.type + chip.option.strike}
-              onChipOpen={this.handleChipOpen}
+              handleChipOpen={this.handleChipOpen}
               style={styles.chip}
             >
               {chip.option.volume} at {`$${chip.option.strike.toFixed(2)}`}

@@ -4,6 +4,16 @@ import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
 import docCookies from './cookies_min.js';
 
+/*
+  Description:
+    Settings menu, nothing special.
+  Used in:
+    ./index.jsx
+  Props:
+    config - Configuration object. See more in index.js.
+    handleSubmit(<config: {}> or null) - Sends config to MainPanel. Send null to close ConfigMenu.
+    open - Boolean value received from Mainpanel that opens/closes ConfigMenu.
+*/
 class ConfigMenu extends React.PureComponent {
   constructor(props) {
     super(props);

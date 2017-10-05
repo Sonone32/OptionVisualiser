@@ -2,6 +2,15 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 
+/*
+  Description:
+    Dialog that displays a wall of text to the user.
+  Used in:
+    ./index.jsx
+  Props:
+    open - Open/close state of this component.
+    handleClose - Closes the component.
+*/
 class About extends React.PureComponent {
   render() {
     let title = (

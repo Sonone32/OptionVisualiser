@@ -23,11 +23,26 @@ const styles = {
   },
 };
 
-// Everything that has to do with API requests gets done here.
+
+/*
+  Description:
+    The outermost component for a ticker symbol.
+    Everything that has to do with API requests gets done here.
+  Used in:
+    ./index.jsx
+  Props:
+    APIClient - Use this to make api calls via an interface object.
+    config - Configuration object. See more in index.js.
+    handleKill(<key: int>) - Send the key of current graph to delete itself.
+    handleNotification(<title: str>, <content: str>, <callback: fn>) - Calls the callback and triggers a dialog with title and content.
+    item - A two-tuple in the form of [<key: int>, <symbol: str>].
+    key - Needed by ReactDOM for components in array.
+    rate - Interest rate as a float.
+*/
 class Graph extends React.PureComponent {
   constructor(props) {
     super(props);
-    // props.item := [<key>, <symbol>]
+    
     this.state = {  // Needs to calculate and store implied volatility.
       chain: {},  // Stores fetched & transformed data for current expDate.
       chartDatasets: [],
@@ -223,7 +238,6 @@ class Graph extends React.PureComponent {
                 <CircularProgress style={styles.loadingIcon} />
               </div>
             : <PlotBasket
-                basket={this.state.plotData}
                 chain={this.state.chain}
                 config={this.props.config}
                 expDate={this.state.expDate}

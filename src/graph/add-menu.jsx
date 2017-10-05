@@ -37,6 +37,19 @@ const styles = {
   },
 };
 
+/*
+  Description:
+    A chip paired with a dialog that prompts user to input a position.
+  Used in:
+    ./plot-basket.jsx
+  Props:
+    expDate - Expiry string.
+    handleAdd(<type: str 'calls' or 'puts'>, <strike: float>, <volume: int>, <color: str>, <premium: float>) - Submit the first three parameters to add a chip. Originates in ./graph.jsx.
+    style - Style object. This is here to avoid redundancy.
+    symbol - Ticker symbol.
+    unusedCalls - An array of strike prices for calls not in use.
+    unusedPuts - An array of strike prices for puts not in use.
+*/
 class AddMenu extends React.PureComponent {
   constructor(props) {
     super(props);

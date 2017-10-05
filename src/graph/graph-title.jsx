@@ -27,6 +27,20 @@ const styles = {
   },
 };
 
+/*
+  Description:
+    An Appbar that has data refresh button, graph removal button, expiry selector, and displays ticker symbol and market fluctuation of said symbol.
+  Used in:
+    ./graph.jsx
+  Props:
+    expDate - The currently selected expiry string.
+    expDates - An array of expiry strings to choose from.
+    handleExpDateChange(<date: str>) - Sends expiration date string to <Graph />.
+    handleKill(<key: int>) - Sends kill signal to <MainPanel />.
+    handleRefresh() - Sends refresh signal to <Graph />.
+    item - A two-tuple in the form of [<key: int>, <symbol: str>].
+    quote - Fetched quote data. See more in /api/api-client.js.
+*/
 class GraphTitle extends React.Component {
   constructor(props) {
     super(props);
@@ -127,6 +141,16 @@ class GraphTitle extends React.Component {
   }
 }
 
+/*
+  Description:
+    A drop down menu that selects expiry. This component is controlled by its parent.
+  Used in:
+    <GraphTitle />
+  Props:
+    handleExpDateChange(<date: str>) - Sends expiration date string to <GraphTitle />
+    expDate - The currently selected expiry string.
+    expDates - An array of expiry strings to choose from.
+*/
 function ExpDateSelector(props) {
   return (
     <SelectField

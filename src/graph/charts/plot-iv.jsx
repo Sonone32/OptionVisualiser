@@ -32,10 +32,10 @@ const options = {
     }],
   },
   tooltips: {
-    // Display tooltip even when the cursor doesn't intersect,
-    // and display the nearest one to cursor.
+    // Display tooltip even when the cursor doesn't intersect.
     intersect: false,
-    mode: 'nearest',
+    // Display all bars at an index.
+    mode: 'index',
     callbacks: {
       label: item => (item['yLabel'] ? `${item['yLabel'].toFixed(2)}%` : 'no value'),
     },
@@ -47,6 +47,15 @@ const options = {
   },
 }
 
+/*
+  Description:
+    Plot the IVs here.
+  Used in:
+    ./charts.jsx
+  Props:
+    chain - Fetched chain data. See more in /api/api-client.js.
+    controlStyle - Object for CSS style to apply to domain slider. A bit of a hack.
+*/
 class IVChart extends React.Component {
   constructor(props) {
     super(props);

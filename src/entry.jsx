@@ -3,6 +3,14 @@ import FlatButton from 'material-ui/FlatButton';
 import MainPanel from './index.jsx';
 import docCookies from './cookies_min.js'
 
+/*
+  Description:
+    Displays a disclaimer after 100 ms delay. Shows user <MainPanel /> or the logo based on user input.
+  Used in:
+    ./index.js
+  Props:
+    config - Configuration object. See more in index.js.
+*/
 class Entry extends React.PureComponent {
   constructor(props) {
     super(props);

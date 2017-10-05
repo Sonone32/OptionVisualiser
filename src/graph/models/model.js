@@ -1,5 +1,10 @@
 import {getValue, getGreeks} from './bsm'
-
+/*
+  Description:
+    Factory pattern interface object for option valuation.
+  Used in:
+    ../charts/charts.jsx
+*/
 class Model {
   constructor(name) {
     switch (name) {

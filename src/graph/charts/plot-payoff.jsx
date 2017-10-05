@@ -41,7 +41,19 @@ const options = {
   },
 };
 
-// Might wanna add a plot on expiry to show time value vs intrinsic value.
+/*
+  Description:
+    Plot the payoff here.
+  Used in:
+    ./charts.jsx
+  Props:
+    chips - An array of chips representing user-input positions to be plotted.
+    domain - An array of floats to be used as the y-axis.
+    model - This objects provides an interface to the currently-in-use math model.
+    multiplier - 1 or 100, based on user settings.
+    period - Time parameter, see ../models/bsm.js for more.
+    rate - Fetched interest rate as a decimal float.
+*/
 class PayoffChart extends React.PureComponent {
   processData = (model, chips, domain, period, rate, multiplier) => {
     let bound = domain.length, total = new Array(bound).fill(0);

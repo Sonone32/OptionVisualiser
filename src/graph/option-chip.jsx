@@ -33,6 +33,20 @@ const styles = {
   },
 };
 
+/*
+  Description:
+    Dialog that handles the modification of chips.
+  Used in:
+    ./plot-basket.jsx
+  Props:
+    chipData - A single option data sent by a chip (more in ../api/api-client.js).
+    chipOpen - Opens or closes this dialog.
+    chipType - Either 'calls' or 'puts'.
+    expDate - Expiry string.
+    handleChipClose() - Closes this dialog.
+    handleSubmit(<type: str 'calls' or 'puts'>, <strike: float>, <volume: int>, <color: str>, <premium: float>) - Submit at least the frist four parameters to edit a chip. Originates in ./graph.jsx.
+    symbol - Ticker symbol.
+*/
 class ChipDialog extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -193,11 +207,21 @@ class ChipDialog extends React.PureComponent {
   }
 }
 
-// Wrapper for material-ui chip that can handle sending info to dialog.
+/*
+  Description:
+    Wrapper for material-ui chip that can handle sending info to dialog. Represents a call or put at a strike.
+  Used in:
+    ./plot-basket.jsx
+  Props:
+    data - A single object from fetched chain data (more in ../api/api-client.js).
+    key - Required prop by ReactJS.
+    handleChipOpen(<type: str>, <data: object>) - Sends the type of option and option data to <PlotBasket /> which then directs it to <ChipDialog />
+    style - Style object. This is here to avoid redundancy.
+*/
 class OptionChip extends React.PureComponent {
   openDialog = () => {
     let data = this.props.data;
-    this.props.onChipOpen(data.type, data.option);
+    this.props.handleChipOpen(data.type, data.option);
   }
   
   render() {
