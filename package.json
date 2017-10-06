@@ -29,9 +29,12 @@
   },
   "devDependencies": {
     "babel-preset-stage-1": "^6.24.1",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-15": "^1.0.1",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^7.4.0",
     "gh-pages": "^1.0.0",
+    "react-test-renderer": "^15.5.4",
     "webpack-visualizer-plugin": "^0.1.11"
   }
 }

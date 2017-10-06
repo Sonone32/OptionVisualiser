@@ -37,10 +37,9 @@ Inside the `src` folder contains all of the written source files for this repo.
 * `index.css` - A very messy CSS file as JSX files have object styles in them.
 * `index.js` - The DOM mounter.
 * `index.jsx` - Handles top level interactions including searches, addition or removal of graphs and other functional components not related to the main purpose ot this website.
-  
-### Why are there no tests?
-Does manual testing count?
-No, but seriously I will add automated tests after this whole thing is stable. At first I thought this was just going to be a small project but it ended up being a lot bigger than what I had imagined (including the backend as well) so the interaction between components were crystalized after I was already deep into this. Hence it didn't make sense to write tests preemptively just to end up deprecating them.
+
+### What now?
+I am currently writing automated tests before adding anything new. Meanwhile giving any feedback is greatly appreciated! Also the kind people at Trade Defender has offered to let this site consume its API provided this site remains free for everyone, so that part of the code will come after tests.
 
 ### How can I talk to you?
 Email me at owner@flowersync.com. Comments, suggestions, ideas, or anything related to finance, math, or programming is appreciated.
