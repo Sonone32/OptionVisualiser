@@ -22,7 +22,7 @@ Inside the `src` folder contains all of the written source files for this repo.
     * `plot-iv.jsx` IV stands for implied volatility. Also a child of `charts.jsx`.
     * `plot-payoff.jsx` Creative name speaks for itself. And its parent is apparent.
   * `models`
-    * `bsm.js` Implementation solutions to aspects of Black-Scholes-Merton model.
+    * `bsm.js` Implementation of solutions to aspects of Black-Scholes-Merton model.
     * `math.js` General math formulae. Currently contains normal distribution cdf, pdf, and a rounding function.
     * `model.js` A factory function that returns an option valuation model to be called upon. 
   * `add-menu.jsx` - A component that is responsible for converting user input into adding new option position.
