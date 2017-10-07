@@ -76,7 +76,6 @@ class Graph extends React.PureComponent {
       });
   }
   
-  // Use the presence of color to determine whether to add changes to or to reset volume.
   // Calls made by chips will have all five params supplied.
   // Calls made by add-menu will only have the first three params supplied.
   handleChipChange = (type, strike, volume, color, premium) => {
@@ -86,7 +85,7 @@ class Graph extends React.PureComponent {
         && (premium === this.state.chain[type][strike].premium)) return;
     
     let newChain = Object.assign({}, this.state.chain);
-    newChain[type][strike].volume = color ? volume : (newChain[type][strike].volume + volume);
+    newChain[type][strike].volume = volume;
     if (color) newChain[type][strike].color = color;
     if (premium) {
       newChain[type][strike].premium = premium;

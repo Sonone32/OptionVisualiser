@@ -17,7 +17,7 @@ const config = {
   // Model to use for valuation. See ./graph/models/model.js for more.
   model: 'BSM',
   // Decide whether to reflect the conventional 100 share per contract size or not.
-  contractMultiplier: docCookies.hasItem('hundo') ? (docCookies.getItem('hundo') === 'true' ? true : false) : true,
+  contractMultiplier: docCookies.hasItem('hundo') ? (docCookies.getItem('hundo') === 'true' ? true : false) : false,
 }
 
 const App = () => (

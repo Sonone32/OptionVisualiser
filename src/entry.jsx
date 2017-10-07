@@ -27,9 +27,13 @@ class Entry extends React.PureComponent {
       disclaimerDeclined: false,
     };
     
-    // Display the disclaimer after 100ms for SEO purposes.
     if (!agreed) {
+      // Display the disclaimer after 100ms for SEO purposes.
       setTimeout(() => {this.setState({disclaimerAgreed: false})}, 100);
+    } else {
+      // Extend expiration by a week.
+      let exp = new Date(new Date().getTime() + 3600000 * 24 * 7);
+      docCookies.setItem('agreed', 'true', exp);
     }
   }
   

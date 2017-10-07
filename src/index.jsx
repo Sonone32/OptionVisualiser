@@ -111,8 +111,8 @@ class MainPanel extends React.Component {
   handleSearch = () => {
     if (!this.state.searchTerm) return;
     // Clear this.state.searchTerm after searching.
-    // Maybe add verification here or on handleSearchChange.
-    let newItems = [[this.state.key, this.state.searchTerm.toUpperCase()]];
+    // Converts searchTerm to uppercase and strip whitespce.
+    let newItems = [[this.state.key, this.state.searchTerm.toUpperCase().replace(/ /g, '')]];
     newItems = newItems.concat(this.state.items);
     
     this.setState({

@@ -120,7 +120,7 @@ class AddMenu extends React.PureComponent {
     this.setState({
       call: true,
       menuOpen: false,
-      quantity: '',
+      quantity: '1',
       strike: null,
       verb: 1,
     });

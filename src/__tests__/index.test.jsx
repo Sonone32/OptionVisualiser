@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Adapter from 'enzyme-adapter-react-15';
 import Enzyme from 'enzyme';
 import {shallow} from 'enzyme';
@@ -8,7 +9,6 @@ import MainPanel from '../index.jsx';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-// Missing API testing.
 describe('/index.jsx', () => {
   test('Constructor', () => {
     const main = shallow(
@@ -44,19 +44,23 @@ describe('/index.jsx', () => {
     
     let x = main.instance();
     
-    x.handleSearchChange('AMD');
+    x.handleSearchChange('AM  D    ');
     x.handleSearch();
     expect(x.state.items).toEqual([[0, 'AMD']]);
+    
     x.handleSearchChange('');
     x.handleSearch();
     expect(x.state.items).toEqual([[0, 'AMD']]);
-    x.handleSearchChange('NVdA');
+    
+    x.handleSearchChange(' NVd A');
     x.handleSearch();
-    x.handleSearchChange('InTC');
+    x.handleSearchChange('I nTC');
     x.handleSearch();
     expect(x.state.items).toEqual([[2, 'INTC'], [1, 'NVDA'], [0, 'AMD']]);
+    
     x.handleKill(1);
     expect(x.state.items).toEqual([[2, 'INTC'], [0, 'AMD']]);
+    
     x.handleSearchChange('AAPL');
     x.handleSearch();
     expect(x.state.items).toEqual([[3, 'AAPL'], [2, 'INTC'], [0, 'AMD']]);
@@ -78,6 +82,7 @@ describe('/index.jsx', () => {
     
     x.handleOpenSettings();
     expect(x.state.configMenuOpen).toBe(true);
+    
     x.handleSubmitSettings({
       slideableTabs: false,
       APIClient: 'GOOGLE',
@@ -107,10 +112,13 @@ describe('/index.jsx', () => {
     );
     
     let x = main.instance();
+    
     expect(x.state.aboutOpen).toBe(false);
+    
     x.handleOpenAbout();
     expect(x.state.aboutOpen).toBe(true);
     x.handleCloseDialog();
+    
     expect(x.state.aboutOpen).toBe(false);
   });
   
@@ -130,11 +138,13 @@ describe('/index.jsx', () => {
     
     // Without call back
     expect(x.state.notification).toBe(false);
+    
     x.handleNotification('hi', 'friend');
     expect(x.state.notification).toEqual({
       content: 'friend',
       title: 'hi',
     });
+    
     x.handleCloseDialog();
     expect(x.state.notification).toBe(false);
     
@@ -165,7 +175,7 @@ describe('/about', () => {
   });
 });
 
-// More configs may be coming, so this will do for now.
+// More configs may be coming, but this will do for now.
 describe('/config-menu.jsx', () => {
   test('componentWillReceiveProps', () => {
     const menu = shallow(
@@ -194,7 +204,6 @@ describe('/config-menu.jsx', () => {
       handleSubmit: 2,
       open: false,
     });
-    
     expect(x.state.slideableTabs).toBe(false);
     expect(x.state.APIClient).toBe('MSN');
     expect(x.state.model).toBe('CRR');
@@ -202,4 +211,4 @@ describe('/config-menu.jsx', () => {
     expect(x.state.handleSubmit).not.toBe(1);
     expect(x.state.open).not.toBe(true);
   });
-})
+});

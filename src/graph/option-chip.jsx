@@ -55,6 +55,7 @@ class ChipDialog extends React.PureComponent {
       color: '',
       strike: null,
       type: '',
+      validPremium: false,
       volume: null,
       premium: null,
     };
@@ -104,7 +105,7 @@ class ChipDialog extends React.PureComponent {
 
   // Make a call to this.props.handleSubmit(type, strike, volume, color)
   handleSubmit = () => {
-    let premium = this.state.premium;
+    let premium = parseFloat(this.state.premium);
     if (premium === '') premium = this.props.chipData.last
                                   || this.props.chipData.ask
                                   || this.props.chipData.bid;

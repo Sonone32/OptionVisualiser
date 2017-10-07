@@ -199,6 +199,7 @@ body {
   font-family: Helvetica;
   color: rgba(0, 0, 0, .6);
   display: flex;
+  padding: 10px;
   justify-content: center;
   flex-flow: column wrap;
   align-items: center;
