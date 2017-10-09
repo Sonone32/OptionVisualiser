@@ -64,7 +64,7 @@ class Charts extends React.PureComponent {
     
     this.state = {
       dataPickerMode: mode,
-      domain: null,
+      domain: [0],
       expDate: expiry,
       model: new Model(this.props.config.model),
       mode: mode,
