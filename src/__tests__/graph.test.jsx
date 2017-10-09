@@ -312,7 +312,7 @@ describe('/graph/option-chip.jsx', () => {
     chip.instance();
   });
   
-  describe('Chip removal and premium change', () => {
+  test('Chip removal and premium change', () => {
     const result = [];
     const menu = shallow(
       <ChipDialog

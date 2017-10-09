@@ -37,11 +37,11 @@ function getGreeks(type, s, k, r, t, v) {
   
   if (type === 'calls') {
     greeks['delta'] = roundFloat(Phi(d1), -4);
-    greeks['theta'] = roundFloat((-s * v * phi(d1) / (2 * t) - r * k * Math.exp(-r * t) * Phi(d2)) / 365, -4);
+    greeks['theta'] = roundFloat((-s * v * phi(d1) / (2 * Math.sqrt(t)) - r * k * Math.exp(-r * t) * Phi(d2)) / 365, -4);
     greeks['rho'] = roundFloat(k * t * Math.exp(-r * t) * Phi(d2) / 100, -4);
   } else {
     greeks['delta'] = roundFloat(Phi(d1) - 1, -4);
-    greeks['theta'] = roundFloat((-s * v * phi(d1) / (2 * t) + r * k * Math.exp(-r * t) * Phi(-d2)) / 365, -4);
+    greeks['theta'] = roundFloat((-s * v * phi(d1) / (2 * Math.sqrt(t)) + r * k * Math.exp(-r * t) * Phi(-d2)) / 365, -4);
     greeks['rho'] = roundFloat(-k * t * Math.exp(-r * t) * Phi(-d2) / 100, -4);
   }
 
