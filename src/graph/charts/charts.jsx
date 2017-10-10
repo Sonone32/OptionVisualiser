@@ -10,7 +10,7 @@ import IVChart from './plot-iv';
 
 const styles = {
   controls: {
-    margin: '3px 10px',
+    margin: '0px 10px',
     display: 'flex',
     alignItems: 'baseline',
     justifyContent: 'space-between',
@@ -32,6 +32,11 @@ const styles = {
     height: '4em',
     margin: 5,
     color: 'rgba(0, 0, 0, .6)',
+  },
+  wrapper:{
+    margin: '0px',
+    display: 'flex',
+    flexDirection: 'column',
   },
 }
 
@@ -63,6 +68,7 @@ class Charts extends React.PureComponent {
     }
     
     this.state = {
+      animateHeight: false,
       dataPickerMode: mode,
       domain: [0],
       expDate: expiry,
@@ -75,6 +81,12 @@ class Charts extends React.PureComponent {
       totalCost: 0,
       value: now,
     };
+  }
+  
+  componentDidMount() {
+    this.setState({
+      animateHeight: true,
+    });
   }
   
   componentWillReceiveProps(nextProps) {
@@ -203,9 +215,49 @@ class Charts extends React.PureComponent {
       ];
     }
   };
-  
-  // Dont display if there are no chips
+
   render() {
+    let controls = (
+      this.props.chips.length
+      ? (
+        <div style={styles.controls}>
+          <DatePicker
+            floatingLabelText="Estimate value on:"
+            maxDate={this.state.expDate}
+            minDate={this.state.now}
+            mode={this.state.mode}
+            onChange={this.handleDatePick}
+            style={styles.datePicker}
+            value={this.state.value}
+          />
+
+          <div>
+            <TextField
+              defaultValue={Math.round(this.state.domain[0])}
+              floatingLabelText="Min. Price:"
+              onChange={(event, val) => {this.handleDomainChange(val, NaN)}}
+              style={styles.textField}
+              type="tel"
+            />
+
+            <TextField
+              defaultValue={Math.round(this.state.domain[this.state.domain.length - 1])}
+              floatingLabelText="Max. Price:"
+              onChange={(event, val) => {this.handleDomainChange(NaN, val)}}
+              style={styles.textField}
+              type="tel"
+            />
+          </div>
+          
+          <div style={styles.totalCost}>
+            Cost to set up: 
+            {`${this.state.totalCost >= 0 ? '$' : '-$'}${Math.abs(this.state.totalCost).toFixed(2)}`}
+          </div>
+        </div>
+      )
+      : null
+    );
+    
     return (
       <div>
         <Tabs
@@ -224,63 +276,35 @@ class Charts extends React.PureComponent {
         >
           <PayoffChart
             chips={this.props.chips}
+            cost={`${this.state.totalCost >= 0 ? '$' : '-$'}${Math.abs(this.state.totalCost).toFixed(2)}`}
             domain={this.state.domain}
             model={this.state.model}
             multiplier={this.state.multiplier}
             period={this.state.period}
             rate={this.props.rate}
-          />
+            price={this.props.price}
+            style={styles.wrapper}
+            >
+          </PayoffChart>
           <GreeksChart
             chips={this.props.chips}
             domain={this.state.domain}
             model={this.state.model}
             multiplier={this.state.multiplier}
             period={this.state.period}
+            price={this.props.price}
             rate={this.props.rate}
-          />
+            style={styles.wrapper}
+            >
+          </GreeksChart>
           <IVChart
             chain={this.props.chain}
             controlStyle={styles.controls}
-          />
+            style={styles.wrapper}
+          >
+          </IVChart>
         </SwipeableViews>
-        {
-          this.props.chips.length
-          ? <div style={styles.controls}>
-              <DatePicker
-                floatingLabelText="Estimate value on:"
-                maxDate={this.state.expDate}
-                minDate={this.state.now}
-                mode={this.state.mode}
-                onChange={this.handleDatePick}
-                style={styles.datePicker}
-                value={this.state.value}
-              />
-              
-              <div>
-                <TextField
-                  defaultValue={Math.round(this.state.domain[0])}
-                  floatingLabelText="Min. Price:"
-                  onChange={(event, val) => {this.handleDomainChange(val, NaN)}}
-                  style={styles.textField}
-                  type="tel"
-                />
-
-                <TextField
-                  defaultValue={Math.round(this.state.domain[this.state.domain.length - 1])}
-                  floatingLabelText="Max. Price:"
-                  onChange={(event, val) => {this.handleDomainChange(NaN, val)}}
-                  style={styles.textField}
-                  type="tel"
-                />
-              </div>
-              
-              <span style={styles.totalCost}>
-                Cost to set up: 
-                {`${this.state.totalCost >= 0 ? '$' : '-$'}${Math.abs(this.state.totalCost).toFixed(2)}`}
-              </span>
-            </div>
-          : null
-        }
+        {controls}
       </div>
     )
   }

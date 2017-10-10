@@ -105,15 +105,16 @@ class GreeksChart extends React.PureComponent {
                                    this.props.domain,
                                    this.props.period,
                                    this.props.rate,
-                                   this.props.multiplier,
-                                  );
+                                   this.props.multiplier);
 
     return (
-      <div className="chart">
-        <Line
-          data={dataset}
-          options={options}
-        />
+      <div style={this.props.style}>
+        <div className="chart">
+          <Line
+            data={dataset}
+            options={options}
+          />
+        </div>
       </div>
     );
   }
