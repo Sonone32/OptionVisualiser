@@ -112,7 +112,8 @@ class MainPanel extends React.Component {
     if (!this.state.searchTerm) return;
     // Clear this.state.searchTerm after searching.
     // Converts searchTerm to uppercase and strip whitespce.
-    let newItems = [[this.state.key, this.state.searchTerm.toUpperCase().replace(/ /g, '')]];
+    let searchTerm = this.state.searchTerm.toUpperCase().replace(/ /g, '').replace(/\./g, '-');
+    let newItems = [[this.state.key, searchTerm]];
     newItems = newItems.concat(this.state.items);
     
     this.setState({
