@@ -117,7 +117,7 @@ class IVChart extends React.Component {
       }
     }
     
-    // Round to integers 
+    // Round to integers
     min = Math.floor(min);
     max = Math.ceil(max);
     

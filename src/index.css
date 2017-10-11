@@ -1,4 +1,8 @@
 * {
+  /*
+    Cursor gets ignored in actual browsers, but fun to use in dev. 
+    Also serves as an indicator of dev vs build.
+  */
   cursor: url(//b.thumbs.redditmedia.com/4ZxOF0Jq21KHWSQUDunb3iUrawRW8aALcFq-5bb9NkM.png);
   font-family: Helvetica;
 }

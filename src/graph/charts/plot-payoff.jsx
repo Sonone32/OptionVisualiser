@@ -57,7 +57,7 @@ const options = {
 class PayoffChart extends React.PureComponent {
   processData = (model, chips, domain, period, rate, multiplier) => {
     let bound = domain.length, total = new Array(bound).fill(0);
-    let vals, val, volume, type, v, strike, premium, time;
+    let vals, val, volume, type, v, strike, premium;
     let data = {
       labels: domain.map(x => `$${x.toFixed(2)}`),
       datasets: [{
@@ -76,11 +76,10 @@ class PayoffChart extends React.PureComponent {
       type = chips[i].type;
       v = chips[i].option.IV;
       volume = chips[i].option.volume;
-      time = (volume < 0) ? 0 : period; // A short position doesn't have varying time value.
       premium = chips[i].option.premium;
       
       for (let j = 0; j < bound; j++) {
-        val = roundFloat(model.getValue(type, domain[j], strike, rate, time, v) * volume, -2) * multiplier;
+        val = roundFloat(model.getValue(type, domain[j], strike, rate, period, v) * volume, -2) * multiplier;
         val -= volume * premium * multiplier;
         vals[j] = val;
         total[j] += val;
