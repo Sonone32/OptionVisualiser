@@ -39,7 +39,7 @@ Inside the `src` folder contains all of the written source files for this repo.
 * `index.jsx` - Handles top level interactions including searches, addition or removal of graphs and other functional components not related to the main purpose ot this website.
 
 ### What now?
-I am currently writing automated tests before adding anything new. Meanwhile giving any feedback is greatly appreciated! Also the kind people at Trade Defender has offered to let this site consume its API provided this site remains free for everyone, so that part of the code will come after tests.
+I am currently writing automated tests before adding anything new. Meanwhile giving any feedback is greatly appreciated!
 
 ### How can I talk to you?
 Email me at owner@flowersync.com. Comments, suggestions, ideas, or anything related to finance, math, or programming is appreciated.
