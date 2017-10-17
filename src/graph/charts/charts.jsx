@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import DatePicker from 'material-ui/DatePicker';
@@ -7,6 +7,7 @@ import Model from '../models/model'
 import PayoffChart from './plot-payoff';
 import GreeksChart from './plot-greeks';
 import IVChart from './plot-iv';
+import DataTable from './data-table';
 
 const styles = {
   controls: {
@@ -217,6 +218,19 @@ class Charts extends React.PureComponent {
   };
 
   render() {
+    // Will use this as an inline component after the code is complete.
+    // Need to move this.totalCost() into DataTable.
+    let table = (
+      <DataTable
+        chips={this.props.chips}
+        model={this.state.model}
+        multiplier={this.state.multiplier}
+        period={this.state.period}
+        price={this.props.price}
+        rate={this.props.rate}
+      />
+    );
+    
     let controls = (
       this.props.chips.length
       ? (
@@ -276,13 +290,11 @@ class Charts extends React.PureComponent {
         >
           <PayoffChart
             chips={this.props.chips}
-            cost={`${this.state.totalCost >= 0 ? '$' : '-$'}${Math.abs(this.state.totalCost).toFixed(2)}`}
             domain={this.state.domain}
             model={this.state.model}
             multiplier={this.state.multiplier}
             period={this.state.period}
             rate={this.props.rate}
-            price={this.props.price}
             style={styles.wrapper}
             >
           </PayoffChart>
@@ -292,7 +304,6 @@ class Charts extends React.PureComponent {
             model={this.state.model}
             multiplier={this.state.multiplier}
             period={this.state.period}
-            price={this.props.price}
             rate={this.props.rate}
             style={styles.wrapper}
             >
