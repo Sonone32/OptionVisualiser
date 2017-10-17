@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import Adapter from 'enzyme-adapter-react-15';
 import Enzyme from 'enzyme';
 import {shallow} from 'enzyme';
-import Charts from '../graph/charts/charts.jsx'
-import PayoffChart from '../graph/charts/plot-payoff.jsx'
-import GreeksChart from '../graph/charts/plot-greeks.jsx'
-import Model from '../graph/models/model.js'
-import {roundFloat} from '../graph/models/maths.js'
+import Charts from '../graph/charts/charts.jsx';
+import PayoffChart from '../graph/charts/plot-payoff.jsx';
+import GreeksChart from '../graph/charts/plot-greeks.jsx';
+import Model from '../graph/models/model.js';
+import {roundFloat} from '../graph/models/maths.js';
+import DataTable from '../graph/charts/data-table.jsx';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -331,5 +332,80 @@ describe('/graph/charts/plot-greeks.jsx', () => {
         );
       });
     }
+  });
+});
+
+describe('/graph/charts/data-table.jsx', () => {
+  const chips=[
+    {
+      type: 'calls',
+      option: {
+      ask: 5,
+      bid: 6,
+      color: '#fff',
+      IV: .4,
+      last: 5.5,
+      premium: 5.5,
+      raw: {},
+      strike: 6,
+      volume: 1,
+      },
+    },
+    {
+      type: 'calls',
+      option: {
+      ask: 5,
+      bid: 4.3,
+      color: '#fff',
+      IV: .3,
+      last: 4.8,
+      premium: 4.5,
+      raw: {},
+      strike: 8,
+      volume: 2,
+      },
+    },
+  ];
+  
+  const period = 30 / 365, price = 5.8, rate = .05, model = new Model('BSM'), multiplier = 100;
+  
+  const table = shallow(
+    <DataTable
+      chips={chips}
+      model={model}
+      multiplier={multiplier}
+      period={period}
+      price={price}
+      rate={rate}
+    />
+  );
+  
+  test('computeTotalCost()', () => {
+    let x= table.instance();
+    
+    expect(x.computeTotalCost(chips, 1)).toBe(14.5);
+    expect(x.computeTotalCost(chips, 10)).toBe(145);
+    expect(x.computeTotalCost([], 1)).toBe(0);
+  });
+  
+  test('computeCurrentValue()', () => {
+    let x = table.instance();
+    let value = model.getValue(chips[0].type, price, chips[0].option.strike, rate, period, chips[0].option.IV) * chips[0].option.volume
+                + model.getValue(chips[1].type, price, chips[1].option.strike, rate, period, chips[1].option.IV) * chips[1].option.volume;
+    
+    expect(x.computeCurrentValue(model, chips, multiplier, price, rate, period)).toBeCloseTo(value * multiplier);
+  });
+  
+  test('computeCurrentGreeks()', () => {
+    let x = table.instance();
+    let g1 = model.getGreeks(chips[0].type, price, chips[0].option.strike, rate, period, chips[0].option.IV);
+    let g2 = model.getGreeks(chips[1].type, price, chips[1].option.strike, rate, period, chips[1].option.IV);
+    let target = x.computeCurrentGreeks(model, chips, multiplier, price, rate, period);
+    
+    expect(target.delta).toBeCloseTo((g1.delta * chips[0].option.volume + g2.delta * chips[1].option.volume) * multiplier);
+    expect(target.gamma).toBeCloseTo((g1.gamma * chips[0].option.volume + g2.gamma * chips[1].option.volume) * multiplier);
+    expect(target.vega).toBeCloseTo((g1.vega * chips[0].option.volume + g2.vega * chips[1].option.volume) * multiplier);
+    expect(target.theta).toBeCloseTo((g1.theta * chips[0].option.volume + g2.theta * chips[1].option.volume) * multiplier);
+    expect(target.rho).toBeCloseTo((g1.rho * chips[0].option.volume + g2.rho * chips[1].option.volume) * multiplier);
   });
 });

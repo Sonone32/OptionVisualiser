@@ -47,7 +47,7 @@ const options = {
   Used in:
     ./charts.jsx
   Props:
-    chips - An array of chips representing user-input positions to be plotted.
+    chips - An array of chips representing user-input positions to be plotted. See charts.jsx.
     domain - An array of floats to be used as the y-axis.
     model - This objects provides an interface to the currently-in-use math model.
     multiplier - 1 or 100, based on user settings.

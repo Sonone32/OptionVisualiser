@@ -4,7 +4,7 @@ import Adapter from 'enzyme-adapter-react-15';
 import Enzyme from 'enzyme';
 import {shallow} from 'enzyme';
 import About from '../about';
-import ConfigMenu from '../config-menu'
+import ConfigMenu from '../config-menu';
 import MainPanel from '../index.jsx';
 
 Enzyme.configure({ adapter: new Adapter() });

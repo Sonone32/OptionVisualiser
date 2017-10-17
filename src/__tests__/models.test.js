@@ -1,5 +1,5 @@
-import {Phi, phi, roundFloat} from '../graph/models/maths.js'
-import {getValue, getGreeks} from '../graph/models/bsm.js'
+import {Phi, phi, roundFloat} from '../graph/models/maths.js';
+import {getValue, getGreeks} from '../graph/models/bsm.js';
 
 describe('/graph/models/maths.js', () => {
   test('Phi', () => {

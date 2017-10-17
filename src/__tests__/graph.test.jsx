@@ -4,10 +4,10 @@ import Adapter from 'enzyme-adapter-react-15';
 import Enzyme from 'enzyme';
 import {shallow} from 'enzyme';
 import Graph from '../graph/graph.jsx';
-import MockAPI from './mock-api'
-import AddMenu from '../graph/add-menu.jsx'
-import GraphTitle from '../graph/graph-title.jsx'
-import PlotBasket from '../graph/plot-basket.jsx'
+import MockAPI from './mock-api';
+import AddMenu from '../graph/add-menu.jsx';
+import GraphTitle from '../graph/graph-title.jsx';
+import PlotBasket from '../graph/plot-basket.jsx';
 import {OptionChip, ChipDialog} from '../graph/option-chip';
 
 Enzyme.configure({ adapter: new Adapter() });
