@@ -43,10 +43,17 @@ class DataTable extends React.PureComponent {
                                          nextProps.rate,
                                          nextProps.period);
     
+    let intrinsic = this.computeCurrentWorth(nextProps.model,
+                                             nextProps.chips,
+                                             nextProps.multiplier,
+                                             nextProps.price,
+                                             nextProps.rate,
+                                             0);
+    
     let cost = this.computeTotalCost(nextProps.chips, nextProps.multiplier);
     
     this.setState({
-      valueTable: this.makeValueTable(worth - cost, cost),
+      valueTable: this.makeValueTable(cost, intrinsic, worth - intrinsic, worth - cost),
       greeksTable: this.makeGreeksTable(greeks),
     });
   }
@@ -57,7 +64,7 @@ class DataTable extends React.PureComponent {
     });
   };
   
-  makeValueTable = (value, cost) => {
+  makeValueTable = (cost, intrinsicValue, timeValue, value) => {
     return ([
       <div className="dataTableElement" key="cost">
         <span className="dataTableEleValue">
@@ -65,6 +72,22 @@ class DataTable extends React.PureComponent {
         </span>
         <span className="dataTableEleLabel">
           cost to set up
+        </span>
+      </div>,
+      <div className="dataTableElement" key="intrinsic">
+        <span className="dataTableEleValue">
+          {`${intrinsicValue >= 0 ? '$' : '-$'}${Math.abs(intrinsicValue).toFixed(2)}`}
+        </span>
+        <span className="dataTableEleLabel">
+          intrinsic value
+        </span>
+      </div>,
+      <div className="dataTableElement" key="time">
+        <span className="dataTableEleValue">
+          {`${timeValue >= 0 ? '$' : '-$'}${Math.abs(timeValue).toFixed(2)}`}
+        </span>
+        <span className="dataTableEleLabel">
+          time value
         </span>
       </div>,
       <div className="dataTableElement" key="value">
