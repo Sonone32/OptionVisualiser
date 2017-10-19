@@ -37,6 +37,7 @@ const styles = {
     handleNotification(<title: str>, <content: str>, <callback: fn>) - Calls the callback and triggers a dialog with title and content.
     item - A two-tuple in the form of [<key: int>, <symbol: str>].
     key - Needed by ReactDOM for components in array.
+    mobileSize - true if window.innerWidth < 768.
     rate - Interest rate as a float.
 */
 class Graph extends React.PureComponent {
@@ -241,6 +242,7 @@ class Graph extends React.PureComponent {
                 config={this.props.config}
                 expDate={this.state.expDate}
                 handleChipChange={this.handleChipChange}
+                mobileSize={this.props.mobileSize}
                 quote={this.state.quote}
                 rate={this.props.rate}
               />

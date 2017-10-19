@@ -31,6 +31,7 @@ class MainPanel extends React.Component {
       notification: false,
       rate: .013,
       searchTerm: '',
+      mobileSize: false, // Used in /graph/charts/data-table.jsx. Notifies width change beyond/below phones.
     }
   }
   
@@ -59,6 +60,29 @@ class MainPanel extends React.Component {
         }
       });
     }
+    
+    // Decides whether to wrap data-table elements or not.
+    // See /graph/charts/data-table.jsx for more info.
+    this.setState({
+      mobileSize: window.innerWidth < 768,
+    });
+    window.addEventListener('resize', (event) => {
+      if (event.target.innerWidth >= 768) {
+        // Big screen, set mobileSize to false if not already false.
+        if (this.state.mobileSize) {
+          this.setState({
+            mobileSize: false,
+          });
+        }
+      } else {
+        // Small screen, set mobileSize to true if not already true.
+        if (!this.state.mobileSize) {
+          this.setState({
+            mobileSize: true,
+          });
+        }
+      }
+    });
   }
   
   componentWillReceiveProps(nextProp) {
@@ -153,6 +177,7 @@ class MainPanel extends React.Component {
         handleNotification={this.handleNotification}
         item={x}
         key={x[0]}
+        mobileSize={this.state.mobileSize}
         rate={this.state.rate}
       />
     ));

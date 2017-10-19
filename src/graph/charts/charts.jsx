@@ -14,7 +14,7 @@ const styles = {
     margin: '0px 10px',
     display: 'flex',
     alignItems: 'baseline',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     flexWrap: 'wrap',
   },
   datePicker: {
@@ -59,6 +59,7 @@ const styles = {
       ]
     config - Configuration object. See more in index.js.
     expDate - Expiry string in the form of "yyyy-mm-dd".
+    mobileSize - true if window.innerWidth < 768.
     price - Spot price of underlying as float.
     rate - Fetched interest rate as a decimal float.
 */
@@ -231,6 +232,7 @@ class Charts extends React.PureComponent {
     let table = (
       <DataTable
         chips={this.props.chips}
+        mobileSize={this.props.mobileSize}
         model={this.state.model}
         multiplier={this.state.multiplier}
         period={this.state.period}
@@ -269,11 +271,6 @@ class Charts extends React.PureComponent {
               style={styles.textField}
               type="tel"
             />
-          </div>
-          
-          <div style={styles.totalCost}>
-            Cost to set up: 
-            {`${this.state.totalCost >= 0 ? '$' : '-$'}${Math.abs(this.state.totalCost).toFixed(2)}`}
           </div>
         </div>
       )
@@ -323,6 +320,7 @@ class Charts extends React.PureComponent {
           >
           </IVChart>
         </SwipeableViews>
+        {table}
         {controls}
       </div>
     )

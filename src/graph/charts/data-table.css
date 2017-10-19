@@ -1,0 +1,45 @@
+.dataTable {
+  margin: 5px 10px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  height: 2em;
+  color: rgba(0, 0, 0, .6);
+  cursor: pointer;
+}
+
+.dataTableElement {
+  align-content: center;
+  display: grid;
+  grid-template-rows: 65% 35%;
+}
+
+.dataTableEleValue {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  grid-row: 1 / 2;
+}
+
+.dataTableEleLabel {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  font-size: .7em;
+  grid-row: 2 / 3;
+}
+
+/* The microsoft special! */
+.dataTableElement {
+  display: -ms-grid;
+  -ms-grid-rows: 65% 35%;
+}
+
+.dataTableEleValue {
+  -ms-grid-row: 1;
+}
+
+.dataTableEleLabel {
+  -ms-grid-row: 2;
+}
+/* end microsoft grid */

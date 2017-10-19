@@ -29,6 +29,7 @@ const styles = {
     config - Configuration object. See more in index.js.
     expDate - Expiry string in the form of "yyyy-mm-dd".
     handleChipChange(<type: str 'calls' or 'puts'>, <strike: float>, <volume: int>, <color: str>, <premium: float>) - Submit only the first three parameters to add a chip, or submit at least four to edit a chip.
+    mobileSize - true if window.innerWidth < 768.
     quote - Fetched quote data. See more in /api/api-client.js.
     rate - Fetched interest rate as a decimal float.
 */
@@ -120,6 +121,7 @@ class PlotBasket extends React.PureComponent {
           chips={this.state.chips}
           config={this.props.config}
           expDate={this.props.expDate}
+          mobileSize={this.props.mobileSize}
           price={this.props.quote.price}
           rate={this.props.rate}
         />

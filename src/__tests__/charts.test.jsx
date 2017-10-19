@@ -388,12 +388,12 @@ describe('/graph/charts/data-table.jsx', () => {
     expect(x.computeTotalCost([], 1)).toBe(0);
   });
   
-  test('computeCurrentValue()', () => {
+  test('computeCurrentWorth()', () => {
     let x = table.instance();
     let value = model.getValue(chips[0].type, price, chips[0].option.strike, rate, period, chips[0].option.IV) * chips[0].option.volume
                 + model.getValue(chips[1].type, price, chips[1].option.strike, rate, period, chips[1].option.IV) * chips[1].option.volume;
     
-    expect(x.computeCurrentValue(model, chips, multiplier, price, rate, period)).toBeCloseTo(value * multiplier);
+    expect(x.computeCurrentWorth(model, chips, multiplier, price, rate, period)).toBeCloseTo(value * multiplier);
   });
   
   test('computeCurrentGreeks()', () => {

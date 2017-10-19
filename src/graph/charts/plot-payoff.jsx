@@ -116,7 +116,6 @@ class PayoffChart extends React.PureComponent {
                                    this.props.period,
                                    this.props.rate,
                                    this.props.multiplier);
-
     
     return (
       <div style={this.props.style}>

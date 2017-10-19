@@ -9,6 +9,7 @@ My brokerage account did not come with an option payout graphing utility and jud
 ### What is in here?
 Inside the `src` folder contains all of the written source files for this repo.
 
+* `__tests__` - Folder with all the automated tests. Still working on it, so not much to be said here.
 * `api`
   * `api-client.js` - Factory function or class (since inheritance in ES6 classes does not have imposed virtual methods so the line is really blurry) which returns an object that interacts with the backend API.
   * `yahoo.js` - Class which uses data from Yahoo Finance. Currently the default one.
@@ -18,6 +19,8 @@ Inside the `src` folder contains all of the written source files for this repo.
 * `graph`
   * `charts`
     * `charts.jsx` A wrapper component that displays one of the three plots below based on user's choice.
+    * `data-table.jsx` Table that displays values at current underlying price.
+    * `data-table.css` CSS file that styles `data-table.jsx`.
     * `plot-greeks.jsx` Plots option greeks. A child of `charts.jsx`.
     * `plot-iv.jsx` IV stands for implied volatility. Also a child of `charts.jsx`.
     * `plot-payoff.jsx` Creative name speaks for itself. And its parent is apparent.
