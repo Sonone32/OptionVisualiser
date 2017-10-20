@@ -36,6 +36,7 @@ Inside the `src` folder contains all of the written source files for this repo.
 * `about.jsx` - This is where I put the site description in a dialog.
 * `animation.css` - Well named CSS file.
 * `config-menu.jsx` - Is exactly what it sounds like.
+* `cookies_min.js` - A cookie-accessing API found on Mozilla.
 * `entry.jsx` - Shows the disclaimer page and handles agreement or decline accordingly.
 * `index.css` - A very messy CSS file as JSX files have object styles in them.
 * `index.js` - The DOM mounter.
