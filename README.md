@@ -40,7 +40,7 @@ Inside the `src` folder contains all of the written source files for this repo.
 * `entry.jsx` - Shows the disclaimer page and handles agreement or decline accordingly.
 * `index.css` - A very messy CSS file as JSX files have object styles in them.
 * `index.js` - The DOM mounter.
-* `index.jsx` - Handles top level interactions including searches, addition or removal of graphs and other functional components not related to the main purpose ot this website.
+* `index.jsx` - Handles top level interactions including searches, addition or removal of graphs and other functional components not related to the main purpose of this website.
 
 ### How can I talk to you?
 Email me at owner@flowersync.com. Comments, suggestions, ideas, or anything related to finance, math, or programming is appreciated.
